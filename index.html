@@ -114,9 +114,9 @@
     transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
   }
   .btn:active{ transform: translateY(1px); }
-  /* high-commitment / transactional */
-  .btn--solid{ background: var(--brand-primary); color: #080E12; }
-  .btn--solid:hover{ background: var(--brand-tertiary); }
+  /* CTA: white with black border, always-large text; hover only fills yellow */
+  .btn--solid{ background: #FFFFFF; color: #080E12; border-color: #080E12; font-size: 16px; }
+  .btn--solid:hover{ background: var(--brand-primary); }
   /* low-commitment / learn more */
   .btn--ghost{ border-color: var(--border-default); color: var(--text-primary); }
   .btn--ghost:hover{ border-color: var(--border-strong); background: rgba(255,255,255,0.04); }
@@ -191,6 +191,7 @@
     width:100%;
     height:100%;
     object-fit:cover;
+    will-change: transform;
   }
   .splash__video--mobile{ display:none; }
 
@@ -208,6 +209,7 @@
     flex-direction:column;
     align-items:center;
     gap: var(--sp-32);
+    will-change: transform, opacity;
   }
 
   .splash__logo svg{
@@ -222,6 +224,15 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     color: #FFFFFF;
+  }
+
+  .splash__subtitle{
+    font-size: 22px;
+    line-height: 1.45;
+    font-weight: 400;
+    color: rgba(255,255,255,0.82);
+    max-width: 760px;
+    margin-top: calc(-1 * var(--sp-16));
   }
 
 
@@ -265,6 +276,28 @@
     background: var(--surface-1);
   }
   .feature-band:nth-of-type(even){ background: var(--surface-2); }
+
+  /* Label pinned to the top-left corner of every feature band */
+  .feature-band > .label{
+    position: absolute;
+    top: var(--sp-16);
+    left: var(--sp-16);
+    z-index: 2;
+  }
+
+  /* Multi-View band — photo backdrop, dark text on white (horizontal for desktop) */
+  .feature-band--multi-view{
+    background-color: #FFFFFF;
+    background-image: url('assets/img/multiview-desktop.png');
+    background-repeat: no-repeat;
+    background-position: center calc(100% + 30px + var(--mv-shift, 0px));
+    background-size: auto calc(80% * var(--mv-zoom, 1));
+    justify-content: flex-start;
+  }
+  .feature-band--multi-view .feature-band__glow{ display:none; }
+  .feature-band--multi-view h2{ color: #08090B; }
+  .feature-band--multi-view .feature-band__tagline{ color: #3F3F46; }
+  .feature-band--multi-view .label{ background: #080E12; color: var(--brand-primary); }
 
   .feature-band__glow{
     position:absolute;
@@ -342,7 +375,12 @@
     padding: var(--sp-48) var(--sp-32);
     width:100%;
   }
-  .card__body .label{ align-self:center; }
+  .card > .label{
+    position: absolute;
+    top: var(--sp-16);
+    left: var(--sp-16);
+    z-index: 2;
+  }
 
   .card__title{
     font-size: 40px;
@@ -444,12 +482,26 @@
   @media (max-width: 900px){
     .header, .splash, .section, .feature-band{ padding-left: var(--sp-24); padding-right: var(--sp-24); }
     .splash__title{ font-size: 52px; }
+    .splash__subtitle{ font-size: 18px; }
     .splash__logo svg{ height: 52px; }
     .splash__video--desktop{ display:none; }
     .splash__video--mobile{ display:block; }
     .feature-band__tagline{ font-size: 22px; }
     .feature-band{ min-height: 520px; }
     .feature-band h2{ font-size: 44px; }
+    .feature-band--multi-view{
+      background-color: #FFFFFF;
+      background-image: url('assets/img/multiview-mobile.png');
+      background-position: right -40px top calc(-1 * var(--mv-shift, 0px));
+      background-size: auto calc(110% * var(--mv-zoom, 1));
+      justify-content: flex-end;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .feature-band--multi-view .feature-band__content{
+      align-items: flex-start;
+      text-align: left;
+    }
     .grid{ grid-template-columns: 1fr; }
   }
 
@@ -496,6 +548,7 @@
         </svg>
       </div>
       <h1 class="splash__title">What's New</h1>
+      <p class="splash__subtitle">Every release, upgrade, and improvement we ship — across live streaming, stats, and the DAZN app on every screen.</p>
     </div>
   </section>
 
@@ -569,10 +622,10 @@
 
     /* ---- FEATURE BANDS: the top updates as stacked full-width bands ---- */
     const band = (e) => `
-      <section class="feature-band">
+      <section class="feature-band feature-band--${e.id}">
         <div class="feature-band__glow" style="background:${e.color};"></div>
+        <span class="label ${e.labelClass}">${e.labelText}</span>
         <div class="feature-band__content">
-          <span class="label ${e.labelClass}">${e.labelText}</span>
           <h2>${e.name}</h2>
           <p class="feature-band__tagline">${e.tagline}</p>
           <div class="feature-band__ctas">
@@ -585,8 +638,8 @@
     /* ---- HIGHLIGHTS: remaining updates as uniform 2-up tiles ---- */
     const card = (e) => `
       <article class="card">
+        <span class="label ${e.labelClass}">${e.labelText}</span>
         <div class="card__body">
-          <span class="label ${e.labelClass}">${e.labelText}</span>
           <h3 class="card__title">${e.name}</h3>
           <p class="card__benefit">${e.tagline}</p>
           <div class="card__ctas">
@@ -595,6 +648,50 @@
         </div>
       </article>`;
     document.getElementById('grid').innerHTML = entries.slice(3, 9).map(card).join('');
+
+    /* ---- Hero parallax: video and title/logo drift apart as you scroll ---- */
+    const splash = document.querySelector('.splash');
+    const splashVideos = document.querySelectorAll('.splash__video');
+    const splashContent = document.querySelector('.splash__content');
+    if (splash && splashContent && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let ticking = false;
+      const updateHeroParallax = () => {
+        const y = window.scrollY;
+        const h = splash.offsetHeight;
+        if (y <= h) {
+          const p = y / h;
+          splashVideos.forEach(v => { v.style.transform = `translate3d(0, ${y * 0.2}px, 0) scale(1.12)`; });
+          splashContent.style.transform = `translate3d(0, ${y * -0.4}px, 0)`;
+          splashContent.style.opacity = String(Math.max(0, 1 - p * 1.5));
+        }
+        ticking = false;
+      };
+      updateHeroParallax();
+      window.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(updateHeroParallax); ticking = true; }
+      }, { passive: true });
+    }
+
+    /* ---- Multi-View band: subtle photo parallax on scroll ---- */
+    const mvBand = document.querySelector('.feature-band--multi-view');
+    if (mvBand && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let mvTicking = false;
+      const updateMvParallax = () => {
+        const rect = mvBand.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (rect.bottom > 0 && rect.top < vh) {
+          const norm = ((rect.top + rect.height / 2) - vh / 2) / (vh / 2 + rect.height / 2);
+          mvBand.style.setProperty('--mv-shift', (-norm * 50).toFixed(1) + 'px');
+          const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+          mvBand.style.setProperty('--mv-zoom', (1 + progress * 0.08).toFixed(3));
+        }
+        mvTicking = false;
+      };
+      updateMvParallax();
+      window.addEventListener('scroll', () => {
+        if (!mvTicking) { requestAnimationFrame(updateMvParallax); mvTicking = true; }
+      }, { passive: true });
+    }
   </script>
 
 </body>
