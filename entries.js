@@ -1,7 +1,16 @@
-// Shared data for the "What's new" timeline (index.html) and the feature detail page (feature.html).
+// Shared data for the "What's new" page (index.html) and the feature detail page (feature.html).
+//
+// Copy model (Apple-style):
+//   name    — short product/feature name, used as the headline on the hero and highlight cards
+//   tagline — a single benefit-first line (no feature lists), used as the card/hero subhead
+//   ctaText — the high-commitment, transactional CTA label ("Learn more" is added automatically)
+//   title / desc — the longer, detailed copy used by the timeline archive and the detail page
 window.DAZN_ENTRIES = [
   {
     id: "multi-view",
+    name: "Multi-View",
+    tagline: "Watch two live games side by side.",
+    ctaText: "Watch now",
     labelClass: "label--new",
     labelText: "New release",
     date: "August 4",
@@ -20,6 +29,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "faster-startup-mobile",
+    name: "Faster start-up",
+    tagline: "Kickoff is only a couple of seconds away.",
+    ctaText: "Update the app",
     labelClass: "label--improve",
     labelText: "Improvement",
     date: "August 2",
@@ -38,6 +50,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "win-probability-overlay",
+    name: "Win Probability",
+    tagline: "Feel every swing of the match, live.",
+    ctaText: "See it live",
     labelClass: "label--upgrade",
     labelText: "Feature upgrade",
     date: "July 27",
@@ -56,6 +71,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "key-moments-live",
+    name: "Live Key Moments",
+    tagline: "Replay the goals seconds after they happen.",
+    ctaText: "Watch now",
     labelClass: "label--live",
     labelText: "Live",
     date: "July 21",
@@ -74,6 +92,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "airplay-chromecast-handoff",
+    name: "Seamless Casting",
+    tagline: "Hand off to your TV without missing a beat.",
+    ctaText: "Try casting",
     labelClass: "label--integration",
     labelText: "Apps &amp; integrations",
     date: "July 12",
@@ -92,6 +113,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "4k-hdr-expansion",
+    name: "4K HDR",
+    tagline: "Six more leagues, now in Ultra-HD.",
+    ctaText: "Watch in 4K",
     labelClass: "label--new",
     labelText: "New release",
     date: "June 24",
@@ -110,6 +134,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "offline-downloads",
+    name: "Offline Downloads",
+    tagline: "Take the match anywhere — no signal needed.",
+    ctaText: "Download now",
     labelClass: "label--new",
     labelText: "New release",
     date: "June 18",
@@ -128,6 +155,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "watch-party-chat-redesign",
+    name: "Match Chat",
+    tagline: "React together, without the clutter.",
+    ctaText: "Start a room",
     labelClass: "label--upgrade",
     labelText: "Feature upgrade",
     date: "June 9",
@@ -146,6 +176,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "watch-party-beta",
+    name: "Watch Party",
+    tagline: "Watch with up to eight friends, in sync.",
+    ctaText: "Host a party",
     labelClass: "label--integration",
     labelText: "Apps &amp; integrations",
     date: "May 29",
@@ -164,6 +197,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "player-stats-panel",
+    name: "Player Stats",
+    tagline: "Tap any player for real-time data.",
+    ctaText: "Explore stats",
     labelClass: "label--new",
     labelText: "New release",
     date: "May 22",
@@ -182,6 +218,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "lower-latency-streams",
+    name: "Lower Latency",
+    tagline: "Up to 4 seconds closer to live.",
+    ctaText: "Watch live",
     labelClass: "label--improve",
     labelText: "Improvement",
     date: "May 14",
@@ -200,6 +239,9 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "home-rail-redesign",
+    name: "New Home",
+    tagline: "Find tonight's game in one tap.",
+    ctaText: "Browse now",
     labelClass: "label--new",
     labelText: "New release",
     date: "May 8",
