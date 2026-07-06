@@ -289,26 +289,34 @@
 
   .month-items{
     margin-left: 160px;
-    padding-bottom: var(--sp-16);
   }
 
   .entry{
     position:relative;
+    z-index:0;
     display:flex;
     gap: var(--sp-24);
     padding: var(--sp-32) 0 var(--sp-32) var(--sp-16);
     border-bottom: 1px solid var(--border-subtle);
     opacity:0;
     transform: translateY(12px);
-    transition: opacity .5s ease, transform .5s ease, background-color .15s ease;
+    transition: opacity .5s ease, transform .5s ease, border-color .15s ease;
     text-decoration:none;
     color:inherit;
     cursor:pointer;
   }
-  .entry:hover{ background-color: var(--surface-hover, rgba(255,255,255,0.03)); }
+  .entry::after{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    top:0; bottom:0;
+    left:-30px; right:0;
+    transition: background-color .15s ease;
+  }
+  .entry:hover::after{ background-color: var(--surface-1); }
+  .entry:hover{ border-bottom-color: transparent; }
+  .entry:has(+ .entry:hover){ border-bottom-color: transparent; }
   .entry.is-visible{ opacity:1; transform:none; }
-
-  .month-items .entry:last-child{ border-bottom:none; }
 
   .entry::before{
     content:"";
@@ -402,6 +410,7 @@
     .month-label{ position:static; float:none; display:block; margin-bottom: var(--sp-16); }
     .month-items{ margin-left: 26px; }
     .entry::before{ left: -18px; }
+    .entry::after{ left: -26px; }
     .entry{ flex-direction:column; }
     .entry__tile{ width:64px; height:64px; }
     .entry__tile svg{ width:28px; height:28px; }
