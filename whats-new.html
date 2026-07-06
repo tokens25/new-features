@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DAZN — What's New</title>
+<style>
+
+  /* ============ DAZN DESIGN TOKENS (Dark theme, Desktop) ============ */
+  :root{
+    --font-family: 'DAZN Oscine', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* foundations.surface */
+    --surface-default: #080E12;
+    --surface-1: #0C1216;
+    --surface-2: #10171B;
+    --surface-3: #1B2227;
+    --surface-4: #21292E;
+    --surface-5: #2A3238;
+
+    /* foundations.text */
+    --text-primary: #FAFBFC;
+    --text-secondary: #BCC5CB;
+    --text-tertiary: #76828C;
+    --text-disabled: #626E78;
+
+    /* foundations.border */
+    --border-subtle: #21292E;
+    --border-default: #444D53;
+    --border-strong: #76828C;
+
+    /* foundations.brand */
+    --brand-primary: #F7FF1A;
+    --brand-secondary: #F2AF3D;
+    --brand-tertiary: #FBED7D;
+    --brand-gradient: linear-gradient(270deg, #FBED7D 0%, #F2AF3D 100%);
+
+    /* foundations.accent */
+    --accent-live: #D12424;
+    --accent-success-text: #79E99C;
+    --accent-success-surface1: #043820;
+    --accent-blue: #1183FF;
+    --accent-purple: #D24AF9;
+    --accent-orange: #FF9600;
+    --accent-pink: #FF8D8D;
+
+    /* components.label (secondary, dark theme) */
+    --label-yellow-secondary-bg: rgba(247, 255, 26, 0.1);
+    --label-yellow-secondary-color: #F7FF1A;
+    --label-blue-secondary-bg: rgba(17, 131, 255, 0.1);
+    --label-blue-secondary-color: #1183FF;
+    --label-green-secondary-bg: rgba(121, 233, 156, 0.2);
+    --label-green-secondary-color: #79E99C;
+    --label-purple-secondary-bg: rgba(190, 95, 224, 0.1);
+    --label-purple-secondary-color: #D24AF9;
+    --label-red-secondary-bg: rgba(209, 36, 36, 0.3);
+    --label-red-secondary-color: #FF8D8D;
+
+    /* typography — desktop */
+    --display-1: 56px;
+    --display-4: 36px;
+    --heading-h4: 28px;
+    --heading-h5: 24px;
+    --heading-h6: 22px;
+    --body-default: 18px;
+    --caption-sm: 14px;
+    --caption-xs: 12px;
+    --label-sm: 14px;
+
+    /* spacing */
+    --sp-4: 4px; --sp-6:6px; --sp-8: 8px; --sp-12: 12px; --sp-16: 16px;
+    --sp-20: 20px; --sp-24: 24px; --sp-32: 32px; --sp-40: 40px;
+    --sp-48: 48px; --sp-64: 64px; --sp-80: 80px; --sp-96: 96px; --sp-120: 120px;
+
+    /* radius */
+    --radius-8: 8px; --radius-12: 12px; --radius-16: 16px; --radius-full: 9999px;
+
+    /* grid */
+    --grid-margin: 64px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--surface-default);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  ::selection{ background: var(--brand-primary); color:#080E12; }
+
+  /* ============ HEADER ============ */
+  .header{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display:flex;
+    align-items:center;
+    height: 72px;
+    padding: 0 var(--grid-margin);
+    background: rgba(8,14,18,0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .logo{
+    display:flex;
+    align-items:center;
+    gap: var(--sp-8);
+  }
+  .logo svg{ display:block; height: 22px; width:auto; }
+
+  /* ============ HERO ============ */
+  .hero{
+    position: relative;
+    overflow: hidden;
+    padding: var(--sp-120) var(--grid-margin) var(--sp-96);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .hero__glow{
+    position:absolute;
+    top:-320px;
+    left:50%;
+    transform:translateX(-50%);
+    width:900px;
+    height:900px;
+    background: radial-gradient(circle, rgba(247,255,26,0.16) 0%, rgba(247,255,26,0) 68%);
+    pointer-events:none;
+  }
+
+  .hero__content{
+    position:relative;
+    max-width: 780px;
+    margin: 0 auto;
+    text-align:center;
+  }
+
+  .hero__eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap: var(--sp-8);
+    padding: var(--sp-6) var(--sp-16);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    font-size: var(--caption-sm);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: var(--sp-24);
+  }
+
+  .hero__eyebrow .pulse-dot{
+    width:8px; height:8px; border-radius:50%;
+    background: var(--accent-live);
+    box-shadow: 0 0 0 0 rgba(209,36,36,0.6);
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse{
+    0%   { box-shadow: 0 0 0 0 rgba(209,36,36,0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(209,36,36,0); }
+    100% { box-shadow: 0 0 0 0 rgba(209,36,36,0); }
+  }
+
+  .hero h1{
+    font-size: var(--display-1);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--sp-24);
+  }
+
+  .hero h1 span{
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p{
+    font-size: var(--body-default);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* signature ticker */
+  .ticker{
+    margin-top: var(--sp-48);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-1);
+    border-radius: var(--radius-12);
+    overflow:hidden;
+    position:relative;
+  }
+  .ticker__track{
+    display:flex;
+    width: max-content;
+    animation: scroll-ticker 26s linear infinite;
+  }
+  .ticker__item{
+    display:flex;
+    align-items:center;
+    gap: var(--sp-12);
+    padding: var(--sp-16) var(--sp-32);
+    font-size: var(--caption-sm);
+    color: var(--text-secondary);
+    white-space:nowrap;
+    border-right: 1px solid var(--border-subtle);
+  }
+  .ticker__item strong{ color: var(--text-primary); font-weight:700; }
+  .ticker__item .dot{ color: var(--brand-primary); }
+
+  @keyframes scroll-ticker{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ticker__track{ animation: none; }
+    .pulse-dot{ animation: none; }
+  }
+
+  /* ============ TIMELINE SECTION ============ */
+  .timeline-section{
+    padding: var(--sp-96) var(--grid-margin) var(--sp-120);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .timeline-section__header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom: var(--sp-64);
+    gap: var(--sp-24);
+    flex-wrap: wrap;
+  }
+
+  .timeline-section__header h2{
+    font-size: var(--heading-h4);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .timeline-section__header p{
+    color: var(--text-tertiary);
+    font-size: var(--caption-sm);
+  }
+
+  .timeline{
+    position:relative;
+  }
+
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left: 130px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--border-subtle);
+  }
+
+  .month-group{
+    position:relative;
+  }
+
+  .month-label{
+    position: sticky;
+    top: 88px;
+    display:inline-block;
+    width: 110px;
+    padding-top: 2px;
+    font-size: var(--heading-h6);
+    font-weight: 800;
+    color: var(--text-primary);
+    float:left;
+    margin-bottom: var(--sp-32);
+  }
+
+  .month-items{
+    margin-left: 160px;
+    padding-bottom: var(--sp-16);
+  }
+
+  .entry{
+    position:relative;
+    display:flex;
+    gap: var(--sp-24);
+    padding: var(--sp-32) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    opacity:0;
+    transform: translateY(12px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .entry.is-visible{ opacity:1; transform:none; }
+
+  .month-items .entry:last-child{ border-bottom:none; }
+
+  .entry::before{
+    content:"";
+    position:absolute;
+    left: -34px;
+    top: 40px;
+    width: 9px;
+    height: 9px;
+    border-radius:50%;
+    background: var(--surface-default);
+    border: 2px solid var(--text-tertiary);
+  }
+  .entry.is-visible::before{
+    border-color: var(--brand-primary);
+  }
+
+  .entry__tile{
+    flex: 0 0 108px;
+    width: 108px;
+    height: 108px;
+    border-radius: var(--radius-12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border: 1px solid var(--border-subtle);
+  }
+  .entry__tile svg{ width: 40px; height: 40px; }
+
+  .entry__body{ flex: 1; min-width:0; }
+
+  .entry__meta{
+    display:flex;
+    align-items:center;
+    gap: var(--sp-12);
+    margin-bottom: var(--sp-12);
+  }
+
+  .label{
+    display:inline-flex;
+    align-items:center;
+    height: 24px;
+    padding: 0 var(--sp-6);
+    border-radius: 2px;
+    font-size: var(--label-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    white-space:nowrap;
+  }
+  .label--new{ background: var(--label-yellow-secondary-bg); color: var(--label-yellow-secondary-color); }
+  .label--upgrade{ background: var(--label-blue-secondary-bg); color: var(--label-blue-secondary-color); }
+  .label--improve{ background: var(--label-green-secondary-bg); color: var(--label-green-secondary-color); }
+  .label--integration{ background: var(--label-purple-secondary-bg); color: var(--label-purple-secondary-color); }
+  .label--live{ background: var(--label-red-secondary-bg); color: var(--label-red-secondary-color); }
+
+  .entry__date{
+    font-size: var(--caption-sm);
+    color: var(--text-tertiary);
+  }
+
+  .entry__title{
+    font-size: var(--heading-h6);
+    font-weight: 700;
+    margin-bottom: var(--sp-8);
+    letter-spacing: -0.01em;
+  }
+
+  .entry__desc{
+    font-size: var(--caption-sm);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin-bottom: var(--sp-16);
+  }
+
+  .entry__product{
+    font-size: var(--caption-xs);
+    color: var(--text-tertiary);
+    display:flex;
+    align-items:center;
+    gap: var(--sp-8);
+  }
+
+  .entry__product .swatch{
+    width:6px; height:6px; border-radius:50%;
+  }
+
+  .entry__link{
+    display:inline-flex;
+    align-items:center;
+    gap: var(--sp-6);
+    font-size: var(--caption-sm);
+    font-weight: 700;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: 2px;
+    margin-top: var(--sp-12);
+    transition: color .15s ease, border-color .15s ease, gap .15s ease;
+  }
+  .entry__link:hover{
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    gap: var(--sp-8);
+  }
+
+  @media (max-width: 900px){
+    .grid-margin, .header, .hero, .timeline-section{ padding-left: var(--sp-24); padding-right: var(--sp-24); }
+    .timeline::before{ left: 0; }
+    .month-label{ position:static; float:none; display:block; margin-bottom: var(--sp-16); }
+    .month-items{ margin-left: 26px; }
+    .entry::before{ left: -18px; }
+    .entry{ flex-direction:column; }
+    .entry__tile{ width:64px; height:64px; }
+    .entry__tile svg{ width:28px; height:28px; }
+    .hero h1{ font-size: var(--display-4); }
+    .ticker__item{ padding: var(--sp-12) var(--sp-20); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <div class="logo" aria-label="DAZN">
+      <svg viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="24" font-family="Arial, sans-serif" font-weight="800" font-size="28" letter-spacing="-1" fill="#FAFBFC">DAZN</text>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero__glow"></div>
+    <div class="hero__content">
+      <span class="hero__eyebrow"><span class="pulse-dot"></span> Product updates</span>
+      <h1>What's new <span>on DAZN</span></h1>
+      <p>Every release, upgrade, and behind-the-scenes improvement we ship — across live streaming, stats, and the DAZN app on every screen.</p>
+
+      <div class="ticker" role="marquee" aria-label="Recent highlights">
+        <div class="ticker__track">
+          <span class="ticker__item"><span class="dot">●</span> <strong>Multi-View</strong>&nbsp;now on Smart TV</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>4K HDR</strong>&nbsp;expanded to 6 more leagues</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>Offline downloads</strong>&nbsp;on mobile</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>Live win-probability</strong>&nbsp;overlay</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>Watch Party</strong>&nbsp;in beta</span>
+          <!-- duplicate for seamless loop -->
+          <span class="ticker__item"><span class="dot">●</span> <strong>Multi-View</strong>&nbsp;now on Smart TV</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>4K HDR</strong>&nbsp;expanded to 6 more leagues</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>Offline downloads</strong>&nbsp;on mobile</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>Live win-probability</strong>&nbsp;overlay</span>
+          <span class="ticker__item"><span class="dot">●</span> <strong>Watch Party</strong>&nbsp;in beta</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TIMELINE ============ -->
+  <section class="timeline-section">
+    <div class="timeline-section__header">
+      <h2>All Updates &amp; Releases</h2>
+      <p id="entry-count">18 updates</p>
+    </div>
+
+    <div class="timeline" id="timeline">
+
+      <div class="month-group">
+        <span class="month-label">April</span>
+        <div class="month-items">
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(247,255,26,0.08); border-color:rgba(247,255,26,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#F7FF1A" stroke-width="1.6"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">April 4</span></div>
+              <h3 class="entry__title">Watch two games at once with Multi-View</h3>
+              <p class="entry__desc">Split the screen and follow two live matches side by side on Smart TV and web, with independent audio switching so you never miss a moment across your leagues.</p>
+              <div class="entry__product"><span class="swatch" style="background:#F7FF1A"></span>DAZN app · Smart TV, Web</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(121,233,156,0.08); border-color:rgba(121,233,156,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#79E99C" stroke-width="1.6"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 3 5-7"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--improve">Improvement</span><span class="entry__date">April 2</span></div>
+              <h3 class="entry__title">Faster start-up times on mobile</h3>
+              <p class="entry__desc">Cold-start time on iOS and Android is down by 38%, so kickoff is never more than a couple of seconds away.</p>
+              <div class="entry__product"><span class="swatch" style="background:#79E99C"></span>DAZN app · iOS, Android</div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <div class="month-group">
+        <span class="month-label">March</span>
+        <div class="month-items">
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(17,131,255,0.08); border-color:rgba(17,131,255,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#1183FF" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--upgrade">Feature upgrade</span><span class="entry__date">March 27</span></div>
+              <h3 class="entry__title">Live win-probability overlay</h3>
+              <p class="entry__desc">A real-time win-probability meter now sits alongside the score bug during select fixtures, updating on every key play so you can feel the swing of the match.</p>
+              <div class="entry__product"><span class="swatch" style="background:#1183FF"></span>DAZN app · All platforms</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(209,36,36,0.08); border-color:rgba(209,36,36,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FF8D8D" stroke-width="1.6"><path d="M12 2l2.9 6.6L22 9.3l-5 5 1.2 7.2L12 18l-6.2 3.5L7 14.3l-5-5 7.1-.7z"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--live">Live</span><span class="entry__date">March 21</span></div>
+              <h3 class="entry__title">Key Moments now generated during the game</h3>
+              <p class="entry__desc">Goals, red cards, and big saves are clipped and ready to replay within seconds of happening — no more waiting until full time to catch up.</p>
+              <div class="entry__product"><span class="swatch" style="background:#FF8D8D"></span>DAZN app · All platforms</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(210,74,249,0.08); border-color:rgba(210,74,249,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#D24AF9" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--integration">Apps &amp; integrations</span><span class="entry__date">March 12</span></div>
+              <h3 class="entry__title">AirPlay and Chromecast handoff improvements</h3>
+              <p class="entry__desc">Casting to your TV now preserves your commentary language, stats overlay, and playback position, so switching screens feels seamless.</p>
+              <div class="entry__product"><span class="swatch" style="background:#D24AF9"></span>DAZN app · Mobile</div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <div class="month-group">
+        <span class="month-label">February</span>
+        <div class="month-items">
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(247,255,26,0.08); border-color:rgba(247,255,26,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#F7FF1A" stroke-width="1.6"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="5"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">February 24</span></div>
+              <h3 class="entry__title">4K HDR expanded to six more leagues</h3>
+              <p class="entry__desc">Ultra-HD broadcasts are rolling out further across our football and combat sports coverage, with wider dynamic range and richer color on supported devices.</p>
+              <div class="entry__product"><span class="swatch" style="background:#F7FF1A"></span>DAZN app · Smart TV, Consoles</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(121,233,156,0.08); border-color:rgba(121,233,156,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#79E99C" stroke-width="1.6"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><rect x="4" y="17" width="16" height="4" rx="1"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">February 18</span></div>
+              <h3 class="entry__title">Offline downloads for mobile</h3>
+              <p class="entry__desc">Download replays and select fixtures to your phone or tablet before you travel, and watch without needing a signal.</p>
+              <div class="entry__product"><span class="swatch" style="background:#79E99C"></span>DAZN app · iOS, Android</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(17,131,255,0.08); border-color:rgba(17,131,255,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#1183FF" stroke-width="1.6"><path d="M4 4h16v12H8l-4 4V4z"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--upgrade">Feature upgrade</span><span class="entry__date">February 9</span></div>
+              <h3 class="entry__title">Redesigned match-chat for Watch Party</h3>
+              <p class="entry__desc">Reactions, threaded replies, and quieter notifications make watching together with friends less distracting and more fun.</p>
+              <div class="entry__product"><span class="swatch" style="background:#1183FF"></span>DAZN app · Mobile, Web</div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <div class="month-group">
+        <span class="month-label">January</span>
+        <div class="month-items">
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(210,74,249,0.08); border-color:rgba(210,74,249,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#D24AF9" stroke-width="1.6"><circle cx="12" cy="8" r="3"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--integration">Apps &amp; integrations</span><span class="entry__date">January 29</span></div>
+              <h3 class="entry__title">Watch Party opens to public beta</h3>
+              <p class="entry__desc">Host a shared viewing room for up to eight friends with synced playback and live reactions — now open to everyone, not just invited testers.</p>
+              <div class="entry__product"><span class="swatch" style="background:#D24AF9"></span>DAZN app · Mobile, Web</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(255,150,0,0.08); border-color:rgba(255,150,0,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FF9600" stroke-width="1.6"><path d="M4 21V9M10 21V3M16 21v-7M22 21H2"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">January 22</span></div>
+              <h3 class="entry__title">Player-level stats panel</h3>
+              <p class="entry__desc">Tap any player during a live match to pull up real-time distance covered, top speed, and touch heat maps sourced straight from the match feed.</p>
+              <div class="entry__product"><span class="swatch" style="background:#FF9600"></span>DAZN app · All platforms</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(121,233,156,0.08); border-color:rgba(121,233,156,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#79E99C" stroke-width="1.6"><path d="M2 12h4l2-6 4 12 2-9 2 3h6"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--improve">Improvement</span><span class="entry__date">January 14</span></div>
+              <h3 class="entry__title">Lower-latency live streams</h3>
+              <p class="entry__desc">Broadcast delay on live fixtures has been cut by up to 4 seconds across our largest markets, closing the gap with traditional TV.</p>
+              <div class="entry__product"><span class="swatch" style="background:#79E99C"></span>DAZN app · All platforms</div>
+            </div>
+          </article>
+
+          <article class="entry">
+            <div class="entry__tile" style="background:rgba(247,255,26,0.08); border-color:rgba(247,255,26,0.25);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#F7FF1A" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
+            <div class="entry__body">
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">January 8</span></div>
+              <h3 class="entry__title">Redesigned home rail for faster browsing</h3>
+              <p class="entry__desc">Live and upcoming fixtures now surface first, with clearer competition rails so you can find tonight's game in one tap.</p>
+              <div class="entry__product"><span class="swatch" style="background:#F7FF1A"></span>DAZN app · All platforms</div>
+              <a class="entry__link" href="#">Read more →</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    // Reveal entries as they scroll into view
+    const entries = document.querySelectorAll('.entry');
+    const io = new IntersectionObserver((items) => {
+      items.forEach(item => {
+        if (item.isIntersecting) {
+          item.target.classList.add('is-visible');
+          io.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    entries.forEach(el => io.observe(el));
+
+    document.getElementById('entry-count').textContent = entries.length + ' updates';
+  </script>
+
+</body>
+</html>
