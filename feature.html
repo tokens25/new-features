@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DAZN — What's New</title>
+<style>
+
+  /* ============ DAZN DESIGN TOKENS (Dark theme, Desktop) ============ */
+  :root{
+    --font-family: 'DAZN Oscine', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --surface-default: #080E12;
+    --surface-1: #0C1216;
+    --surface-2: #10171B;
+
+    --text-primary: #FAFBFC;
+    --text-secondary: #BCC5CB;
+    --text-tertiary: #76828C;
+
+    --border-subtle: #21292E;
+    --border-default: #444D53;
+    --border-strong: #76828C;
+
+    --brand-primary: #F7FF1A;
+
+    --label-yellow-secondary-bg: rgba(247, 255, 26, 0.1);
+    --label-yellow-secondary-color: #F7FF1A;
+    --label-blue-secondary-bg: rgba(17, 131, 255, 0.1);
+    --label-blue-secondary-color: #1183FF;
+    --label-green-secondary-bg: rgba(121, 233, 156, 0.2);
+    --label-green-secondary-color: #79E99C;
+    --label-purple-secondary-bg: rgba(190, 95, 224, 0.1);
+    --label-purple-secondary-color: #D24AF9;
+    --label-red-secondary-bg: rgba(209, 36, 36, 0.3);
+    --label-red-secondary-color: #FF8D8D;
+
+    --display-4: 36px;
+    --heading-h4: 28px;
+    --heading-h5: 24px;
+    --heading-h6: 22px;
+    --body-default: 18px;
+    --caption-sm: 14px;
+    --caption-xs: 12px;
+    --label-sm: 14px;
+
+    --sp-4: 4px; --sp-6:6px; --sp-8: 8px; --sp-12: 12px; --sp-16: 16px;
+    --sp-20: 20px; --sp-24: 24px; --sp-32: 32px; --sp-40: 40px;
+    --sp-48: 48px; --sp-64: 64px; --sp-96: 96px;
+
+    --radius-8: 8px; --radius-12: 12px; --radius-16: 16px; --radius-full: 9999px;
+
+    --grid-margin: 64px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    background: var(--surface-default);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  ::selection{ background: var(--brand-primary); color:#080E12; }
+
+  /* ============ HEADER ============ */
+  .header{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display:flex;
+    align-items:center;
+    height: 72px;
+    padding: 0 var(--grid-margin);
+    background: rgba(8,14,18,0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .logo{ display:flex; align-items:center; gap: var(--sp-8); }
+  .logo svg{ display:block; height: 22px; width:auto; }
+
+  /* ============ BREADCRUMB BAR ============ */
+  .breadcrumb-bar{
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .breadcrumb{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--sp-16) var(--grid-margin);
+    display:flex;
+    align-items:center;
+    gap: var(--sp-8);
+    font-size: var(--caption-sm);
+    color: var(--text-tertiary);
+    flex-wrap:wrap;
+  }
+  .breadcrumb a:hover{ color: var(--text-primary); }
+  .breadcrumb .current{ color: var(--text-secondary); }
+  .breadcrumb .sep{ color: var(--border-default); }
+
+  /* ============ LAYOUT ============ */
+  .layout{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--sp-64) var(--grid-margin) var(--sp-96);
+    display:grid;
+    grid-template-columns: 1fr 260px;
+    gap: var(--sp-64);
+    align-items:start;
+  }
+
+  /* ============ MAIN CONTENT ============ */
+  .content__meta{
+    display:flex;
+    align-items:center;
+    gap: var(--sp-12);
+    margin-bottom: var(--sp-16);
+  }
+
+  .label{
+    display:inline-flex;
+    align-items:center;
+    height: 24px;
+    padding: 0 var(--sp-6);
+    border-radius: 2px;
+    font-size: var(--label-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    white-space:nowrap;
+  }
+  .label--new{ background: var(--label-yellow-secondary-bg); color: var(--label-yellow-secondary-color); }
+  .label--upgrade{ background: var(--label-blue-secondary-bg); color: var(--label-blue-secondary-color); }
+  .label--improve{ background: var(--label-green-secondary-bg); color: var(--label-green-secondary-color); }
+  .label--integration{ background: var(--label-purple-secondary-bg); color: var(--label-purple-secondary-color); }
+  .label--live{ background: var(--label-red-secondary-bg); color: var(--label-red-secondary-color); }
+
+  .content__date{ font-size: var(--caption-sm); color: var(--text-tertiary); }
+
+  .content__title{
+    font-size: var(--heading-h4);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--sp-16);
+  }
+
+  .content__topline{
+    display:flex;
+    justify-content:flex-end;
+    font-size: var(--caption-sm);
+    color: var(--text-tertiary);
+    margin-bottom: var(--sp-16);
+  }
+
+  .content__divider{
+    border:none;
+    border-top: 1px solid var(--border-subtle);
+    margin-bottom: var(--sp-32);
+  }
+
+  .lead{
+    font-size: var(--body-default);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: var(--sp-24);
+  }
+
+  .callout{
+    border: 1px solid;
+    border-radius: var(--radius-8);
+    padding: var(--sp-16) var(--sp-20);
+    font-size: var(--caption-sm);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: var(--sp-32);
+  }
+  .callout strong{ color: var(--text-primary); }
+  .callout--tip{ border-color: rgba(121,233,156,0.3); background: rgba(121,233,156,0.06); }
+  .callout--note{ border-color: rgba(17,131,255,0.3); background: rgba(17,131,255,0.06); }
+
+  .hero-tile{
+    width: 100%;
+    height: 220px;
+    border-radius: var(--radius-16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border: 1px solid var(--border-subtle);
+    margin-bottom: var(--sp-40);
+  }
+  .hero-tile svg{ width: 72px; height: 72px; }
+
+  .content section{
+    margin-bottom: var(--sp-40);
+    scroll-margin-top: 96px;
+  }
+  .content section h2{
+    font-size: var(--heading-h6);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--sp-16);
+  }
+  .content section p{
+    font-size: var(--caption-sm);
+    line-height: 1.75;
+    color: var(--text-secondary);
+  }
+
+  .last-updated{
+    font-size: var(--caption-xs);
+    color: var(--text-tertiary);
+    margin-bottom: var(--sp-32);
+  }
+
+  .related-heading{
+    font-size: var(--heading-h6);
+    font-weight: 700;
+    margin-bottom: var(--sp-20);
+  }
+
+  .related-list{
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-12);
+    overflow:hidden;
+  }
+  .related-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: var(--sp-20) var(--sp-24);
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: var(--caption-sm);
+    font-weight: 700;
+    transition: background-color .15s ease, color .15s ease;
+  }
+  .related-row:last-child{ border-bottom:none; }
+  .related-row:hover{ background: var(--surface-1); color: var(--brand-primary); }
+  .related-row .arrow{ color: var(--text-tertiary); transition: transform .15s ease; }
+  .related-row:hover .arrow{ transform: translateX(3px); color: var(--brand-primary); }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar{ position:sticky; top: 96px; }
+  .sidebar__title{
+    font-size: var(--caption-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+    margin-bottom: var(--sp-16);
+  }
+  .toc{ display:flex; flex-direction:column; gap: var(--sp-12); margin-bottom: var(--sp-32); }
+  .toc a{
+    font-size: var(--caption-sm);
+    color: var(--text-tertiary);
+    border-left: 2px solid transparent;
+    padding-left: var(--sp-12);
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .toc a.is-active{ color: var(--text-primary); font-weight:700; border-color: var(--brand-primary); }
+
+  .sidebar__divider{ border:none; border-top: 1px solid var(--border-subtle); margin-bottom: var(--sp-32); }
+
+  .sidebar__product{
+    display:flex;
+    align-items:center;
+    gap: var(--sp-8);
+    font-size: var(--caption-sm);
+    color: var(--text-secondary);
+  }
+  .sidebar__product .swatch{ width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+  .not-found{ color: var(--text-secondary); font-size: var(--body-default); }
+
+  @media (max-width: 900px){
+    .header, .breadcrumb, .layout{ padding-left: var(--sp-24); padding-right: var(--sp-24); }
+    .layout{ grid-template-columns: 1fr; }
+    .sidebar{ position:static; order:-1; margin-bottom: var(--sp-32); }
+    .toc{ flex-direction:row; flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo" aria-label="DAZN">
+      <svg viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="24" font-family="Arial, sans-serif" font-weight="800" font-size="28" letter-spacing="-1" fill="#FAFBFC">DAZN</text>
+      </svg>
+    </div>
+  </header>
+
+  <div class="breadcrumb-bar">
+    <nav class="breadcrumb" id="breadcrumb">
+      <a href="index.html">All updates</a>
+    </nav>
+  </div>
+
+  <div class="layout" id="layout">
+    <main class="content" id="content">
+      <p class="not-found">Loading…</p>
+    </main>
+    <aside class="sidebar" id="sidebar"></aside>
+  </div>
+
+  <script src="entries.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    const list = window.DAZN_ENTRIES || [];
+    const entry = list.find(e => e.id === id);
+    const content = document.getElementById('content');
+    const sidebar = document.getElementById('sidebar');
+    const breadcrumb = document.getElementById('breadcrumb');
+
+    if (!entry) {
+      content.innerHTML = `<p class="not-found">We couldn't find that update. It may have been moved — head back to see everything that's new.</p>`;
+    } else {
+      document.title = `${entry.title} — DAZN What's New`;
+
+      breadcrumb.innerHTML = `
+        <a href="index.html">All updates</a>
+        <span class="sep">›</span>
+        <span>${entry.date.split(' ')[0]}</span>
+        <span class="sep">›</span>
+        <span class="current">${entry.title}</span>
+      `;
+
+      const wordCount = (entry.desc + ' ' + entry.sections.map(s => s.text).join(' ')).split(/\s+/).length;
+      const readMins = Math.max(1, Math.round(wordCount / 180));
+
+      content.innerHTML = `
+        <div class="content__meta">
+          <span class="label ${entry.labelClass}">${entry.labelText}</span>
+          <span class="content__date">${entry.date}</span>
+        </div>
+        <h1 class="content__title">${entry.title}</h1>
+        <div class="content__topline">${readMins} min read</div>
+        <hr class="content__divider">
+        <p class="lead">${entry.desc}</p>
+        <div class="callout callout--tip"><strong>Tip:</strong> ${entry.tip}</div>
+        <div class="hero-tile" style="background:${entry.tileBg}; border-color:${entry.tileBorder};">
+          <svg viewBox="0 0 24 24" fill="none" stroke="${entry.color}" stroke-width="1.2">${entry.icon}</svg>
+        </div>
+        ${entry.sections.map((s, i) => `
+          <section id="sec-${i}">
+            <h2>${s.heading}</h2>
+            <p>${s.text}</p>
+          </section>
+        `).join('')}
+        <div class="callout callout--note"><strong>Note:</strong> This feature is available on ${entry.product}.</div>
+        <p class="last-updated">Last updated ${entry.date}</p>
+        <hr class="content__divider">
+        <h3 class="related-heading">Related updates</h3>
+        <div class="related-list">
+          ${list.filter(e => e.id !== entry.id).slice(0, 4).map(e => `
+            <a class="related-row" href="feature.html?id=${e.id}">${e.title}<span class="arrow">→</span></a>
+          `).join('')}
+        </div>
+      `;
+
+      sidebar.innerHTML = `
+        <p class="sidebar__title">On this page</p>
+        <nav class="toc" id="toc">
+          ${entry.sections.map((s, i) => `<a href="#sec-${i}" data-target="sec-${i}">${s.heading}</a>`).join('')}
+        </nav>
+        <hr class="sidebar__divider">
+        <p class="sidebar__title">Product</p>
+        <div class="sidebar__product"><span class="swatch" style="background:${entry.color}"></span>${entry.product}</div>
+      `;
+
+      const tocLinks = Array.from(document.querySelectorAll('#toc a'));
+      const sections = Array.from(document.querySelectorAll('.content section'));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(item => {
+          if (item.isIntersecting) {
+            tocLinks.forEach(link => link.classList.toggle('is-active', link.dataset.target === item.target.id));
+          }
+        });
+      }, { rootMargin: '-96px 0px -70% 0px', threshold: 0 });
+      sections.forEach(sec => io.observe(sec));
+      if (tocLinks[0]) tocLinks[0].classList.add('is-active');
+    }
+  </script>
+
+</body>
+</html>

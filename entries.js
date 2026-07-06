@@ -1,0 +1,219 @@
+// Shared data for the "What's new" timeline (index.html) and the feature detail page (feature.html).
+window.DAZN_ENTRIES = [
+  {
+    id: "multi-view",
+    labelClass: "label--new",
+    labelText: "New release",
+    date: "August 4",
+    title: "Watch two games at once with Multi-View",
+    desc: "Split the screen and follow two live matches side by side on Smart TV and web, with independent audio switching so you never miss a moment across your leagues.",
+    tip: "Multi-View works best when both matches share a similar kickoff time — pick two live fixtures for the tightest sync.",
+    sections: [
+      { heading: "What's changing", text: "Multi-View is rolling out first to Smart TV and web, with mobile and console support following in the coming weeks. Each pane streams independently, so you can pause, rewind, or switch commentary language on one match without affecting the other." },
+      { heading: "How it works", text: "Open any two live fixtures from the home rail and select the split-screen icon in the player controls. Your layout and audio preference are remembered the next time you tune in." }
+    ],
+    product: "DAZN app · Smart TV, Web",
+    color: "#F7FF1A",
+    tileBg: "rgba(247,255,26,0.08)",
+    tileBorder: "rgba(247,255,26,0.25)",
+    icon: '<path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/>'
+  },
+  {
+    id: "faster-startup-mobile",
+    labelClass: "label--improve",
+    labelText: "Improvement",
+    date: "August 2",
+    title: "Faster start-up times on mobile",
+    desc: "Cold-start time on iOS and Android is down by 38%, so kickoff is never more than a couple of seconds away.",
+    tip: "Force-closing and reopening the app after updating gives you the full benefit of the faster cold-start immediately.",
+    sections: [
+      { heading: "What's changing", text: "The improvement comes from a rebuilt app-launch pipeline that defers non-essential network calls until after the first frame renders, and from smarter local caching of your most-watched leagues." },
+      { heading: "How it works", text: "We measured cold-start time across a representative mix of iOS and Android devices, from budget hardware to the latest flagships, and the 38% improvement holds consistently across the board." }
+    ],
+    product: "DAZN app · iOS, Android",
+    color: "#79E99C",
+    tileBg: "rgba(121,233,156,0.08)",
+    tileBorder: "rgba(121,233,156,0.25)",
+    icon: '<path d="M3 3v18h18"/><path d="M7 15l4-4 4 3 5-7"/>'
+  },
+  {
+    id: "win-probability-overlay",
+    labelClass: "label--upgrade",
+    labelText: "Feature upgrade",
+    date: "July 27",
+    title: "Live win-probability overlay",
+    desc: "A real-time win-probability meter now sits alongside the score bug during select fixtures, updating on every key play so you can feel the swing of the match.",
+    tip: "You can hide the overlay from Player Settings if you'd rather watch without predictions.",
+    sections: [
+      { heading: "What's changing", text: "The model factors in expected goals, possession trends, and game state to update its projection after every meaningful play — shots, cards, and substitutions all move the needle." },
+      { heading: "How it works", text: "You can toggle the overlay on or off from the player controls at any time, and it's designed to sit alongside the existing score bug without covering the action." }
+    ],
+    product: "DAZN app · All platforms",
+    color: "#1183FF",
+    tileBg: "rgba(17,131,255,0.08)",
+    tileBorder: "rgba(17,131,255,0.25)",
+    icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>'
+  },
+  {
+    id: "key-moments-live",
+    labelClass: "label--live",
+    labelText: "Live",
+    date: "July 21",
+    title: "Key Moments now generated during the game",
+    desc: "Goals, red cards, and big saves are clipped and ready to replay within seconds of happening — no more waiting until full time to catch up.",
+    tip: "Key Moments are saved to the match page for 30 days, so you can revisit them well after full time.",
+    sections: [
+      { heading: "What's changing", text: "Instead of waiting for a post-match highlights reel, clips of goals, red cards, and big saves are now available to replay within seconds of the moment happening on the pitch." },
+      { heading: "How it works", text: "Each clip is tagged with the match, minute, and player involved, so you can jump straight back into the live feed once you've caught up." }
+    ],
+    product: "DAZN app · All platforms",
+    color: "#FF8D8D",
+    tileBg: "rgba(209,36,36,0.08)",
+    tileBorder: "rgba(209,36,36,0.25)",
+    icon: '<path d="M12 2l2.9 6.6L22 9.3l-5 5 1.2 7.2L12 18l-6.2 3.5L7 14.3l-5-5 7.1-.7z"/>'
+  },
+  {
+    id: "airplay-chromecast-handoff",
+    labelClass: "label--integration",
+    labelText: "Apps &amp; integrations",
+    date: "July 12",
+    title: "AirPlay and Chromecast handoff improvements",
+    desc: "Casting to your TV now preserves your commentary language, stats overlay, and playback position, so switching screens feels seamless.",
+    tip: "Handoff works best when your phone and TV or streaming device are on the same Wi-Fi network.",
+    sections: [
+      { heading: "What's changing", text: "Previously, casting to a TV would reset your commentary language and drop any active stats overlay. That state now travels with the stream, so the experience on the big screen matches exactly what you had on your phone." },
+      { heading: "How it works", text: "Playback position is also preserved to the second, so handing off mid-match — say, walking from the kitchen to the living room — no longer means missing a replay or rewinding manually." }
+    ],
+    product: "DAZN app · Mobile",
+    color: "#D24AF9",
+    tileBg: "rgba(210,74,249,0.08)",
+    tileBorder: "rgba(210,74,249,0.25)",
+    icon: '<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/>'
+  },
+  {
+    id: "4k-hdr-expansion",
+    labelClass: "label--new",
+    labelText: "New release",
+    date: "June 24",
+    title: "4K HDR expanded to six more leagues",
+    desc: "Ultra-HD broadcasts are rolling out further across our football and combat sports coverage, with wider dynamic range and richer color on supported devices.",
+    tip: "4K HDR requires an HDR-capable display and a stable connection of at least 25 Mbps.",
+    sections: [
+      { heading: "What's changing", text: "This expansion brings Ultra-HD broadcasts to six additional leagues across football and combat sports, on top of existing 4K HDR coverage." },
+      { heading: "How it works", text: "Supported Smart TVs and consoles will automatically switch to the higher-fidelity stream when available bandwidth allows, with no changes needed in your settings." }
+    ],
+    product: "DAZN app · Smart TV, Consoles",
+    color: "#F7FF1A",
+    tileBg: "rgba(247,255,26,0.08)",
+    tileBorder: "rgba(247,255,26,0.25)",
+    icon: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="5"/>'
+  },
+  {
+    id: "offline-downloads",
+    labelClass: "label--new",
+    labelText: "New release",
+    date: "June 18",
+    title: "Offline downloads for mobile",
+    desc: "Download replays and select fixtures to your phone or tablet before you travel, and watch without needing a signal.",
+    tip: "Downloads use your device's storage, so keep an eye on available space before downloading a full match.",
+    sections: [
+      { heading: "What's changing", text: "Downloaded content is encrypted on-device and automatically expires after a set viewing window, in line with broadcast rights agreements." },
+      { heading: "How it works", text: "You can manage active downloads from a new 'Downloads' tab in the mobile app, including pausing, prioritizing, or removing content to free up space." }
+    ],
+    product: "DAZN app · iOS, Android",
+    color: "#79E99C",
+    tileBg: "rgba(121,233,156,0.08)",
+    tileBorder: "rgba(121,233,156,0.25)",
+    icon: '<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><rect x="4" y="17" width="16" height="4" rx="1"/>'
+  },
+  {
+    id: "watch-party-chat-redesign",
+    labelClass: "label--upgrade",
+    labelText: "Feature upgrade",
+    date: "June 9",
+    title: "Redesigned match-chat for Watch Party",
+    desc: "Reactions, threaded replies, and quieter notifications make watching together with friends less distracting and more fun.",
+    tip: "Quiet mode can be toggled per-room from the chat settings icon in the top-right corner.",
+    sections: [
+      { heading: "What's changing", text: "The redesigned chat adds quick-tap reactions, threaded replies so side conversations don't clutter the main feed, and a 'quiet mode' that limits notifications during key moments." },
+      { heading: "How it works", text: "These changes were driven directly by feedback from the Watch Party beta, where message volume during big matches made the original chat hard to follow." }
+    ],
+    product: "DAZN app · Mobile, Web",
+    color: "#1183FF",
+    tileBg: "rgba(17,131,255,0.08)",
+    tileBorder: "rgba(17,131,255,0.25)",
+    icon: '<path d="M4 4h16v12H8l-4 4V4z"/>'
+  },
+  {
+    id: "watch-party-beta",
+    labelClass: "label--integration",
+    labelText: "Apps &amp; integrations",
+    date: "May 29",
+    title: "Watch Party opens to public beta",
+    desc: "Host a shared viewing room for up to eight friends with synced playback and live reactions — now open to everyone, not just invited testers.",
+    tip: "Rooms currently support up to eight participants — larger groups can start multiple linked rooms.",
+    sections: [
+      { heading: "What's changing", text: "Public beta removes the invite requirement entirely — any user can start or join a room for up to eight friends, with synced playback and live reactions." },
+      { heading: "How it works", text: "During the invite-only beta we focused on sync reliability across varying connection speeds; public rollout adds capacity to support significantly more concurrent rooms." }
+    ],
+    product: "DAZN app · Mobile, Web",
+    color: "#D24AF9",
+    tileBg: "rgba(210,74,249,0.08)",
+    tileBorder: "rgba(210,74,249,0.25)",
+    icon: '<circle cx="12" cy="8" r="3"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6"/>'
+  },
+  {
+    id: "player-stats-panel",
+    labelClass: "label--new",
+    labelText: "New release",
+    date: "May 22",
+    title: "Player-level stats panel",
+    desc: "Tap any player during a live match to pull up real-time distance covered, top speed, and touch heat maps sourced straight from the match feed.",
+    tip: "Stat availability varies by competition — coverage is deepest in our top-tier football leagues.",
+    sections: [
+      { heading: "What's changing", text: "Tapping a player during a live match surfaces real-time distance covered, top speed, and a touch heat map, all sourced directly from the same match feed powering official broadcast graphics." },
+      { heading: "How it works", text: "The panel is available across Smart TV, mobile, and web, and updates continuously throughout the match rather than only at half-time or full-time." }
+    ],
+    product: "DAZN app · All platforms",
+    color: "#FF9600",
+    tileBg: "rgba(255,150,0,0.08)",
+    tileBorder: "rgba(255,150,0,0.25)",
+    icon: '<path d="M4 21V9M10 21V3M16 21v-7M22 21H2"/>'
+  },
+  {
+    id: "lower-latency-streams",
+    labelClass: "label--improve",
+    labelText: "Improvement",
+    date: "May 14",
+    title: "Lower-latency live streams",
+    desc: "Broadcast delay on live fixtures has been cut by up to 4 seconds across our largest markets, closing the gap with traditional TV.",
+    tip: "Actual latency improvement varies by region and network conditions.",
+    sections: [
+      { heading: "What's changing", text: "Broadcast delay has been cut by up to 4 seconds in our largest markets by optimizing the encoding and delivery pipeline end-to-end, from ingest through to the player." },
+      { heading: "How it works", text: "Lower latency particularly benefits viewers who follow along with social media or a second screen, closing the gap that previously caused spoilers to arrive before the stream." }
+    ],
+    product: "DAZN app · All platforms",
+    color: "#79E99C",
+    tileBg: "rgba(121,233,156,0.08)",
+    tileBorder: "rgba(121,233,156,0.25)",
+    icon: '<path d="M2 12h4l2-6 4 12 2-9 2 3h6"/>'
+  },
+  {
+    id: "home-rail-redesign",
+    labelClass: "label--new",
+    labelText: "New release",
+    date: "May 8",
+    title: "Redesigned home rail for faster browsing",
+    desc: "Live and upcoming fixtures now surface first, with clearer competition rails so you can find tonight's game in one tap.",
+    tip: "You can still access on-demand content anytime from the Library tab.",
+    sections: [
+      { heading: "What's changing", text: "Live and upcoming fixtures now surface at the very top of the home screen, ahead of on-demand content, so tonight's game is never more than a scroll away." },
+      { heading: "How it works", text: "Competition rails have also been reorganized around your followed leagues and teams, replacing the previous flat, undifferentiated grid." }
+    ],
+    product: "DAZN app · All platforms",
+    color: "#F7FF1A",
+    tileBg: "rgba(247,255,26,0.08)",
+    tileBorder: "rgba(247,255,26,0.25)",
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'
+  }
+];

@@ -296,12 +296,16 @@
     position:relative;
     display:flex;
     gap: var(--sp-24);
-    padding: var(--sp-32) 0;
+    padding: var(--sp-32) 0 var(--sp-32) var(--sp-16);
     border-bottom: 1px solid var(--border-subtle);
     opacity:0;
     transform: translateY(12px);
-    transition: opacity .5s ease, transform .5s ease;
+    transition: opacity .5s ease, transform .5s ease, background-color .15s ease;
+    text-decoration:none;
+    color:inherit;
+    cursor:pointer;
   }
+  .entry:hover{ background-color: var(--surface-hover, rgba(255,255,255,0.03)); }
   .entry.is-visible{ opacity:1; transform:none; }
 
   .month-items .entry:last-child{ border-bottom:none; }
@@ -392,24 +396,6 @@
     width:6px; height:6px; border-radius:50%;
   }
 
-  .entry__link{
-    display:inline-flex;
-    align-items:center;
-    gap: var(--sp-6);
-    font-size: var(--caption-sm);
-    font-weight: 700;
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--border-strong);
-    padding-bottom: 2px;
-    margin-top: var(--sp-12);
-    transition: color .15s ease, border-color .15s ease, gap .15s ease;
-  }
-  .entry__link:hover{
-    color: var(--brand-primary);
-    border-color: var(--brand-primary);
-    gap: var(--sp-8);
-  }
-
   @media (max-width: 900px){
     .grid-margin, .header, .hero, .timeline-section{ padding-left: var(--sp-24); padding-right: var(--sp-24); }
     .timeline::before{ left: 0; }
@@ -471,181 +457,173 @@
     <div class="timeline" id="timeline">
 
       <div class="month-group">
-        <span class="month-label">April</span>
+        <span class="month-label">August</span>
         <div class="month-items">
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=multi-view">
             <div class="entry__tile" style="background:rgba(247,255,26,0.08); border-color:rgba(247,255,26,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#F7FF1A" stroke-width="1.6"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">April 4</span></div>
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">August 4</span></div>
               <h3 class="entry__title">Watch two games at once with Multi-View</h3>
               <p class="entry__desc">Split the screen and follow two live matches side by side on Smart TV and web, with independent audio switching so you never miss a moment across your leagues.</p>
               <div class="entry__product"><span class="swatch" style="background:#F7FF1A"></span>DAZN app · Smart TV, Web</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=faster-startup-mobile">
             <div class="entry__tile" style="background:rgba(121,233,156,0.08); border-color:rgba(121,233,156,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#79E99C" stroke-width="1.6"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 3 5-7"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--improve">Improvement</span><span class="entry__date">April 2</span></div>
+              <div class="entry__meta"><span class="label label--improve">Improvement</span><span class="entry__date">August 2</span></div>
               <h3 class="entry__title">Faster start-up times on mobile</h3>
               <p class="entry__desc">Cold-start time on iOS and Android is down by 38%, so kickoff is never more than a couple of seconds away.</p>
               <div class="entry__product"><span class="swatch" style="background:#79E99C"></span>DAZN app · iOS, Android</div>
             </div>
-          </article>
+          </a>
 
         </div>
       </div>
 
       <div class="month-group">
-        <span class="month-label">March</span>
+        <span class="month-label">July</span>
         <div class="month-items">
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=win-probability-overlay">
             <div class="entry__tile" style="background:rgba(17,131,255,0.08); border-color:rgba(17,131,255,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#1183FF" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--upgrade">Feature upgrade</span><span class="entry__date">March 27</span></div>
+              <div class="entry__meta"><span class="label label--upgrade">Feature upgrade</span><span class="entry__date">July 27</span></div>
               <h3 class="entry__title">Live win-probability overlay</h3>
               <p class="entry__desc">A real-time win-probability meter now sits alongside the score bug during select fixtures, updating on every key play so you can feel the swing of the match.</p>
               <div class="entry__product"><span class="swatch" style="background:#1183FF"></span>DAZN app · All platforms</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=key-moments-live">
             <div class="entry__tile" style="background:rgba(209,36,36,0.08); border-color:rgba(209,36,36,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#FF8D8D" stroke-width="1.6"><path d="M12 2l2.9 6.6L22 9.3l-5 5 1.2 7.2L12 18l-6.2 3.5L7 14.3l-5-5 7.1-.7z"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--live">Live</span><span class="entry__date">March 21</span></div>
+              <div class="entry__meta"><span class="label label--live">Live</span><span class="entry__date">July 21</span></div>
               <h3 class="entry__title">Key Moments now generated during the game</h3>
               <p class="entry__desc">Goals, red cards, and big saves are clipped and ready to replay within seconds of happening — no more waiting until full time to catch up.</p>
               <div class="entry__product"><span class="swatch" style="background:#FF8D8D"></span>DAZN app · All platforms</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=airplay-chromecast-handoff">
             <div class="entry__tile" style="background:rgba(210,74,249,0.08); border-color:rgba(210,74,249,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#D24AF9" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--integration">Apps &amp; integrations</span><span class="entry__date">March 12</span></div>
+              <div class="entry__meta"><span class="label label--integration">Apps &amp; integrations</span><span class="entry__date">July 12</span></div>
               <h3 class="entry__title">AirPlay and Chromecast handoff improvements</h3>
               <p class="entry__desc">Casting to your TV now preserves your commentary language, stats overlay, and playback position, so switching screens feels seamless.</p>
               <div class="entry__product"><span class="swatch" style="background:#D24AF9"></span>DAZN app · Mobile</div>
             </div>
-          </article>
+          </a>
 
         </div>
       </div>
 
       <div class="month-group">
-        <span class="month-label">February</span>
+        <span class="month-label">June</span>
         <div class="month-items">
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=4k-hdr-expansion">
             <div class="entry__tile" style="background:rgba(247,255,26,0.08); border-color:rgba(247,255,26,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#F7FF1A" stroke-width="1.6"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="5"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">February 24</span></div>
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">June 24</span></div>
               <h3 class="entry__title">4K HDR expanded to six more leagues</h3>
               <p class="entry__desc">Ultra-HD broadcasts are rolling out further across our football and combat sports coverage, with wider dynamic range and richer color on supported devices.</p>
               <div class="entry__product"><span class="swatch" style="background:#F7FF1A"></span>DAZN app · Smart TV, Consoles</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=offline-downloads">
             <div class="entry__tile" style="background:rgba(121,233,156,0.08); border-color:rgba(121,233,156,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#79E99C" stroke-width="1.6"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><rect x="4" y="17" width="16" height="4" rx="1"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">February 18</span></div>
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">June 18</span></div>
               <h3 class="entry__title">Offline downloads for mobile</h3>
               <p class="entry__desc">Download replays and select fixtures to your phone or tablet before you travel, and watch without needing a signal.</p>
               <div class="entry__product"><span class="swatch" style="background:#79E99C"></span>DAZN app · iOS, Android</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=watch-party-chat-redesign">
             <div class="entry__tile" style="background:rgba(17,131,255,0.08); border-color:rgba(17,131,255,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#1183FF" stroke-width="1.6"><path d="M4 4h16v12H8l-4 4V4z"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--upgrade">Feature upgrade</span><span class="entry__date">February 9</span></div>
+              <div class="entry__meta"><span class="label label--upgrade">Feature upgrade</span><span class="entry__date">June 9</span></div>
               <h3 class="entry__title">Redesigned match-chat for Watch Party</h3>
               <p class="entry__desc">Reactions, threaded replies, and quieter notifications make watching together with friends less distracting and more fun.</p>
               <div class="entry__product"><span class="swatch" style="background:#1183FF"></span>DAZN app · Mobile, Web</div>
             </div>
-          </article>
+          </a>
 
         </div>
       </div>
 
       <div class="month-group">
-        <span class="month-label">January</span>
+        <span class="month-label">May</span>
         <div class="month-items">
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=watch-party-beta">
             <div class="entry__tile" style="background:rgba(210,74,249,0.08); border-color:rgba(210,74,249,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#D24AF9" stroke-width="1.6"><circle cx="12" cy="8" r="3"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--integration">Apps &amp; integrations</span><span class="entry__date">January 29</span></div>
+              <div class="entry__meta"><span class="label label--integration">Apps &amp; integrations</span><span class="entry__date">May 29</span></div>
               <h3 class="entry__title">Watch Party opens to public beta</h3>
               <p class="entry__desc">Host a shared viewing room for up to eight friends with synced playback and live reactions — now open to everyone, not just invited testers.</p>
               <div class="entry__product"><span class="swatch" style="background:#D24AF9"></span>DAZN app · Mobile, Web</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=player-stats-panel">
             <div class="entry__tile" style="background:rgba(255,150,0,0.08); border-color:rgba(255,150,0,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#FF9600" stroke-width="1.6"><path d="M4 21V9M10 21V3M16 21v-7M22 21H2"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">January 22</span></div>
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">May 22</span></div>
               <h3 class="entry__title">Player-level stats panel</h3>
               <p class="entry__desc">Tap any player during a live match to pull up real-time distance covered, top speed, and touch heat maps sourced straight from the match feed.</p>
               <div class="entry__product"><span class="swatch" style="background:#FF9600"></span>DAZN app · All platforms</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=lower-latency-streams">
             <div class="entry__tile" style="background:rgba(121,233,156,0.08); border-color:rgba(121,233,156,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#79E99C" stroke-width="1.6"><path d="M2 12h4l2-6 4 12 2-9 2 3h6"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--improve">Improvement</span><span class="entry__date">January 14</span></div>
+              <div class="entry__meta"><span class="label label--improve">Improvement</span><span class="entry__date">May 14</span></div>
               <h3 class="entry__title">Lower-latency live streams</h3>
               <p class="entry__desc">Broadcast delay on live fixtures has been cut by up to 4 seconds across our largest markets, closing the gap with traditional TV.</p>
               <div class="entry__product"><span class="swatch" style="background:#79E99C"></span>DAZN app · All platforms</div>
             </div>
-          </article>
+          </a>
 
-          <article class="entry">
+          <a class="entry" href="feature.html?id=home-rail-redesign">
             <div class="entry__tile" style="background:rgba(247,255,26,0.08); border-color:rgba(247,255,26,0.25);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#F7FF1A" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             </div>
             <div class="entry__body">
-              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">January 8</span></div>
+              <div class="entry__meta"><span class="label label--new">New release</span><span class="entry__date">May 8</span></div>
               <h3 class="entry__title">Redesigned home rail for faster browsing</h3>
               <p class="entry__desc">Live and upcoming fixtures now surface first, with clearer competition rails so you can find tonight's game in one tap.</p>
               <div class="entry__product"><span class="swatch" style="background:#F7FF1A"></span>DAZN app · All platforms</div>
-              <a class="entry__link" href="#">Read more →</a>
             </div>
-          </article>
+          </a>
 
         </div>
       </div>
