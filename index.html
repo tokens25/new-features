@@ -269,7 +269,7 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-end;
     text-align:center;
     min-height: 640px;
     padding: var(--sp-96) var(--grid-margin);
@@ -294,21 +294,9 @@
     background-size: auto calc(80% * var(--mv-zoom, 1));
     justify-content: flex-start;
   }
-  .feature-band--multi-view .feature-band__glow{ display:none; }
   .feature-band--multi-view h2{ color: #08090B; }
   .feature-band--multi-view .feature-band__tagline{ color: #3F3F46; }
   .feature-band--multi-view .label{ background: #080E12; color: var(--brand-primary); }
-
-  .feature-band__glow{
-    position:absolute;
-    top:50%; left:50%;
-    width: 720px; height: 720px;
-    transform: translate(-50%, -62%);
-    border-radius:50%;
-    opacity:0.14;
-    filter: blur(10px);
-    pointer-events:none;
-  }
 
   .feature-band__content{
     position:relative;
@@ -370,7 +358,7 @@
     flex:1;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-end;
     gap: var(--sp-12);
     padding: var(--sp-48) var(--sp-32);
     width:100%;
@@ -480,29 +468,31 @@
   }
 
   @media (max-width: 900px){
-    .header, .splash, .section, .feature-band{ padding-left: var(--sp-24); padding-right: var(--sp-24); }
+    .header, .splash, .section{ padding-left: var(--sp-24); padding-right: var(--sp-24); }
     .splash__title{ font-size: 52px; }
     .splash__subtitle{ font-size: 18px; }
     .splash__logo svg{ height: 52px; }
     .splash__video--desktop{ display:none; }
     .splash__video--mobile{ display:block; }
-    .feature-band__tagline{ font-size: 22px; }
-    .feature-band{ min-height: 520px; }
-    .feature-band h2{ font-size: 44px; }
+    .feature-band{
+      min-height: 520px;
+      padding: 30px;
+      justify-content: flex-end;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .feature-band__content{ align-items: flex-start; text-align: left; }
+    .feature-band h2{ font-size: 32px; }
+    .feature-band__tagline{ font-size: 20px; }
     .feature-band--multi-view{
       background-color: #FFFFFF;
       background-image: url('assets/img/multiview-mobile.png');
       background-position: right -40px top calc(-1 * var(--mv-shift, 0px));
       background-size: auto calc(110% * var(--mv-zoom, 1));
-      justify-content: flex-end;
-      align-items: flex-start;
-      text-align: left;
-    }
-    .feature-band--multi-view .feature-band__content{
-      align-items: flex-start;
-      text-align: left;
     }
     .grid{ grid-template-columns: 1fr; }
+    .card{ padding: 30px; align-items: flex-start; text-align: left; }
+    .card__body{ padding: 0; align-items: flex-start; justify-content: flex-end; text-align: left; }
   }
 
   @media (max-width: 640px){
@@ -623,7 +613,6 @@
     /* ---- FEATURE BANDS: the top updates as stacked full-width bands ---- */
     const band = (e) => `
       <section class="feature-band feature-band--${e.id}">
-        <div class="feature-band__glow" style="background:${e.color};"></div>
         <span class="label ${e.labelClass}">${e.labelText}</span>
         <div class="feature-band__content">
           <h2>${e.name}</h2>
