@@ -76,11 +76,16 @@
 
   /* ============ HERO ============ */
   .fhero{
+    --fp: 0; /* scroll progress 0→1: full-bleed → wrap width */
     position:relative; overflow:hidden;
     min-height: 82vh; display:flex; align-items:flex-end;
     background: var(--panel);
+    margin-left: calc(var(--fp) * max(0px, (100% - var(--max)) / 2));
+    margin-right: calc(var(--fp) * max(0px, (100% - var(--max)) / 2));
+    border-radius: calc(var(--fp) * 28px);
   }
   .fhero__ph{ position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; }
+  .fhero__inner > div{ will-change: transform, opacity; }
   .fhero::after{
     content:""; position:absolute; inset:0;
     background: linear-gradient(180deg, rgba(255,255,255,0) 45%, rgba(255,255,255,0.55) 100%);
@@ -136,15 +141,27 @@
   .closer__media img{ width:100%; height:100%; object-fit:cover; }
 
   /* ============ GALLERY ============ */
+  .gallery{ overflow-x: clip; }
   .gallery__grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: var(--sp-24); }
   .tile{
     background: #FFFFFF; border-radius: var(--r-20); overflow:hidden;
     aspect-ratio: 1/1; display:flex; align-items:center; justify-content:center;
   }
+  /* Scroll-in: tiles arrive from their four corners (gated on .reveal) */
+  .gallery__grid.reveal .tile{
+    opacity: 0;
+    transition: opacity .55s ease, transform .7s cubic-bezier(.22,.61,.36,1);
+    will-change: transform, opacity;
+  }
+  .gallery__grid.reveal .tile:nth-child(1){ transform: translate(-50px, -50px); }
+  .gallery__grid.reveal .tile:nth-child(2){ transform: translate(50px, -50px); }
+  .gallery__grid.reveal .tile:nth-child(3){ transform: translate(-50px, 50px); }
+  .gallery__grid.reveal .tile:nth-child(4){ transform: translate(50px, 50px); }
+  .gallery__grid.reveal .tile.in{ opacity: 1; transform: none; }
   .tile img{ width:100%; height:100%; object-fit:cover; }
   .ph-ico{ width:64px; height:64px; color:#c9c9ce; }
   .fhero__ph .ph-ico, .statement__ph .ph-ico{ width:112px; height:112px; color:#dcdce0; }
-  .gallery__cap{ margin-top: var(--sp-40); font-size: 24px; line-height:1.4; font-weight:600; max-width: 780px; }
+  .gallery__cap{ margin-bottom: var(--sp-40); font-size: 24px; line-height:1.4; font-weight:600; max-width: 780px; }
   .gallery__cap .muted{ color: var(--ink-2); }
 
   /* ============ HIGHLIGHTS CAROUSEL ============ */
@@ -172,8 +189,6 @@
     display:flex; align-items:center; gap: var(--sp-16);
     width: fit-content; margin: var(--sp-40) auto 0;
     padding: 14px 22px;
-    background: var(--panel);
-    border-radius: var(--r-full);
   }
   .highlights__dots button{
     border:none; padding:0; cursor:pointer;
@@ -196,6 +211,50 @@
     top: var(--sp-40); right: var(--sp-40); left: 50%;
     font-size: 26px; line-height:1.28; font-weight:600; color: var(--ink);
   }
+
+  /* ============ GAUGES (animated meters) ============ */
+  .gauges{ text-align:center; background: var(--panel); }
+  .gauges__title{ font-size: 40px; font-weight:700; letter-spacing:-0.02em; margin-bottom: var(--sp-64); }
+  .gauges__row{ display:flex; justify-content:center; align-items:flex-start; gap: 72px; flex-wrap:wrap; }
+  .gauge{ display:flex; flex-direction:column; align-items:center; gap: var(--sp-16); }
+  .gauge__ring{ position:relative; width: 190px; height: 190px; }
+  .gauge__svg{ width:100%; height:100%; display:block; }
+  .gauge__track{ fill:none; stroke:#EAEAEE; stroke-width:9; stroke-linecap:round; stroke-dasharray: 245 82; }
+  .gauge__value{
+    fill:none; stroke-width:9; stroke-linecap:round;
+    stroke-dasharray: 327; stroke-dashoffset: 327;
+    transition: stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .gauge__num{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size: 32px; font-weight:700; letter-spacing:-0.01em; color: var(--ink);
+  }
+  .gauge__label{ font-size: 15px; font-weight:600; color: var(--ink-2); }
+  @media (prefers-reduced-motion: reduce){ .gauge__value{ transition: none; } }
+
+  /* ============ STAT CARDS (big number + label) ============ */
+  .statcards{ overflow-x: clip; }
+  .statcards__title{ font-size: 48px; font-weight:700; letter-spacing:-0.02em; margin-bottom: var(--sp-48); }
+  .statcards__grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-24); }
+  .statcard{
+    background: #FFFFFF;
+    border-radius: var(--r-20);
+    padding: var(--sp-40);
+    min-height: 320px;
+    display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .statcard__num{ font-size: 64px; font-weight:700; line-height:1; letter-spacing:-0.03em; color: var(--ink); }
+  .statcard__label{ margin-top: var(--sp-12); font-size: 20px; font-weight:500; color: var(--ink); }
+  /* Scroll-in: left from left, middle from bottom, right from right (gated on .reveal) */
+  .statcards__grid.reveal .statcard{
+    opacity: 0;
+    transition: opacity .6s ease, transform .8s cubic-bezier(.22,.61,.36,1);
+    will-change: transform, opacity;
+  }
+  .statcards__grid.reveal .statcard:nth-child(1){ transform: translateX(-170px); }
+  .statcards__grid.reveal .statcard:nth-child(2){ transform: translateY(170px); }
+  .statcards__grid.reveal .statcard:nth-child(3){ transform: translateX(170px); }
+  .statcards__grid.reveal .statcard.in{ opacity: 1; transform: none; }
 
   /* ============ CENTERED STATEMENT ============ */
   .centered{ text-align:center; }
@@ -253,6 +312,14 @@
     .highlights__head h2{ font-size: 32px; }
     .highlights__scroll{ grid-auto-columns: 86vw; }
     .hcard__cap{ left: var(--sp-24); right: var(--sp-24); top: var(--sp-24); font-size: 19px; }
+    .gauges__title{ font-size: 28px; margin-bottom: var(--sp-40); }
+    .gauges__row{ gap: 32px; }
+    .gauge__ring{ width: 150px; height: 150px; }
+    .gauge__num{ font-size: 26px; }
+    .statcards__title{ font-size: 34px; margin-bottom: var(--sp-32); }
+    .statcards__grid{ grid-template-columns: 1fr; }
+    .statcard{ min-height: 220px; }
+    .statcard__num{ font-size: 52px; }
     .centered h2{ font-size: 38px; }
     .cards{ grid-template-columns: 1fr; margin-top: var(--sp-48); }
     .statement h2{ font-size: 44px; }
@@ -335,6 +402,42 @@
         </article>`).join('');
       const hdots = highlightCaps.map((_, i) => `<button${i === 0 ? ' class="is-active"' : ''} aria-label="Go to card ${i + 1}"></button>`).join('');
 
+      // Animated gauges (arc draws in + number counts up on scroll)
+      const gaugeData = [
+        { pct: 0.78, target: 66000, label: 'Live hours a year' },
+        { pct: 0.55, target: 3489,  label: 'Events this month' },
+        { pct: 0.88, target: 890,   label: 'Competitions' }
+      ];
+      const gauges = gaugeData.map((g, i) => `
+        <div class="gauge" data-pct="${g.pct}">
+          <div class="gauge__ring">
+            <svg class="gauge__svg" viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <linearGradient id="gGrad${i}" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#8923A0" stop-opacity="0.7"/>
+                  <stop offset="23%" stop-color="#F1A322"/>
+                  <stop offset="100%" stop-color="#F7FF1A"/>
+                </linearGradient>
+              </defs>
+              <circle class="gauge__track" cx="60" cy="60" r="52" transform="rotate(135 60 60)"/>
+              <circle class="gauge__value" cx="60" cy="60" r="52" stroke="url(#gGrad${i})" transform="rotate(135 60 60)"/>
+            </svg>
+            <span class="gauge__num" data-target="${g.target}">0</span>
+          </div>
+          <span class="gauge__label">${g.label}</span>
+        </div>`).join('');
+
+      const statCards = [
+        { display: '5,5M', target: 5.5, decimals: 1, suffix: 'M', label: 'subscribers worldwide' },
+        { display: '200+', target: 200, decimals: 0, suffix: '+', label: 'markets served' },
+        { display: '9',    target: 9,   decimals: 0, suffix: '',  label: 'sports on one app' }
+      ];
+      const statcardsHtml = statCards.map(s => `
+        <div class="statcard">
+          <div class="statcard__num" data-target="${s.target}" data-decimals="${s.decimals}" data-suffix="${s.suffix}">${s.display}</div>
+          <div class="statcard__label">${s.label}</div>
+        </div>`).join('');
+
       page.innerHTML = `
         <!-- HERO -->
         <section class="fhero">
@@ -363,11 +466,19 @@
           </div>
         </section>
 
+        <!-- STAT CARDS -->
+        <section class="section statcards" style="background:var(--panel)">
+          <div class="wrap">
+            <h2 class="statcards__title">Closer look</h2>
+            <div class="statcards__grid">${statcardsHtml}</div>
+          </div>
+        </section>
+
         <!-- GALLERY -->
         <section class="section gallery" style="background:var(--panel)">
           <div class="wrap">
-            <div class="gallery__grid">${galleryTiles}</div>
             <p class="gallery__cap"><strong>Made for every screen.</strong> <span class="muted">Watch ${entry.name} on ${platforms} — wherever the match takes you, with the same seamless experience.</span></p>
+            <div class="gallery__grid">${galleryTiles}</div>
           </div>
         </section>
 
@@ -378,6 +489,14 @@
           </div>
           <div class="highlights__scroll">${hcards}</div>
           <div class="highlights__dots">${hdots}</div>
+        </section>
+
+        <!-- GAUGES -->
+        <section class="section gauges">
+          <div class="wrap">
+            <h2 class="gauges__title">By the numbers.</h2>
+            <div class="gauges__row">${gauges}</div>
+          </div>
         </section>
 
         <!-- CENTERED STATEMENT -->
@@ -440,6 +559,110 @@
           if (!dTick) { requestAnimationFrame(() => { syncDots(); dTick = false; }); dTick = true; }
         }, { passive: true });
         dotEls.forEach((d, i) => d.addEventListener('click', () => hscroll.scrollTo({ left: i * step(), behavior: 'smooth' })));
+      }
+
+      // Gauges: draw the arc and count the number up when scrolled into view
+      const gaugeEls = [...page.querySelectorAll('.gauge')];
+      if (gaugeEls.length) {
+        const ARC = 245, CIRC = 327;
+        const fmt = (n) => Math.round(n).toLocaleString('de-DE');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const runGauge = (g) => {
+          if (g.dataset.done) return;
+          g.dataset.done = '1';
+          const pct = parseFloat(g.dataset.pct);
+          g.querySelector('.gauge__value').style.strokeDashoffset = (CIRC - pct * ARC).toFixed(1);
+          const num = g.querySelector('.gauge__num');
+          const target = parseFloat(num.dataset.target);
+          if (reduce) { num.textContent = fmt(target); return; }
+          const dur = 1400, t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min(1, (t - t0) / dur);
+            num.textContent = fmt(target * (1 - Math.pow(1 - p, 3)));
+            if (p < 1) requestAnimationFrame(tick); else num.textContent = fmt(target);
+          };
+          requestAnimationFrame(tick);
+          setTimeout(() => { num.textContent = fmt(target); }, dur + 400); // fallback
+        };
+        if ('IntersectionObserver' in window) {
+          const gio = new IntersectionObserver((es) => es.forEach(e => {
+            if (e.isIntersecting) { runGauge(e.target); gio.unobserve(e.target); }
+          }), { threshold: 0.4 });
+          gaugeEls.forEach(g => gio.observe(g));
+        } else {
+          gaugeEls.forEach(runGauge);
+        }
+        setTimeout(() => gaugeEls.forEach(runGauge), 2500); // safety net
+      }
+
+      // Hero: narrows to the wrap width + layered content parallax as you scroll
+      const fhero = page.querySelector('.fhero');
+      if (fhero && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const RANGE = 340;
+        const heroText = fhero.querySelector('.fhero__inner > div');
+        const heroPill = fhero.querySelector('.pricepill');
+        let fTick = false;
+        const updHero = () => {
+          const y = window.scrollY;
+          fhero.style.setProperty('--fp', Math.min(1, Math.max(0, y / RANGE)).toFixed(3));
+          const h = fhero.offsetHeight || 1;
+          const fade = Math.max(0, 1 - (y / h) * 1.25).toFixed(3);
+          if (heroText) { heroText.style.transform = `translate3d(0, ${(y * -0.42).toFixed(1)}px, 0)`; heroText.style.opacity = fade; }
+          if (heroPill) { heroPill.style.transform = `translate3d(0, ${(y * -0.12).toFixed(1)}px, 0)`; heroPill.style.opacity = fade; }
+          fTick = false;
+        };
+        updHero();
+        window.addEventListener('scroll', () => {
+          if (!fTick) { requestAnimationFrame(updHero); fTick = true; }
+        }, { passive: true });
+      }
+
+      // Gallery tiles: arrive from four corners on enter, reverse on leave
+      const galGrid = page.querySelector('.gallery__grid');
+      const galTiles = galGrid ? [...galGrid.querySelectorAll('.tile')] : [];
+      if (galGrid && galTiles.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        galGrid.classList.add('reveal');
+        const gio = new IntersectionObserver((es) => es.forEach(e => {
+          galGrid.dataset.everFired = '1';
+          galTiles.forEach(t => t.classList.toggle('in', e.isIntersecting));
+        }), { threshold: 0.2 });
+        gio.observe(galGrid);
+        setTimeout(() => { if (!galGrid.dataset.everFired) galTiles.forEach(t => t.classList.add('in')); }, 2500);
+      }
+
+      // Stat cards: slide in (left / bottom / right) + count up on enter, reverse on leave
+      const statGrid = page.querySelector('.statcards__grid');
+      const statEls = statGrid ? [...statGrid.querySelectorAll('.statcard')] : [];
+      if (statGrid && statEls.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        statGrid.classList.add('reveal');
+        const animateNum = (card, up) => {
+          const num = card.querySelector('.statcard__num');
+          const target = parseFloat(num.dataset.target);
+          const dec = parseInt(num.dataset.decimals || '0', 10);
+          const suf = num.dataset.suffix || '';
+          const fmt = (n) => (dec > 0 ? n.toFixed(dec).replace('.', ',') : Math.round(n).toString()) + suf;
+          const from = parseFloat(num.dataset.cur != null ? num.dataset.cur : (up ? 0 : target));
+          const to = up ? target : 0;
+          cancelAnimationFrame(card._raf || 0);
+          const dur = 1200, t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min(1, (t - t0) / dur);
+            const val = from + (to - from) * (1 - Math.pow(1 - p, 3));
+            num.dataset.cur = val; num.textContent = fmt(val);
+            if (p < 1) card._raf = requestAnimationFrame(tick);
+            else { num.dataset.cur = to; num.textContent = fmt(to); }
+          };
+          card._raf = requestAnimationFrame(tick);
+        };
+        const sio = new IntersectionObserver((es) => es.forEach(e => {
+          statGrid.dataset.everFired = '1';
+          const show = e.isIntersecting;
+          statEls.forEach(c => c.classList.toggle('in', show));
+          statEls.forEach(c => animateNum(c, show));
+        }), { threshold: 0.3 });
+        sio.observe(statGrid);
+        // safety net: if the observer never fires (e.g. offscreen renderer), show finals
+        setTimeout(() => { if (!statGrid.dataset.everFired) statEls.forEach(c => c.classList.add('in')); }, 2500);
       }
     }
   </script>
