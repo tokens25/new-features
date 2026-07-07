@@ -308,10 +308,46 @@
   .feature-band--multi-view .label{ background: #080E12; color: var(--brand-primary); }
 
   /* Win Probability band — same light background and text colors as Multi-View */
-  .feature-band--win-probability-overlay{ background-color: #FFFFFF; }
+  .feature-band--win-probability-overlay{ background-color: #FFFFFF; justify-content: flex-end; }
   .feature-band--win-probability-overlay h2{ color: #08090B; }
   .feature-band--win-probability-overlay .feature-band__tagline{ color: #3F3F46; }
   .feature-band--win-probability-overlay .label{ background: #080E12; color: var(--brand-primary); }
+
+  /* Win Probability band — floating live-scorecards backdrop (scroll parallax) */
+  /* Fixed-size canvas so the scorecards keep their size like an image (cropped, not scaled, on smaller viewports) */
+  .wp-cluster{ position:absolute; top:0; left:50%; transform:translateX(-50%); width:1280px; height:70%; z-index:0; pointer-events:none; }
+  .wp-card{ position:absolute; background:#12141c; border-radius:0.9em; color:#fff; box-shadow:0 0.5em 1.4em rgba(0,0,0,0.16); will-change:transform; container-type:inline-size; overflow:hidden; }
+  .wp-sizer{ padding:1.3em 1.15em; font-size:5cqw; }
+  .wp-shaded{ background:radial-gradient(circle at 20% 12%,rgba(255,255,255,0.14),transparent 42%),radial-gradient(circle at 82% 88%,rgba(255,255,255,0.09),transparent 45%),linear-gradient(135deg,#1d2029 0%,#12141c 50%,#080910 100%); box-shadow:0 0.7em 1.8em rgba(0,0,0,0.3),inset 0 0.08em 0.15em rgba(255,255,255,0.06); }
+  .wp-flags{ display:flex; align-items:center; justify-content:center; gap:1em; }
+  .wp-flag{ width:2.4em; height:1.75em; border-radius:0.25em; flex-shrink:0; }
+  .wp-score{ font-size:2.3em; font-weight:700; letter-spacing:0.03em; white-space:nowrap; line-height:1; }
+  .wp-codes{ display:flex; justify-content:space-between; margin-top:0.5em; font-size:0.82em; font-weight:600; letter-spacing:0.04em; color:#e6e6ea; }
+  .wp-min{ color:#e0463f; font-size:0.72em; text-align:center; margin-top:0.5em; display:flex; align-items:center; justify-content:center; gap:0.25em; }
+  .wp-dot{ width:0.35em; height:0.35em; border-radius:50%; background:#e0463f; display:inline-block; }
+  .wp-events{ margin-top:1.5em; display:flex; flex-direction:column; gap:0.9em; }
+  .wp-ev{ display:flex; align-items:center; gap:0.55em; font-size:0.78em; white-space:nowrap; }
+  .wp-chip{ background:#232635; color:#f0c419; font-weight:700; border-radius:0.35em; padding:0.18em 0.55em; min-width:2.4em; text-align:center; }
+  .wp-ball{ width:1.3em; height:1.3em; border-radius:50%; border:0.1em solid #fff; flex-shrink:0; }
+  .wp-yc{ width:0.8em; height:1.1em; border-radius:0.12em; background:#f0c419; flex-shrink:0; }
+  .wp-esp{ background:linear-gradient(to bottom,#aa151b 25%,#f1bf00 25% 75%,#aa151b 75%); }
+  .wp-fra{ background:linear-gradient(to right,#0055a4 33%,#fff 33% 66%,#ef4135 66%); }
+  .wp-bra{ background:radial-gradient(circle,#f8d117 30%,#009c3b 31%); }
+  .wp-arg{ background:linear-gradient(to bottom,#75aadb 33%,#fff 33% 66%,#75aadb 66%); }
+  .wp-ger{ background:linear-gradient(to bottom,#000 33%,#dd0000 33% 66%,#ffce00 66%); }
+  .wp-ned{ background:linear-gradient(to bottom,#ae1c28 33%,#fff 33% 66%,#21468b 66%); }
+  .wp-ita{ background:linear-gradient(to right,#009246 33%,#fff 33% 66%,#ce2b37 66%); }
+  .wp-por{ background:linear-gradient(to right,#046a38 40%,#da291c 40%); }
+  .wp-jpn{ background:radial-gradient(circle,#bc002d 25%,#fff 26%); }
+  .wp-kor{ background:radial-gradient(circle at 50% 50%,#003478 20%,#fff 21% 60%,#c60c30 61%); }
+  .wp-usa{ background:linear-gradient(#b31942 0 12%,#fff 12% 20%,#b31942 20% 32%,#fff 32% 40%,#b31942 40% 52%,#fff 52% 60%,#b31942 60%),linear-gradient(to right,#0a3161 45%,transparent 45%); }
+  .wp-mex{ background:linear-gradient(to right,#006847 33%,#fff 33% 66%,#ce1126 66%); }
+  .wp-cro{ background:repeating-conic-gradient(#c8102e 0 90deg,#fff 0 180deg); background-size:0.5em 0.5em; }
+  .wp-mar{ background:#c1272d; }
+  .wp-swe{ background:linear-gradient(to bottom,transparent 42%,#fecc02 42% 56%,transparent 56%),linear-gradient(to right,transparent 32%,#fecc02 32% 44%,transparent 44%),#006aa7; }
+  .wp-nor{ background:linear-gradient(to bottom,transparent 42%,#fff 42% 58%,transparent 58%),linear-gradient(to right,transparent 32%,#fff 32% 46%,transparent 46%),#ba0c2f; }
+  .wp-col{ background:linear-gradient(to bottom,#fcd116 45%,#003893 45% 72%,#ce1126 72%); }
+  .wp-uru{ background:repeating-linear-gradient(#fff 0 0.35em,#75aadb 0.35em 0.7em); }
 
   /* Faster start-up band — dark photo backdrop (light text stays legible) */
   .feature-band.feature-band--faster-startup-mobile{
@@ -622,9 +658,112 @@
   <script>
     const entries = window.DAZN_ENTRIES || [];
 
+    /* ---- Floating live-scorecards backdrop for the Win Probability band ---- */
+    const scoreCluster = `
+      <div class="wp-cluster">
+        <div class="wp-card wp-shaded" data-depth="0.05" data-rot="-7" style="left:15%;top:7%;width:27%;z-index:6;">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-esp"></div><div class="wp-score">1 - 1</div><div class="wp-flag wp-fra"></div></div>
+            <div class="wp-codes"><span>ESP</span><span>FRA</span></div>
+            <div class="wp-min"><span class="wp-dot"></span>67'</div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>L. Yamal</span><span class="wp-chip" style="margin-left:auto;">10'</span></div>
+              <div class="wp-ev"><span class="wp-yc"></span><span>M. Olise</span><span class="wp-chip" style="margin-left:auto;">32'</span></div>
+              <div class="wp-ev"><span class="wp-ball"></span><span>K. Mbappe</span><span class="wp-chip" style="margin-left:auto;">67'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card wp-shaded" data-depth="0.09" data-rot="4" data-shift="30" style="left:46%;top:14%;width:26%;z-index:5;opacity:0.95;">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-bra"></div><div class="wp-score">2 - 0</div><div class="wp-flag wp-arg"></div></div>
+            <div class="wp-codes"><span>BRA</span><span>ARG</span></div>
+            <div class="wp-min"><span class="wp-dot"></span>78'</div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>Vinicius Jr</span><span class="wp-chip" style="margin-left:auto;">23'</span></div>
+              <div class="wp-ev"><span class="wp-ball"></span><span>Rodrygo</span><span class="wp-chip" style="margin-left:auto;">55'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card" data-depth="0.14" data-rot="-6" style="left:3%;top:46%;width:19%;z-index:4;opacity:0.72;filter:blur(1px);">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-ger"></div><div class="wp-score">0 - 2</div><div class="wp-flag wp-ned"></div></div>
+            <div class="wp-codes"><span>GER</span><span>NED</span></div>
+            <div class="wp-min"><span class="wp-dot"></span>54'</div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>M. de Ligt</span><span class="wp-chip" style="margin-left:auto;">12'</span></div>
+              <div class="wp-ev"><span class="wp-ball"></span><span>C. Gakpo</span><span class="wp-chip" style="margin-left:auto;">39'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card" data-depth="0.18" data-rot="6" style="left:33%;top:-5%;width:18%;z-index:3;opacity:0.55;filter:blur(1.5px);">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-ita"></div><div class="wp-score">1 - 1</div><div class="wp-flag wp-por"></div></div>
+            <div class="wp-codes"><span>ITA</span><span>POR</span></div>
+            <div class="wp-min"><span class="wp-dot"></span>44'</div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>N. Barella</span><span class="wp-chip" style="margin-left:auto;">8'</span></div>
+              <div class="wp-ev"><span class="wp-ball"></span><span>C. Ronaldo</span><span class="wp-chip" style="margin-left:auto;">44'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card" data-depth="0.16" data-rot="-8" style="left:72%;top:42%;width:19%;z-index:3;opacity:0.62;filter:blur(1.5px);">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-jpn"></div><div class="wp-score">2 - 1</div><div class="wp-flag wp-kor"></div></div>
+            <div class="wp-codes"><span>JPN</span><span>KOR</span></div>
+            <div class="wp-min"><span class="wp-dot"></span>81'</div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>K. Mitoma</span><span class="wp-chip" style="margin-left:auto;">15'</span></div>
+              <div class="wp-ev"><span class="wp-yc"></span><span>Son H-M</span><span class="wp-chip" style="margin-left:auto;">30'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card" data-depth="0.22" data-rot="3" style="left:60%;top:-7%;width:16%;z-index:2;opacity:0.42;filter:blur(2.5px);">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-usa"></div><div class="wp-score">0 - 0</div><div class="wp-flag wp-mex"></div></div>
+            <div class="wp-codes"><span>USA</span><span>MEX</span></div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>C. Pulisic</span><span class="wp-chip" style="margin-left:auto;">20'</span></div>
+              <div class="wp-ev"><span class="wp-yc"></span><span>H. Lozano</span><span class="wp-chip" style="margin-left:auto;">66'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card" data-depth="0.13" data-rot="7" style="left:31%;top:48%;width:18%;z-index:4;opacity:0.75;filter:blur(1px);">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-cro"></div><div class="wp-score">2 - 2</div><div class="wp-flag wp-mar"></div></div>
+            <div class="wp-codes"><span>CRO</span><span>MAR</span></div>
+            <div class="wp-min"><span class="wp-dot"></span>90'</div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>L. Modric</span><span class="wp-chip" style="margin-left:auto;">5'</span></div>
+              <div class="wp-ev"><span class="wp-ball"></span><span>H. Ziyech</span><span class="wp-chip" style="margin-left:auto;">40'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card" data-depth="0.25" data-rot="-10" style="left:84%;top:1%;width:15%;z-index:2;opacity:0.35;filter:blur(3px);">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-swe"></div><div class="wp-score">1 - 0</div><div class="wp-flag wp-nor"></div></div>
+            <div class="wp-codes"><span>SWE</span><span>NOR</span></div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>A. Isak</span><span class="wp-chip" style="margin-left:auto;">18'</span></div>
+              <div class="wp-ev"><span class="wp-ball"></span><span>E. Haaland</span><span class="wp-chip" style="margin-left:auto;">50'</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="wp-card" data-depth="0.28" data-rot="8" style="left:-3%;top:-9%;width:16%;z-index:1;opacity:0.38;filter:blur(3px);">
+          <div class="wp-sizer">
+            <div class="wp-flags"><div class="wp-flag wp-col"></div><div class="wp-score">1 - 1</div><div class="wp-flag wp-uru"></div></div>
+            <div class="wp-codes"><span>COL</span><span>URU</span></div>
+            <div class="wp-events">
+              <div class="wp-ev"><span class="wp-ball"></span><span>J. Rodriguez</span><span class="wp-chip" style="margin-left:auto;">25'</span></div>
+              <div class="wp-ev"><span class="wp-yc"></span><span>D. Nunez</span><span class="wp-chip" style="margin-left:auto;">60'</span></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
     /* ---- FEATURE BANDS: the top updates as stacked full-width bands ---- */
     const band = (e) => `
       <section class="feature-band feature-band--${e.id}">
+        ${e.id === 'win-probability-overlay' ? scoreCluster : ''}
         <div class="feature-band__content">
           <h2>${e.name}</h2>
           <p class="feature-band__tagline">${e.tagline}</p>
@@ -737,6 +876,35 @@
       updateFsParallax();
       window.addEventListener('scroll', () => {
         if (!fsTicking) { requestAnimationFrame(updateFsParallax); fsTicking = true; }
+      }, { passive: true });
+    }
+
+    /* ---- Win Probability band: floating scorecards drift at different depths ---- */
+    const wpBand = document.querySelector('.feature-band--win-probability-overlay');
+    if (wpBand && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const wpCards = [...wpBand.querySelectorAll('.wp-card')];
+      let wpTicking = false;
+      const updateWpParallax = () => {
+        const rect = wpBand.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (rect.bottom > 0 && rect.top < vh) {
+          // -1 (band below viewport) → 0 (centered) → 1 (band above viewport)
+          const norm = ((rect.top + rect.height / 2) - vh / 2) / (vh / 2 + rect.height / 2);
+          wpCards.forEach((card) => {
+            const depth = parseFloat(card.dataset.depth) || 0.1;
+            const baseRot = parseFloat(card.dataset.rot) || 0;
+            const shiftBase = parseFloat(card.dataset.shift) || 0;
+            // Deeper (fainter/blurred) cards drift far and faster; front cards barely move → depth
+            const shift = norm * depth * 620;
+            const drift = norm * depth * baseRot * 0.9;   // rotation opens up slightly with scroll
+            card.style.transform = `translateY(${(shift + shiftBase).toFixed(1)}px) rotate(${(baseRot + drift).toFixed(2)}deg)`;
+          });
+        }
+        wpTicking = false;
+      };
+      updateWpParallax();
+      window.addEventListener('scroll', () => {
+        if (!wpTicking) { requestAnimationFrame(updateWpParallax); wpTicking = true; }
       }, { passive: true });
     }
   </script>
