@@ -98,29 +98,32 @@
   ::selection{ background: var(--brand-primary); color:#080E12; }
 
   /* ============ BUTTONS (dual-CTA pattern) ============ */
+  /* DAZN design system button — Lg form (48px, 8px radius, 16/700) */
   .btn{
     display:inline-flex;
+    flex-direction:row;
     align-items:center;
     justify-content:center;
     gap: var(--sp-8);
-    height: 44px;
-    padding: 0 var(--sp-24);
-    border-radius: var(--radius-full);
-    font-size: var(--caption-sm);
+    height: 48px;
+    padding: 0 var(--sp-16);
+    border-radius: var(--radius-8);
+    font-family: var(--font-family);
+    font-size: 16px;
+    line-height: 16px;
     font-weight: 700;
-    letter-spacing: 0.01em;
     white-space:nowrap;
     border: 1px solid transparent;
     transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
   }
   .btn:active{ transform: translateY(1px); }
-  /* CTA: white with black border, always-large text; hover only fills yellow */
-  .btn--solid{ background: #FFFFFF; color: #080E12; border-color: #080E12; font-size: 16px; }
+  /* Colors kept: white with black border; hover fills yellow */
+  .btn--solid{ background: #FFFFFF; color: #080E12; border-color: #080E12; }
   .btn--solid:hover{ background: var(--brand-primary); }
   /* low-commitment / learn more */
   .btn--ghost{ border-color: var(--border-default); color: var(--text-primary); }
   .btn--ghost:hover{ border-color: var(--border-strong); background: rgba(255,255,255,0.04); }
-  .btn--sm{ height: 38px; padding: 0 var(--sp-16); }
+  .btn--sm{ height: 32px; padding: 0 var(--sp-8); font-size: 12px; }
 
   /* ============ HEADER ============ */
   .header{
@@ -301,6 +304,12 @@
   .feature-band--multi-view .feature-band__tagline{ color: #3F3F46; }
   .feature-band--multi-view .label{ background: #080E12; color: var(--brand-primary); }
 
+  /* Win Probability band — same light background and text colors as Multi-View */
+  .feature-band--win-probability-overlay{ background-color: #FFFFFF; }
+  .feature-band--win-probability-overlay h2{ color: #08090B; }
+  .feature-band--win-probability-overlay .feature-band__tagline{ color: #3F3F46; }
+  .feature-band--win-probability-overlay .label{ background: #080E12; color: var(--brand-primary); }
+
   /* Faster start-up band — dark photo backdrop (light text stays legible) */
   .feature-band.feature-band--faster-startup-mobile{
     background-color: #eaeaea;
@@ -365,10 +374,16 @@
     align-items:center;
     text-align:center;
     min-height: 520px;
-    background: var(--surface-1);
-    border-radius: 0;
+    background: var(--surface-5);
+    border: 1px solid #76828c36;
+    border-radius: 20px;
     overflow:hidden;
   }
+  /* Light tiles — same background and text colors as the Multi-View band */
+  .card--light{ background: #FFFFFF; }
+  .card--light .card__title{ color: #08090B; }
+  .card--light .card__benefit{ color: #3F3F46; }
+  .card--light .label{ background: #080E12; color: var(--brand-primary); }
   /* Staggered slide-in (gated on .reveal so cards stay visible without JS) */
   .grid.reveal .card{
     opacity: 0;
@@ -452,8 +467,8 @@
 
   /* ============ FOOTER ============ */
   .footer{
-    border-top: 1px solid var(--border-subtle);
-    background: var(--surface-1);
+    border-top: 1px solid #76828c36;
+    background: #FFFFFF;
     padding: var(--sp-64) var(--grid-margin) var(--sp-40);
   }
   .footer__inner{ max-width: var(--max-width); margin: 0 auto; }
@@ -486,11 +501,11 @@
     gap: var(--sp-16);
     flex-wrap:wrap;
     font-size: var(--caption-xs);
-    color: var(--text-tertiary);
+    color: #6E6E73;
   }
   .footer__legal a{ margin-left: var(--sp-20); }
   .footer__legal a:first-child{ margin-left: 0; }
-  .footer__legal a:hover{ color: var(--text-primary); }
+  .footer__legal a:hover{ color: #1D1D1F; }
 
   @media (prefers-reduced-motion: reduce){
     .pulse-dot{ animation: none; }
@@ -607,7 +622,6 @@
     /* ---- FEATURE BANDS: the top updates as stacked full-width bands ---- */
     const band = (e) => `
       <section class="feature-band feature-band--${e.id}">
-        <span class="label ${e.labelClass}">${e.labelText}</span>
         <div class="feature-band__content">
           <h2>${e.name}</h2>
           <p class="feature-band__tagline">${e.tagline}</p>
@@ -619,9 +633,9 @@
     document.getElementById('feature-bands').innerHTML = entries.slice(0, 3).map(band).join('');
 
     /* ---- HIGHLIGHTS: remaining updates as uniform 2-up tiles ---- */
+    const lightCards = ['airplay-chromecast-handoff', '4k-hdr-expansion', 'offline-downloads', 'watch-party-chat-redesign'];
     const card = (e) => `
-      <article class="card">
-        <span class="label ${e.labelClass}">${e.labelText}</span>
+      <article class="card${lightCards.includes(e.id) ? ' card--light' : ''}">
         <div class="card__body">
           <h3 class="card__title">${e.name}</h3>
           <p class="card__benefit">${e.tagline}</p>
