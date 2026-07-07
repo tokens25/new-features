@@ -147,6 +147,56 @@
   .gallery__cap{ margin-top: var(--sp-40); font-size: 24px; line-height:1.4; font-weight:600; max-width: 780px; }
   .gallery__cap .muted{ color: var(--ink-2); }
 
+  /* ============ HIGHLIGHTS CAROUSEL ============ */
+  .highlights__head{
+    display:flex; align-items:baseline; justify-content:space-between; gap: var(--sp-24);
+    margin-bottom: var(--sp-48);
+  }
+  .highlights__head h2{ font-size: 48px; font-weight:700; letter-spacing:-0.02em; }
+  .highlights__film{ font-size: 19px; font-weight:600; color:#0071E3; white-space:nowrap; }
+  .highlights__scroll{
+    display:grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(900px, 84vw);
+    gap: var(--sp-24);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--gm);
+    padding: 0 var(--gm);
+    scrollbar-width: none;
+  }
+  .highlights__scroll::-webkit-scrollbar{ display: none; }
+
+  .highlights__dots{
+    display:flex; align-items:center; gap: var(--sp-16);
+    width: fit-content; margin: var(--sp-40) auto 0;
+    padding: 14px 22px;
+    background: var(--panel);
+    border-radius: var(--r-full);
+  }
+  .highlights__dots button{
+    border:none; padding:0; cursor:pointer;
+    width: 8px; height: 8px; border-radius: var(--r-full);
+    background: #b6b6bb;
+    transition: width .25s ease, background-color .25s ease;
+  }
+  .highlights__dots button.is-active{ width: 40px; background: #6e6e73; }
+  .hcard{
+    position:relative;
+    scroll-snap-align: start;
+    aspect-ratio: 16 / 10;
+    background: var(--panel);
+    border-radius: var(--r-20);
+    overflow:hidden;
+  }
+  .hcard__media{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:0; }
+  .hcard__cap{
+    position:absolute; z-index:1;
+    top: var(--sp-40); right: var(--sp-40); left: 50%;
+    font-size: 26px; line-height:1.28; font-weight:600; color: var(--ink);
+  }
+
   /* ============ CENTERED STATEMENT ============ */
   .centered{ text-align:center; }
   .centered h2{ font-size: 64px; line-height:1.05; font-weight:700; letter-spacing:-0.02em; }
@@ -199,6 +249,10 @@
     .accordion{ max-width:none; }
     .gallery__grid{ grid-template-columns: 1fr; }
     .gallery__cap{ font-size: 20px; }
+    .highlights__head{ flex-direction:column; align-items:flex-start; gap: var(--sp-8); }
+    .highlights__head h2{ font-size: 32px; }
+    .highlights__scroll{ grid-auto-columns: 86vw; }
+    .hcard__cap{ left: var(--sp-24); right: var(--sp-24); top: var(--sp-24); font-size: 19px; }
     .centered h2{ font-size: 38px; }
     .cards{ grid-template-columns: 1fr; margin-top: var(--sp-48); }
     .statement h2{ font-size: 44px; }
@@ -267,6 +321,20 @@
         <div class="tile">${PH}</div>
         <div class="tile">${PH}</div>`;
 
+      // Horizontally-scrolling highlight cards
+      const highlightCaps = [
+        entry.tagline,
+        entry.sections[0].text,
+        entry.sections[1].text,
+        entry.tip
+      ];
+      const hcards = highlightCaps.map(t => `
+        <article class="hcard">
+          <div class="hcard__media">${PH}</div>
+          <p class="hcard__cap">${t}</p>
+        </article>`).join('');
+      const hdots = highlightCaps.map((_, i) => `<button${i === 0 ? ' class="is-active"' : ''} aria-label="Go to card ${i + 1}"></button>`).join('');
+
       page.innerHTML = `
         <!-- HERO -->
         <section class="fhero">
@@ -301,6 +369,15 @@
             <div class="gallery__grid">${galleryTiles}</div>
             <p class="gallery__cap"><strong>Made for every screen.</strong> <span class="muted">Watch ${entry.name} on ${platforms} — wherever the match takes you, with the same seamless experience.</span></p>
           </div>
+        </section>
+
+        <!-- HIGHLIGHTS CAROUSEL -->
+        <section class="section highlights">
+          <div class="wrap highlights__head">
+            <h2>Get the highlights.</h2>
+          </div>
+          <div class="highlights__scroll">${hcards}</div>
+          <div class="highlights__dots">${hdots}</div>
         </section>
 
         <!-- CENTERED STATEMENT -->
@@ -345,6 +422,25 @@
           sync();
         });
       });
+
+      // Highlights carousel: sync pagination dots with scroll position
+      const hscroll = page.querySelector('.highlights__scroll');
+      const dotEls = [...page.querySelectorAll('.highlights__dots button')];
+      if (hscroll && dotEls.length) {
+        const step = () => {
+          const c = hscroll.querySelector('.hcard');
+          return c ? c.offsetWidth + parseFloat(getComputedStyle(hscroll).columnGap || '0') : 1;
+        };
+        const syncDots = () => {
+          const idx = Math.min(dotEls.length - 1, Math.round(hscroll.scrollLeft / step()));
+          dotEls.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+        };
+        let dTick = false;
+        hscroll.addEventListener('scroll', () => {
+          if (!dTick) { requestAnimationFrame(() => { syncDots(); dTick = false; }); dTick = true; }
+        }, { passive: true });
+        dotEls.forEach((d, i) => d.addEventListener('click', () => hscroll.scrollTo({ left: i * step(), behavior: 'smooth' })));
+      }
     }
   </script>
 
