@@ -240,7 +240,7 @@
     border-radius: var(--r-20); overflow:hidden; background: var(--panel);
     aspect-ratio: 3/2; display:flex; align-items:center; justify-content:center;
   }
-  .closer__media img{ width:100%; height:100%; object-fit:cover; }
+  .closer__media img{ width:100%; height:100%; object-fit:cover; transition: opacity .3s ease; }
 
   /* ============ GALLERY ============ */
   .gallery{ overflow-x: clip; }
@@ -662,8 +662,17 @@
       // Accordion behaviour
       const accEls = [...page.querySelectorAll('.acc__item')];
       const closerImg = page.querySelector('.closer__media img');
+      if (closerImg && entry.closerImages) closerImg.dataset.cur = entry.closerImages[0];
       const showCloserImage = (i) => {
-        if (closerImg && entry.closerImages && entry.closerImages[i]) closerImg.src = entry.closerImages[i];
+        const src = entry.closerImages && entry.closerImages[i];
+        if (!closerImg || !src || closerImg.dataset.cur === src) return;
+        closerImg.dataset.cur = src;
+        new Image().src = src;               // warm the cache to avoid a flash
+        closerImg.style.opacity = '0';       // fade out
+        setTimeout(() => {                    // then swap + fade back in
+          closerImg.src = src;
+          closerImg.style.opacity = '1';
+        }, 300);
       };
       const setAcc = (item, open) => {
         item.classList.toggle('open', open);

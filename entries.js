@@ -26,10 +26,10 @@ window.DAZN_ENTRIES = [
     users: ["Subscriber"],
     title: "Watch two games at once with Multi-View",
     desc: "Split the screen and follow two live matches side by side on Smart TV and web, with independent audio switching so you never miss a moment across your leagues.",
-    tip: "Multi-View works best when both matches share a similar kickoff time — pick two live fixtures for the tightest sync.",
+    tip: "Works best when both matches kick off around the same time.",
     sections: [
-      { heading: "What's changing", text: "Multi-View is rolling out first to Smart TV and web, with mobile and console support following in the coming weeks. Each pane streams independently, so you can pause, rewind, or switch commentary language on one match without affecting the other." },
-      { heading: "How it works", text: "Open any two live fixtures from the home rail and select the split-screen icon in the player controls. Your layout and audio preference are remembered the next time you tune in." }
+      { heading: "What's changing", text: "Live on Smart TV and web, mobile and console coming soon." },
+      { heading: "How it works", text: "Open two fixtures and tap the split-screen icon to start." }
     ],
     product: "DAZN app · Smart TV, Web",
     color: "#F7FF1A",
