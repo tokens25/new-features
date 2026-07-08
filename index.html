@@ -312,7 +312,7 @@
   .feature-band--multi-view .label{ background: #080E12; color: var(--brand-primary); }
 
   /* Win Probability band — same light background and text colors as Multi-View */
-  .feature-band--win-probability-overlay{ background-color: #FFFFFF; justify-content: flex-end; }
+  .feature-band--win-probability-overlay{ background: linear-gradient(to top, #F5F5F7 0%, #FFFFFF 55%); justify-content: flex-end; }
   .feature-band--win-probability-overlay h2{ color: #08090B; }
   .feature-band--win-probability-overlay .feature-band__tagline{ color: #3F3F46; }
   .feature-band--win-probability-overlay .label{ background: #080E12; color: var(--brand-primary); }
@@ -427,6 +427,22 @@
   .card--light .card__title{ color: #08090B; }
   .card--light .card__benefit{ color: #3F3F46; }
   .card--light .label{ background: #080E12; color: var(--brand-primary); }
+  /* Live Key Moments tile — dramatic dark photo backdrop with a bottom scrim for legible text */
+  .card--key-moments-live{
+    background-color: #0C1216;
+    background-image: linear-gradient(180deg, rgba(8,14,18,0) 38%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/live-key-moments.png');
+    background-repeat: no-repeat;
+    background-position: center, calc(50% + 30px) -20px;
+    background-size: cover, 100% auto;
+  }
+  /* Seamless Casting tile — multi-device image anchored to the bottom, text on the white area up top */
+  .card--airplay-chromecast-handoff{
+    background-color: #FFFFFF;
+    background-image: url('assets/img/seamless-casting.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 80%;
+  }
   /* Staggered slide-in (gated on .reveal so cards stay visible without JS) */
   .grid.reveal .card{
     opacity: 0;
@@ -781,7 +797,7 @@
     /* ---- HIGHLIGHTS: remaining updates as uniform 2-up tiles ---- */
     const lightCards = ['airplay-chromecast-handoff', '4k-hdr-expansion', 'offline-downloads', 'watch-party-chat-redesign'];
     const card = (e) => `
-      <article class="card${lightCards.includes(e.id) ? ' card--light' : ''}">
+      <article class="card card--${e.id}${lightCards.includes(e.id) ? ' card--light' : ''}">
         <div class="card__body">
           <h3 class="card__title">${e.name}</h3>
           <p class="card__benefit">${e.tagline}</p>
