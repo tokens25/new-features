@@ -8,14 +8,31 @@
   :root{
     --font-family: 'DAZN Oscine', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-    /* light theme */
+    /* light theme (default) */
     --bg: #FFFFFF;
     --panel: #F5F5F7;
+    --card: #FFFFFF;             /* tiles, stat cards, menus */
     --ink: #1D1D1F;
     --ink-2: #6E6E73;
     --line: #E5E5E7;
     --brand: #F7FF1A;
     --btn-ink: #080E12;
+    /* component surfaces (swapped in dark) */
+    --header-bg: rgba(255,255,255,0.8);
+    --surface-hover: #EDEDF0;
+    --border-hover: #D9D9DE;
+    --pill-bg: rgba(245,245,247,0.9);
+    --fade-rgb: 255,255,255;     /* fhero bottom fade + section fades */
+    --label-bg: #ececec;
+    --label-ink: #0C1216;
+    --track: #EAEAEE;            /* gauge track */
+    --ph-ico: #c9c9ce;
+    --ph-ico-lg: #dcdce0;
+    --dot: #b6b6bb;
+    --dot-active: #6e6e73;
+    --btn-bg: #080E12;
+    --btn-fg: #FFFFFF;
+    --btn-hover: #000000;
 
     --max: 1120px;
     --gm: 40px;
@@ -24,6 +41,31 @@
     --sp-32:32px; --sp-40:40px; --sp-48:48px; --sp-64:64px; --sp-80:80px;
     --sp-96:96px; --sp-120:120px;
     --r-16:16px; --r-20:20px; --r-28:28px; --r-full:9999px;
+  }
+
+  /* ============ DARK THEME (per-entry, e.g. Win Probability) ============ */
+  :root[data-theme="dark"]{
+    --bg: #080E12;
+    --panel: #0C1216;
+    --card: #12181D;
+    --ink: #FAFBFC;
+    --ink-2: #9AA3A9;
+    --line: #21292E;
+    --header-bg: rgba(8,14,18,0.8);
+    --surface-hover: #1B2227;
+    --border-hover: #2A3238;
+    --pill-bg: rgba(255,255,255,0.06);
+    --fade-rgb: 8,14,18;
+    --label-bg: #21292E;
+    --label-ink: #FAFBFC;
+    --track: #21292E;
+    --ph-ico: #2A3238;
+    --ph-ico-lg: #20272C;
+    --dot: #3A424A;
+    --dot-active: #76828C;
+    --btn-bg: #FAFBFC;
+    --btn-fg: #080E12;
+    --btn-hover: #F7FF1A;
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
@@ -43,7 +85,7 @@
     position: sticky; top:0; z-index:50;
     display:flex; align-items:center; justify-content:space-between;
     height: 64px; padding: 0 var(--gm);
-    background: rgba(255,255,255,0.8);
+    background: var(--header-bg);
     backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--line);
   }
@@ -63,16 +105,16 @@
   .dropdown__toggle{
     display:inline-flex; align-items:center; gap:8px;
     height:40px; padding:0 16px; border-radius:10px;
-    background:#F5F5F7; color:var(--ink); border:1px solid var(--line);
+    background:var(--panel); color:var(--ink); border:1px solid var(--line);
     font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;
     transition: background-color .15s ease, border-color .15s ease;
   }
-  .dropdown__toggle:hover{ background:#EDEDF0; border-color:#D9D9DE; }
+  .dropdown__toggle:hover{ background:var(--surface-hover); border-color:var(--border-hover); }
   .dropdown__toggle svg{ width:20px; height:20px; transition: transform .2s ease; }
   .dropdown.open .dropdown__toggle svg{ transform: rotate(180deg); }
   .dropdown__menu{
     position:absolute; top:calc(100% + 8px); right:0; min-width:220px;
-    background:#FFFFFF; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden;
     box-shadow: 0 14px 34px rgba(0,0,0,0.14);
     opacity:0; visibility:hidden; transform:translateY(-6px);
     transition: opacity .16s ease, transform .16s ease, visibility .16s;
@@ -95,8 +137,8 @@
     font-size: 15px; font-weight:600; white-space:nowrap;
     border: 1px solid transparent; transition: background-color .15s ease, transform .12s ease;
   }
-  .btn--solid{ background: var(--btn-ink); color:#fff; }
-  .btn--solid:hover{ background:#000; }
+  .btn--solid{ background: var(--btn-bg); color: var(--btn-fg); }
+  .btn--solid:hover{ background: var(--btn-hover); }
   .btn:active{ transform: translateY(1px); }
 
   /* ============ SECTION SHELL ============ */
@@ -120,7 +162,7 @@
   .fhero__inner > div{ will-change: transform, opacity; }
   .fhero::after{
     content:""; position:absolute; inset:0;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 45%, rgba(255,255,255,0.55) 100%);
+    background: linear-gradient(180deg, rgba(var(--fade-rgb),0) 45%, rgba(var(--fade-rgb),0.55) 100%);
     pointer-events:none;
   }
   .fhero__inner{
@@ -147,11 +189,11 @@
     font-family: 'DAZN Oscine', var(--font-family, sans-serif);
     font-weight: 700; font-size: 14px; line-height: 14px;
     white-space: nowrap;
-    background: #ececec; color: #0C1216;
+    background: var(--label-bg); color: var(--label-ink);
   }
   .pricepill{
     display:inline-flex; align-items:center; gap: var(--sp-16);
-    background: rgba(245,245,247,0.9); backdrop-filter: blur(8px);
+    background: var(--pill-bg); backdrop-filter: blur(8px);
     border-radius: var(--r-full); padding: 8px 8px 8px 22px;
   }
   .pricepill span{ font-size:16px; font-weight:600; }
@@ -192,7 +234,7 @@
   .gallery{ overflow-x: clip; }
   .gallery__grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: var(--sp-24); }
   .tile{
-    background: #FFFFFF; border-radius: var(--r-20); overflow:hidden;
+    background: var(--card); border-radius: var(--r-20); overflow:hidden;
     aspect-ratio: 1/1; display:flex; align-items:center; justify-content:center;
   }
   /* Scroll-in: tiles arrive from their four corners (gated on .reveal) */
@@ -207,8 +249,8 @@
   .gallery__grid.reveal .tile:nth-child(4){ transform: translate(50px, 50px); }
   .gallery__grid.reveal .tile.in{ opacity: 1; transform: none; }
   .tile img{ width:100%; height:100%; object-fit:cover; }
-  .ph-ico{ width:64px; height:64px; color:#c9c9ce; }
-  .fhero__ph .ph-ico, .statement__ph .ph-ico{ width:112px; height:112px; color:#dcdce0; }
+  .ph-ico{ width:64px; height:64px; color:var(--ph-ico); }
+  .fhero__ph .ph-ico, .statement__ph .ph-ico{ width:112px; height:112px; color:var(--ph-ico-lg); }
   .gallery__cap{ margin-bottom: var(--sp-40); font-size: 24px; line-height:1.4; font-weight:600; max-width: 780px; }
   .gallery__cap .muted{ color: var(--ink-2); }
 
@@ -241,10 +283,10 @@
   .highlights__dots button{
     border:none; padding:0; cursor:pointer;
     width: 8px; height: 8px; border-radius: var(--r-full);
-    background: #b6b6bb;
+    background: var(--dot);
     transition: width .25s ease, background-color .25s ease;
   }
-  .highlights__dots button.is-active{ width: 40px; background: #6e6e73; }
+  .highlights__dots button.is-active{ width: 40px; background: var(--dot-active); }
   .hcard{
     position:relative;
     scroll-snap-align: start;
@@ -267,7 +309,7 @@
   .gauge{ display:flex; flex-direction:column; align-items:center; gap: var(--sp-16); }
   .gauge__ring{ position:relative; width: 190px; height: 190px; }
   .gauge__svg{ width:100%; height:100%; display:block; }
-  .gauge__track{ fill:none; stroke:#EAEAEE; stroke-width:9; stroke-linecap:round; stroke-dasharray: 245 82; }
+  .gauge__track{ fill:none; stroke:var(--track); stroke-width:9; stroke-linecap:round; stroke-dasharray: 245 82; }
   .gauge__value{
     fill:none; stroke-width:9; stroke-linecap:round;
     stroke-dasharray: 327; stroke-dashoffset: 327;
@@ -285,7 +327,7 @@
   .statcards__title{ font-size: 48px; font-weight:700; letter-spacing:-0.02em; margin-bottom: var(--sp-48); }
   .statcards__grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-24); }
   .statcard{
-    background: #FFFFFF;
+    background: var(--card);
     border-radius: var(--r-20);
     padding: var(--sp-40);
     min-height: 320px;
@@ -424,6 +466,10 @@
       page.innerHTML = `<p class="not-found">We couldn't find that update. Head back to <a href="index.html" style="text-decoration:underline">What's New</a>.</p>`;
     } else {
       document.title = `${entry.name} — DAZN`;
+
+      // Per-entry theme (e.g. Win Probability ships in dark mode)
+      if (entry.theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
 
       // Short platform string, e.g. "Smart TV, Web"
       const platforms = entry.product.replace('DAZN app · ', '');
@@ -602,15 +648,20 @@
       `;
 
       // Accordion behaviour
-      page.querySelectorAll('.acc__item').forEach(item => {
-        const head = item.querySelector('.acc__head');
+      const accEls = [...page.querySelectorAll('.acc__item')];
+      const setAcc = (item, open) => {
+        item.classList.toggle('open', open);
         const body = item.querySelector('.acc__body');
-        const sync = () => { body.style.maxHeight = item.classList.contains('open') ? body.scrollHeight + 'px' : '0px'; };
-        if (item.classList.contains('open')) requestAnimationFrame(sync);
-        head.addEventListener('click', () => {
-          const open = item.classList.toggle('open');
-          head.setAttribute('aria-expanded', open);
-          sync();
+        item.querySelector('.acc__head').setAttribute('aria-expanded', open);
+        body.style.maxHeight = open ? body.scrollHeight + 'px' : '0px';
+      };
+      accEls.forEach(item => {
+        if (item.classList.contains('open')) requestAnimationFrame(() => setAcc(item, true));
+        item.querySelector('.acc__head').addEventListener('click', () => {
+          const willOpen = !item.classList.contains('open');
+          // Single-open: collapse the others, then toggle this one
+          accEls.forEach(other => { if (other !== item) setAcc(other, false); });
+          setAcc(item, willOpen);
         });
       });
 
