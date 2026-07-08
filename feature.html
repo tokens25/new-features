@@ -611,14 +611,14 @@
           setTimeout(() => { num.textContent = fmt(target); }, dur + 400); // fallback
         };
         if ('IntersectionObserver' in window) {
+          // Fire only when a gauge reaches the middle of the viewport (central ~20% band)
           const gio = new IntersectionObserver((es) => es.forEach(e => {
             if (e.isIntersecting) { runGauge(e.target); gio.unobserve(e.target); }
-          }), { threshold: 0.4 });
+          }), { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
           gaugeEls.forEach(g => gio.observe(g));
         } else {
-          gaugeEls.forEach(runGauge);
+          gaugeEls.forEach(runGauge); // no IntersectionObserver: run immediately
         }
-        setTimeout(() => gaugeEls.forEach(runGauge), 2500); // safety net
       }
 
       // Hero: narrows to the wrap width + layered content parallax as you scroll
