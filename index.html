@@ -181,6 +181,7 @@
 
   /* ============ HERO — full-screen splash ============ */
   .splash{
+    --fp: 0; /* scroll progress 0→1: full-bleed → wrap width */
     position: relative;
     overflow: hidden;
     height: 800px;
@@ -191,6 +192,9 @@
     text-align:center;
     padding: var(--sp-64) var(--grid-margin);
     background: #0C1216;
+    margin-left: calc(var(--fp) * max(0px, (100% - var(--max-width)) / 2));
+    margin-right: calc(var(--fp) * max(0px, (100% - var(--max-width)) / 2));
+    border-radius: calc(var(--fp) * 28px);
   }
 
   .splash__video{
@@ -820,10 +824,13 @@
     const splashVideos = document.querySelectorAll('.splash__video');
     const splashContent = document.querySelector('.splash__content');
     if (splash && splashContent && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const NARROW_RANGE = 340; // px of scroll to go full-bleed → wrap width, like the feature hero
       let ticking = false;
       const updateHeroParallax = () => {
         const y = window.scrollY;
         const h = splash.offsetHeight;
+        // Narrow to the wrap width + round the corners as you scroll (mirrors .fhero)
+        splash.style.setProperty('--fp', Math.min(1, Math.max(0, y / NARROW_RANGE)).toFixed(3));
         if (y <= h) {
           const p = y / h;
           splashVideos.forEach(v => { v.style.transform = `translate3d(0, ${y * 0.2}px, 0) scale(1.12)`; });

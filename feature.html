@@ -632,7 +632,9 @@
           const y = window.scrollY;
           fhero.style.setProperty('--fp', Math.min(1, Math.max(0, y / RANGE)).toFixed(3));
           const h = fhero.offsetHeight || 1;
-          const fade = Math.max(0, 1 - (y / h) * 1.25).toFixed(3);
+          // Hold full opacity for the first quarter, then fade gently so content lingers longer
+          const START = h * 0.25;
+          const fade = Math.max(0, 1 - Math.max(0, (y - START) / h) * 1.15).toFixed(3);
           if (heroText) { heroText.style.transform = `translate3d(0, ${(y * -0.42).toFixed(1)}px, 0)`; heroText.style.opacity = fade; }
           if (heroPill) { heroPill.style.transform = `translate3d(0, ${(y * -0.12).toFixed(1)}px, 0)`; heroPill.style.opacity = fade; }
           fTick = false;
