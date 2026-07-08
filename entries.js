@@ -11,6 +11,13 @@ window.DAZN_ENTRIES = [
     name: "Multi-View",
     tagline: "Watch two live games side by side.",
     ctaText: "Watch now",
+    heroImage: "assets/img/multiview-feature-hero.png",
+    closerImages: [
+      "assets/img/multiview-closer-1.png",
+      "assets/img/multiview-closer-2.png",
+      "assets/img/multiview-closer-3.png",
+      "assets/img/multiview-closer-4.png"
+    ],
     labelClass: "label--new",
     labelText: "New release",
     date: "August 4",

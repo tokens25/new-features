@@ -33,6 +33,8 @@
     --btn-bg: #080E12;
     --btn-fg: #FFFFFF;
     --btn-hover: #000000;
+    --page-bg: #EAEAEE;
+    --gallery-bg: #FAFBFC;
 
     --max: 1120px;
     --gm: 40px;
@@ -66,6 +68,8 @@
     --btn-bg: #FAFBFC;
     --btn-fg: #080E12;
     --btn-hover: #F7FF1A;
+    --page-bg: #080E12;
+    --gallery-bg: #0C1216;
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
@@ -77,6 +81,7 @@
     -webkit-font-smoothing: antialiased;
     line-height: 1.1;
   }
+  #page{ background: var(--page-bg); }
   a{ color:inherit; text-decoration:none; }
   img{ display:block; max-width:100%; }
 
@@ -158,7 +163,14 @@
     margin-right: calc(var(--fp) * max(0px, (100% - var(--max)) / 2));
     border-radius: calc(var(--fp) * 28px);
   }
+  .fhero--image{ background: #FFFFFF; }
   .fhero__ph{ position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; }
+  .fhero__ph img{
+    width:100%; height:100%; object-fit:contain; object-position:center -200px;
+    /* whole image stays inside the frame; shrinks as you scroll (--fp: 0→1) */
+    transform: scale(calc(1 - var(--fp, 0) * 0.3));
+    transform-origin: center;
+  }
   .fhero__inner > div{ will-change: transform, opacity; }
   .fhero::after{
     content:""; position:absolute; inset:0;
@@ -200,7 +212,7 @@
 
   /* ============ CLOSER LOOK (accordion + image) ============ */
   .closer h2{ font-size: 48px; font-weight:700; letter-spacing:-0.02em; margin-bottom: var(--sp-64); }
-  .closer__grid{ display:grid; grid-template-columns: 1fr 1fr; gap: var(--sp-48); align-items:center; }
+  .closer__grid{ display:grid; grid-template-columns: 2fr 1fr; gap: var(--sp-48); align-items:center; }
   .accordion{ display:flex; flex-direction:column; gap: var(--sp-16); max-width: 460px; }
   .acc__item{ background: var(--panel); border-radius: var(--r-28); overflow:hidden; }
   .acc__head{
@@ -226,7 +238,7 @@
   .acc__body p{ font-size:15px; line-height:1.6; color:var(--ink-2); padding-bottom: 22px; }
   .closer__media{
     border-radius: var(--r-20); overflow:hidden; background: var(--panel);
-    aspect-ratio: 4/5; display:flex; align-items:center; justify-content:center;
+    aspect-ratio: 3/2; display:flex; align-items:center; justify-content:center;
   }
   .closer__media img{ width:100%; height:100%; object-fit:cover; }
 
@@ -557,8 +569,8 @@
 
       page.innerHTML = `
         <!-- HERO -->
-        <section class="fhero">
-          <div class="fhero__ph">${PH}</div>
+        <section class="fhero${entry.heroImage ? ' fhero--image' : ''}">
+          <div class="fhero__ph">${entry.heroImage ? `<img src="${entry.heroImage}" alt="">` : PH}</div>
           <div class="fhero__inner">
             <div>
               <div class="fhero__eyebrow">${entry.name}</div>
@@ -578,7 +590,7 @@
           <div class="wrap">
             <h2>New Features</h2>
             <div class="closer__grid">
-              <div class="closer__media">${PH}</div>
+              <div class="closer__media">${entry.closerImages ? `<img src="${entry.closerImages[0]}" alt="">` : PH}</div>
               <div class="accordion">${acc}</div>
             </div>
           </div>
@@ -593,7 +605,7 @@
         </section>
 
         <!-- GALLERY -->
-        <section class="section gallery" style="background:var(--panel)">
+        <section class="section gallery" style="background:var(--gallery-bg)">
           <div class="wrap">
             <p class="gallery__cap"><strong>Made for every screen.</strong> <span class="muted">Watch ${entry.name} on ${platforms} — wherever the match takes you, with the same seamless experience.</span></p>
             <div class="gallery__grid">${galleryTiles}</div>
@@ -649,19 +661,25 @@
 
       // Accordion behaviour
       const accEls = [...page.querySelectorAll('.acc__item')];
+      const closerImg = page.querySelector('.closer__media img');
+      const showCloserImage = (i) => {
+        if (closerImg && entry.closerImages && entry.closerImages[i]) closerImg.src = entry.closerImages[i];
+      };
       const setAcc = (item, open) => {
         item.classList.toggle('open', open);
         const body = item.querySelector('.acc__body');
         item.querySelector('.acc__head').setAttribute('aria-expanded', open);
         body.style.maxHeight = open ? body.scrollHeight + 'px' : '0px';
       };
-      accEls.forEach(item => {
+      accEls.forEach((item, idx) => {
         if (item.classList.contains('open')) requestAnimationFrame(() => setAcc(item, true));
         item.querySelector('.acc__head').addEventListener('click', () => {
           const willOpen = !item.classList.contains('open');
           // Single-open: collapse the others, then toggle this one
           accEls.forEach(other => { if (other !== item) setAcc(other, false); });
           setAcc(item, willOpen);
+          // Swap the closer image to match the opened accordion item
+          if (willOpen) showCloserImage(idx);
         });
       });
 
