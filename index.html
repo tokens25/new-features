@@ -646,7 +646,7 @@
     .feature-band--multi-view{
       background-color: #FFFFFF;
       background-image: url('assets/img/multiview-mobile.png');
-      background-position: right -160px top calc(-20px - var(--mv-shift, 0px));
+      background-position: right -220px top calc(-20px - var(--mv-shift, 0px));
       background-size: auto calc(105% * var(--mv-zoom, 1));
       padding-right: 140px;
     }
@@ -656,7 +656,11 @@
   }
 
   @media (max-width: 640px){
-    .card{ min-height: 440px; }
+    .card{ min-height: 680px; }
+    .feature-band{ min-height: 680px; }
+    .card--airplay-chromecast-handoff::before{ background-size: 200%; }
+    .card--4k-hdr-expansion::before{ background-size: 200%; background-position: calc(80% + 10px) top; }
+    .card--offline-downloads::before{ background-size: 260%; background-position: calc(50% + 60px) top; }
     .card__title{ font-size: 32px; }
     .card__benefit{ font-size: 20px; }
     .footer__cols{ grid-template-columns: repeat(2, 1fr); }
