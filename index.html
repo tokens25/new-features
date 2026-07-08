@@ -435,6 +435,38 @@
     background-position: center, calc(50% + 30px) -20px;
     background-size: cover, 100% auto;
   }
+  /* 4K HDR tile — action-burst image anchored to the top, text on the white area below */
+  .card--4k-hdr-expansion{
+    background-color: #FFFFFF;
+    background-image: url('assets/img/4k-hdr.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 76%;
+  }
+  /* Offline Downloads tile — Downloads-screen image anchored to the top, text on the white area below */
+  .card--offline-downloads{
+    background-color: #FFFFFF;
+    background-image: url('assets/img/offline-downloads.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 82%;
+  }
+  /* Match Chat tile — FanZone UI photo backdrop with a bottom scrim for legible text */
+  .card--watch-party-chat-redesign{
+    background-color: #2A3238;
+    background-image: linear-gradient(180deg, rgba(20,24,28,0) 40%, rgba(20,24,28,0.82) 76%, #14181C 100%), url('assets/img/match-chat.png');
+    background-repeat: no-repeat;
+    background-position: center, center;
+    background-size: cover;
+  }
+  /* Watch Party tile — co-viewing UI photo backdrop with a bottom scrim for legible text */
+  .card--watch-party-beta{
+    background-color: #2A3238;
+    background-image: linear-gradient(180deg, rgba(20,24,28,0) 40%, rgba(20,24,28,0.82) 76%, #14181C 100%), url('assets/img/watch-party.png');
+    background-repeat: no-repeat;
+    background-position: center, center;
+    background-size: cover;
+  }
   /* Seamless Casting tile — multi-device image anchored to the bottom, text on the white area up top */
   .card--airplay-chromecast-handoff{
     background-color: #FFFFFF;
@@ -795,7 +827,7 @@
     document.getElementById('feature-bands').innerHTML = entries.slice(0, 3).map(band).join('');
 
     /* ---- HIGHLIGHTS: remaining updates as uniform 2-up tiles ---- */
-    const lightCards = ['airplay-chromecast-handoff', '4k-hdr-expansion', 'offline-downloads', 'watch-party-chat-redesign'];
+    const lightCards = ['airplay-chromecast-handoff', '4k-hdr-expansion', 'offline-downloads'];
     const card = (e) => `
       <article class="card card--${e.id}${lightCards.includes(e.id) ? ' card--light' : ''}">
         <div class="card__body">
