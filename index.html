@@ -321,7 +321,7 @@
     background-color: #080E12;
     background-image: linear-gradient(180deg, rgba(8,14,18,0) 32%, rgba(8,14,18,0.85) 70%, #080E12 100%), url('assets/img/win-probability.png');
     background-repeat: no-repeat;
-    background-position: center, center;
+    background-position: center, center calc(50% + var(--wp-shift, 0px));
     background-size: cover;
     justify-content: flex-end;
   }
@@ -952,26 +952,16 @@
       }, { passive: true });
     }
 
-    /* ---- Win Probability band: floating scorecards drift at different depths ---- */
+    /* ---- Win Probability band: subtle photo parallax on scroll ---- */
     const wpBand = document.querySelector('.feature-band--win-probability-overlay');
     if (wpBand && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const wpCards = [...wpBand.querySelectorAll('.wp-card')];
       let wpTicking = false;
       const updateWpParallax = () => {
         const rect = wpBand.getBoundingClientRect();
         const vh = window.innerHeight;
         if (rect.bottom > 0 && rect.top < vh) {
-          // -1 (band below viewport) → 0 (centered) → 1 (band above viewport)
           const norm = ((rect.top + rect.height / 2) - vh / 2) / (vh / 2 + rect.height / 2);
-          wpCards.forEach((card) => {
-            const depth = parseFloat(card.dataset.depth) || 0.1;
-            const baseRot = parseFloat(card.dataset.rot) || 0;
-            const shiftBase = parseFloat(card.dataset.shift) || 0;
-            // Deeper (fainter/blurred) cards drift far and faster; front cards barely move → depth
-            const shift = norm * depth * 620;
-            const drift = norm * depth * baseRot * 0.9;   // rotation opens up slightly with scroll
-            card.style.transform = `translateY(${(shift + shiftBase).toFixed(1)}px) rotate(${(baseRot + drift).toFixed(2)}deg)`;
-          });
+          wpBand.style.setProperty('--wp-shift', (-norm * 40).toFixed(1) + 'px');
         }
         wpTicking = false;
       };
