@@ -192,8 +192,8 @@
     text-align:center;
     padding: var(--sp-64) var(--grid-margin);
     background: #0C1216;
-    margin-left: calc(var(--fp) * max(0px, (100% - var(--max-width)) / 2));
-    margin-right: calc(var(--fp) * max(0px, (100% - var(--max-width)) / 2));
+    margin-left: calc(var(--fp) * max(0px, (100% - 1440px) / 2));
+    margin-right: calc(var(--fp) * max(0px, (100% - 1440px) / 2));
     border-radius: calc(var(--fp) * 28px);
   }
 
@@ -269,16 +269,19 @@
     font-size: var(--caption-sm);
   }
 
-  /* ============ FEATURE BANDS — stacked full-width (Apple-style) ============ */
+  /* ============ FEATURE BANDS — stacked, capped at 1600px (Apple-style) ============ */
   #feature-bands{
     display:flex;
     flex-direction:column;
+    align-items:center;
     gap: var(--sp-16);
     margin-top: var(--sp-16);
   }
   .feature-band{
     position:relative;
     overflow:hidden;
+    width:100%;
+    max-width: 1800px;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -289,6 +292,8 @@
     background: var(--surface-1);
   }
   .feature-band:nth-of-type(even){ background: var(--surface-2); }
+  /* Round the corners once the 1800px cap leaves margin on the sides */
+  @media (min-width: 1840px){ .feature-band{ border-radius: 28px; } }
 
   /* Label pinned to the top-left corner of every feature band */
   .feature-band > .label{
@@ -311,11 +316,15 @@
   .feature-band--multi-view .feature-band__tagline{ color: #3F3F46; }
   .feature-band--multi-view .label{ background: #080E12; color: var(--brand-primary); }
 
-  /* Win Probability band — same light background and text colors as Multi-View */
-  .feature-band--win-probability-overlay{ background: linear-gradient(to top, #F5F5F7 0%, #FFFFFF 55%); justify-content: flex-end; }
-  .feature-band--win-probability-overlay h2{ color: #08090B; }
-  .feature-band--win-probability-overlay .feature-band__tagline{ color: #3F3F46; }
-  .feature-band--win-probability-overlay .label{ background: #080E12; color: var(--brand-primary); }
+  /* Win Probability band — dark product-shot backdrop with a bottom scrim for legible text */
+  .feature-band--win-probability-overlay{
+    background-color: #080E12;
+    background-image: linear-gradient(180deg, rgba(8,14,18,0) 32%, rgba(8,14,18,0.85) 70%, #080E12 100%), url('assets/img/win-probability.png');
+    background-repeat: no-repeat;
+    background-position: center, center;
+    background-size: cover;
+    justify-content: flex-end;
+  }
 
   /* Win Probability band — floating live-scorecards backdrop (scroll parallax) */
   /* Fixed-size canvas so the scorecards keep their size like an image (cropped, not scaled, on smaller viewports) */
@@ -400,8 +409,8 @@
 
   /* ============ HIGHLIGHTS — uniform 2-up tile grid ============ */
   #highlights{
-    max-width: none;
-    margin: 0;
+    max-width: 1440px;
+    margin: 0 auto;
     padding: var(--sp-16);
   }
   .grid{
@@ -421,6 +430,24 @@
     border: 1px solid #76828c36;
     border-radius: 20px;
     overflow:hidden;
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Each tile's image lives on a ::before layer so it can zoom on hover */
+  .card::before{
+    content:"";
+    position:absolute; inset:0; z-index:0;
+    background-repeat:no-repeat;
+    transition: transform .5s cubic-bezier(.22,.61,.36,1);
+    will-change: transform;
+  }
+  .card__body{ position:relative; z-index:1; transition: transform .4s cubic-bezier(.22,.61,.36,1); }
+  /* Hover: zoom the image layer, lift the text */
+  .card:hover::before{ transform: scale(1.08); }
+  .card:hover .card__body{ transform: translateY(-12px); }
+  @media (prefers-reduced-motion: reduce){
+    .card:hover::before{ transform: none; }
+    .card:hover .card__body{ transform: none; }
   }
   /* Light tiles — same background and text colors as the Multi-View band */
   .card--light{ background: #FFFFFF; }
@@ -428,50 +455,41 @@
   .card--light .card__benefit{ color: #3F3F46; }
   .card--light .label{ background: #080E12; color: var(--brand-primary); }
   /* Live Key Moments tile — dramatic dark photo backdrop with a bottom scrim for legible text */
-  .card--key-moments-live{
-    background-color: #0C1216;
+  .card--key-moments-live{ background-color: #0C1216; }
+  .card--key-moments-live::before{
     background-image: linear-gradient(180deg, rgba(8,14,18,0) 38%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/live-key-moments.png');
-    background-repeat: no-repeat;
-    background-position: center, calc(50% + 30px) -20px;
-    background-size: cover, 100% auto;
+    background-position: center, center top;
+    background-size: cover, cover;
   }
   /* 4K HDR tile — action-burst image anchored to the top, text on the white area below */
-  .card--4k-hdr-expansion{
-    background-color: #FFFFFF;
+  .card--4k-hdr-expansion::before{
     background-image: url('assets/img/4k-hdr.png');
-    background-repeat: no-repeat;
     background-position: center top;
     background-size: 76%;
   }
   /* Offline Downloads tile — Downloads-screen image anchored to the top, text on the white area below */
-  .card--offline-downloads{
-    background-color: #FFFFFF;
+  .card--offline-downloads::before{
     background-image: url('assets/img/offline-downloads.png');
-    background-repeat: no-repeat;
     background-position: center top;
     background-size: 82%;
   }
   /* Match Chat tile — FanZone UI photo backdrop with a bottom scrim for legible text */
-  .card--watch-party-chat-redesign{
-    background-color: #2A3238;
+  .card--watch-party-chat-redesign{ background-color: #2A3238; }
+  .card--watch-party-chat-redesign::before{
     background-image: linear-gradient(180deg, rgba(20,24,28,0) 40%, rgba(20,24,28,0.82) 76%, #14181C 100%), url('assets/img/match-chat.png');
-    background-repeat: no-repeat;
     background-position: center, center;
     background-size: cover;
   }
   /* Watch Party tile — co-viewing UI photo backdrop with a bottom scrim for legible text */
-  .card--watch-party-beta{
-    background-color: #2A3238;
+  .card--watch-party-beta{ background-color: #2A3238; }
+  .card--watch-party-beta::before{
     background-image: linear-gradient(180deg, rgba(20,24,28,0) 40%, rgba(20,24,28,0.82) 76%, #14181C 100%), url('assets/img/watch-party.png');
-    background-repeat: no-repeat;
-    background-position: center, center top;
-    background-size: cover, 100% auto;
+    background-position: center, center;
+    background-size: cover, cover;
   }
-  /* Seamless Casting tile — multi-device image anchored to the bottom, text on the white area up top */
-  .card--airplay-chromecast-handoff{
-    background-color: #FFFFFF;
+  /* Seamless Casting tile — multi-device image anchored to the top, text on the white area below */
+  .card--airplay-chromecast-handoff::before{
     background-image: url('assets/img/seamless-casting.png');
-    background-repeat: no-repeat;
     background-position: center top;
     background-size: 80%;
   }
@@ -815,7 +833,6 @@
     /* ---- FEATURE BANDS: the top updates as stacked full-width bands ---- */
     const band = (e) => `
       <section class="feature-band feature-band--${e.id}">
-        ${e.id === 'win-probability-overlay' ? scoreCluster : ''}
         <div class="feature-band__content">
           <h2>${e.name}</h2>
           <p class="feature-band__tagline">${e.tagline}</p>
@@ -829,15 +846,12 @@
     /* ---- HIGHLIGHTS: remaining updates as uniform 2-up tiles ---- */
     const lightCards = ['airplay-chromecast-handoff', '4k-hdr-expansion', 'offline-downloads'];
     const card = (e) => `
-      <article class="card card--${e.id}${lightCards.includes(e.id) ? ' card--light' : ''}">
+      <a class="card card--${e.id}${lightCards.includes(e.id) ? ' card--light' : ''}" href="feature.html?id=${e.id}">
         <div class="card__body">
           <h3 class="card__title">${e.name}</h3>
           <p class="card__benefit">${e.tagline}</p>
-          <div class="card__ctas">
-            <a class="btn btn--solid" href="feature.html?id=${e.id}">Learn more</a>
-          </div>
         </div>
-      </article>`;
+      </a>`;
     document.getElementById('grid').innerHTML = entries.slice(3, 9).map(card).join('');
 
     /* ---- Tiles slide into place, staggered, as they scroll into view ---- */

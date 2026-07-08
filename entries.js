@@ -152,8 +152,8 @@ window.DAZN_ENTRIES = [
   },
   {
     id: "watch-party-beta",
-    name: "Watch Party",
-    tagline: "Watch with up to eight friends, in sync.",
+    name: "My Clips",
+    tagline: "The best football moments are meant to be shared",
     ctaText: "Host a party",
     labelClass: "label--integration",
     labelText: "Apps &amp; integrations",
