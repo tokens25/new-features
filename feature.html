@@ -310,11 +310,18 @@
   .hcard__media{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:0; }
   .hcard__media img{ width:100%; height:100%; object-fit:cover; object-position: center calc(50% + 60px); }
   .highlights__scroll .hcard:nth-child(4) .hcard__media img{ object-fit: contain; transform: scale(0.85); object-position: center calc(50% + 80px); }
+  /* Per-entry (e.g. Scores): images fill each card, centered, no multiview-specific offsets */
+  .highlights__scroll--fill .hcard__media img{ object-fit: cover; object-position: center; transform: none; }
+  .highlights__scroll--fill .hcard:nth-child(4) .hcard__media img{ object-fit: cover; object-position: center; transform: none; }
   .hcard__cap{
     position:absolute; z-index:1;
     top: var(--sp-40); right: var(--sp-40); left: 50%;
     font-size: 26px; line-height:1.28; font-weight:600; color: var(--ink);
   }
+  /* Per-entry (Scores): image on top, caption below it (Apple-style) instead of overlaid */
+  .highlights__scroll--capbelow .hcard{ aspect-ratio: auto; background: transparent; border-radius: 0; overflow: visible; }
+  .highlights__scroll--capbelow .hcard__media{ position: relative; inset: auto; width: 100%; aspect-ratio: 16 / 10; border-radius: var(--r-20); overflow: hidden; }
+  .highlights__scroll--capbelow .hcard__cap{ position: static; top:auto; right:auto; left:auto; margin-top: var(--sp-20); font-size: 24px; line-height: 1.4; font-weight: 700; color: var(--ink); max-width: none; }
 
   /* ============ GAUGES (animated meters) ============ */
   .gauges{ text-align:center; background: var(--panel); }
@@ -421,6 +428,7 @@
     .accordion{ max-width:none; }
     .gallery__grid{ grid-template-columns: 1fr; }
     .gallery__cap{ font-size: 20px; }
+    .highlights__scroll--capbelow .hcard__cap{ font-size: 20px; }
     .highlights__head{ flex-direction:column; align-items:flex-start; gap: var(--sp-8); }
     .highlights__head h2{ font-size: 32px; }
     .highlights__scroll{ grid-auto-columns: 86vw; }
@@ -532,7 +540,9 @@
         entry.sections[0].text,
         entry.sections[1].text,
         entry.tip
-      ];
+      // Per-card caption override (entry.highlightCaps[i]); opt-out trims to 3 cards
+      ].map((t, i) => (entry.highlightCaps && entry.highlightCaps[i]) || t)
+       .slice(0, entry.highlightsThree ? 3 : 4);
       const hcards = highlightCaps.map((t, i) => `
         <article class="hcard">
           <div class="hcard__media">${entry.highlightImages && entry.highlightImages[i] ? `<img src="${entry.highlightImages[i]}" alt="">` : PH}</div>
@@ -626,7 +636,7 @@
           <div class="wrap highlights__head">
             <h2>Get the highlights.</h2>
           </div>
-          <div class="highlights__scroll">${hcards}</div>
+          <div class="highlights__scroll${entry.highlightsFill ? ' highlights__scroll--fill' : ''}${entry.highlightsCaptionBelow ? ' highlights__scroll--capbelow' : ''}">${hcards}</div>
           <div class="highlights__dots">${hdots}</div>
         </section>
 
