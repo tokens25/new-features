@@ -163,18 +163,18 @@
     margin-right: calc(var(--fp) * max(0px, (100% - var(--max)) / 2));
     border-radius: calc(var(--fp) * 28px);
   }
-  .fhero--image{ background: #FFFFFF; }
+  .fhero--image{ background: var(--panel); }
   .fhero__ph{ position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; }
   .fhero__ph img{
-    width:100%; height:100%; object-fit:contain; object-position:center -180px;
-    /* whole image stays inside the frame; shrinks as you scroll (--fp: 0→1) */
-    transform: scale(calc(1 - var(--fp, 0) * 0.3));
+    width:100%; height:100%; object-fit:cover; object-position:center 78%;
+    /* cover fills the frame edge-to-edge at any size; anchor low so the empty top
+       is what gets cropped and the darker floor sits under the headline */
     transform-origin: center;
   }
   .fhero__inner > div{ will-change: transform, opacity; }
   .fhero::after{
     content:""; position:absolute; inset:0;
-    background: linear-gradient(180deg, rgba(var(--fade-rgb),0) 45%, rgba(var(--fade-rgb),0.55) 100%);
+    background: linear-gradient(180deg, rgba(var(--fade-rgb),0) 32%, rgba(var(--fade-rgb),0.55) 66%, rgba(var(--fade-rgb),0.95) 100%);
     pointer-events:none;
   }
   .fhero__inner{
@@ -413,7 +413,7 @@
     .section{ padding: var(--sp-80) 0; }
     .fhero h1{ font-size: 40px; }
     .fhero__inner{ flex-direction:column; align-items:flex-start; }
-    .fhero__ph img{ object-position: center 20px; transform: scale(calc((1 - var(--fp, 0) * 0.3) * 1.1)); }
+    .fhero__ph img{ object-fit: contain; object-position: center 20px; transform: scale(calc((1 - var(--fp, 0) * 0.3) * 1.1)); }
     .statement__ph img{ object-position: 35% center; }
     .closer h2{ font-size: 34px; margin-bottom: var(--sp-40); }
     .closer__grid{ grid-template-columns: 1fr; gap: var(--sp-32); }
@@ -510,9 +510,10 @@
       const accItems = [
         { h: entry.sections[0].heading, t: entry.sections[0].text },
         { h: entry.sections[1].heading, t: entry.sections[1].text },
-        { h: 'Where you can watch', t: `${entry.name} is available on ${entry.product}. Sign in with your DAZN account on any supported device to get started.` },
-        { h: 'Good to know', t: entry.tip }
+        { h: 'Where you can watch', t: `${entry.name} is available on ${entry.product}. Sign in with your DAZN account on any supported device to get started.` }
       ];
+      // Per-entry opt-out (e.g. Scores hides this) — otherwise show the "Good to know" tip
+      if (!entry.hideGoodToKnow) accItems.push({ h: 'Good to know', t: entry.tip });
 
       const acc = accItems.map((it, i) => `
         <div class="acc__item${i === 0 ? ' open' : ''}">
