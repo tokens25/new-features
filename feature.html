@@ -237,7 +237,7 @@
   }
   .acc__body p{ font-size:15px; line-height:1.6; color:var(--ink-2); padding-bottom: 22px; }
   .closer__media{
-    border-radius: var(--r-20); overflow:hidden; background: var(--panel);
+    border-radius: var(--r-20); overflow:hidden; background: #FFFFFF;
     aspect-ratio: 3/2; display:flex; align-items:center; justify-content:center;
   }
   .closer__media img{ width:100%; height:100%; object-fit:cover; transition: opacity .3s ease; }
@@ -303,11 +303,13 @@
     position:relative;
     scroll-snap-align: start;
     aspect-ratio: 16 / 10;
-    background: var(--panel);
+    background: var(--card);
     border-radius: var(--r-20);
     overflow:hidden;
   }
   .hcard__media{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:0; }
+  .hcard__media img{ width:100%; height:100%; object-fit:cover; object-position: center calc(50% + 60px); }
+  .highlights__scroll .hcard:nth-child(4) .hcard__media img{ object-fit: contain; transform: scale(0.85); object-position: center calc(50% + 80px); }
   .hcard__cap{
     position:absolute; z-index:1;
     top: var(--sp-40); right: var(--sp-40); left: 50%;
@@ -377,14 +379,21 @@
   /* ============ BIG STATEMENT (image bg) ============ */
   .statement{
     position:relative; overflow:hidden; text-align:center;
-    min-height: 92vh; display:flex; flex-direction:column; justify-content:flex-start;
-    padding: var(--sp-96) var(--gm) 0;
+    min-height: 92vh; display:flex; flex-direction:column; justify-content:flex-end;
+    padding: var(--sp-96) var(--gm) var(--sp-96);
     background: var(--panel);
   }
   .statement__ph{ position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; }
+  .statement__ph img{ width:100%; height:100%; object-fit:cover; }
+  .statement--image .statement__ph::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(8,14,18,0.15) 0%, rgba(8,14,18,0.75) 100%);
+  }
+  .statement--image .eyebrow, .statement--image h2{ color:#FAFBFC; }
+  .statement--image .statement__lead{ color:rgba(250,251,252,0.8); }
   .statement__inner{ position:relative; z-index:1; max-width: 900px; margin:0 auto; }
   .statement .eyebrow{ font-size:21px; }
-  .statement h2{ font-size: 84px; line-height:1.02; font-weight:700; letter-spacing:-0.025em; }
+  .statement h2{ font-size: 60px; line-height:1.02; font-weight:700; letter-spacing:-0.025em; }
   .statement__lead{
     max-width: 620px; margin: var(--sp-32) auto 0;
     font-size: 21px; line-height:1.5; color: var(--ink-2); font-weight:500;
@@ -511,11 +520,8 @@
           <div class="acc__body"><p>${it.t}</p></div>
         </div>`).join('');
 
-      const galleryTiles = `
-        <div class="tile">${PH}</div>
-        <div class="tile">${PH}</div>
-        <div class="tile">${PH}</div>
-        <div class="tile">${PH}</div>`;
+      const galleryTiles = [0, 1, 2, 3].map(i =>
+        `<div class="tile">${entry.galleryImages && entry.galleryImages[i] ? `<img src="${entry.galleryImages[i]}" alt="">` : PH}</div>`).join('');
 
       // Horizontally-scrolling highlight cards
       const highlightCaps = [
@@ -524,9 +530,9 @@
         entry.sections[1].text,
         entry.tip
       ];
-      const hcards = highlightCaps.map(t => `
+      const hcards = highlightCaps.map((t, i) => `
         <article class="hcard">
-          <div class="hcard__media">${PH}</div>
+          <div class="hcard__media">${entry.highlightImages && entry.highlightImages[i] ? `<img src="${entry.highlightImages[i]}" alt="">` : PH}</div>
           <p class="hcard__cap">${t}</p>
         </article>`).join('');
       const hdots = highlightCaps.map((_, i) => `<button${i === 0 ? ' class="is-active"' : ''} aria-label="Go to card ${i + 1}"></button>`).join('');
@@ -637,11 +643,11 @@
             <p class="centered__lead">${entry.desc}</p>
             <div class="cards">
               <div>
-                <div class="card2__media">${PH}</div>
+                <div class="card2__media">${entry.worksImages && entry.worksImages[0] ? `<img src="${entry.worksImages[0]}" alt="">` : PH}</div>
                 <p class="card2__cap"><strong>${entry.sections[0].heading}.</strong> <span class="muted">${entry.sections[0].text}</span></p>
               </div>
               <div>
-                <div class="card2__media">${PH}</div>
+                <div class="card2__media">${entry.worksImages && entry.worksImages[1] ? `<img src="${entry.worksImages[1]}" alt="">` : PH}</div>
                 <p class="card2__cap"><strong>${entry.sections[1].heading}.</strong> <span class="muted">${entry.sections[1].text}</span></p>
               </div>
             </div>
@@ -649,8 +655,8 @@
         </section>
 
         <!-- BIG STATEMENT -->
-        <section class="statement">
-          <div class="statement__ph">${PH}</div>
+        <section class="statement${entry.statementImage ? ' statement--image' : ''}">
+          <div class="statement__ph">${entry.statementImage ? `<img src="${entry.statementImage}" alt="">` : PH}</div>
           <div class="statement__inner">
             <p class="eyebrow">${entry.name}</p>
             <h2>${entry.title}</h2>

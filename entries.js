@@ -18,6 +18,10 @@ window.DAZN_ENTRIES = [
       "assets/img/multiview-closer-3.png",
       "assets/img/multiview-closer-4.png"
     ],
+    highlightImages: ["assets/img/multiview-highlight-1.png", "assets/img/multiview-highlight-2.png", "assets/img/multiview-highlight-3.png", "assets/img/multiview-highlight-4.png"],
+    galleryImages: ["assets/img/multiview-gallery-1.png", "assets/img/multiview-gallery-2.png", "assets/img/multiview-gallery-3.png", "assets/img/multiview-gallery-4.png"],
+    worksImages: ["assets/img/multiview-works-1.png", "assets/img/multiview-works-2.png"],
+    statementImage: "assets/img/multiview-statement.png",
     labelClass: "label--new",
     labelText: "New release",
     date: "August 4",
