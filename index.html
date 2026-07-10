@@ -457,8 +457,8 @@
   /* Live Key Moments tile — dramatic dark photo backdrop with a bottom scrim for legible text */
   .card--key-moments-live{ background-color: #0C1216; }
   .card--key-moments-live::before{
-    background-image: linear-gradient(180deg, rgba(8,14,18,0) 38%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/live-key-moments.png');
-    background-position: center, center top;
+    background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-stories.png');
+    background-position: center, center;
     background-size: cover, cover;
   }
   /* 4K HDR tile — action-burst image anchored to the top, text on the white area below */
@@ -487,11 +487,26 @@
     background-position: center, center;
     background-size: cover, cover;
   }
-  /* Seamless Casting tile — multi-device image anchored to the top, text on the white area below */
+  /* FanZone tile — dark photo backdrop with a bottom scrim for legible text */
+  .card--airplay-chromecast-handoff{ background-color: #0C1216; }
   .card--airplay-chromecast-handoff::before{
-    background-image: url('assets/img/seamless-casting.png');
-    background-position: center top;
-    background-size: 80%;
+    background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-fanzone.png');
+    background-position: center, center;
+    background-size: cover, cover;
+  }
+  /* Faster start-up tile — dark app-screenshot backdrop with a bottom scrim for legible text */
+  .card--faster-startup-mobile{ background-color: #0C161C; }
+  .card--faster-startup-mobile::before{
+    background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-stats.png');
+    background-position: center, center;
+    background-size: cover, cover;
+  }
+  /* Win Probability tile — dark photo backdrop with a bottom scrim for legible text */
+  .card--win-probability-overlay{ background-color: #0C1216; }
+  .card--win-probability-overlay::before{
+    background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-myclips.png');
+    background-position: center, center;
+    background-size: cover, cover;
   }
   /* Staggered slide-in (gated on .reveal so cards stay visible without JS) */
   .grid.reveal .card{
@@ -644,12 +659,16 @@
     .feature-band h2{ font-size: 32px; }
     .feature-band__tagline{ font-size: 20px; }
     .feature-band--multi-view{
-      background-color: #FFFFFF;
-      background-image: url('assets/img/multiview-mobile.png');
-      background-position: right -220px top calc(-20px - var(--mv-shift, 0px));
-      background-size: auto calc(105% * var(--mv-zoom, 1));
-      padding-right: 140px;
+      background-color: #0C1216;
+      background-image: linear-gradient(180deg, rgba(8,14,18,0) 42%, rgba(8,14,18,0.88) 100%), url('assets/img/hp-multiview-m.png');
+      background-repeat: no-repeat, no-repeat;
+      background-position: center, center;
+      background-size: cover, cover;
+      justify-content: flex-end;
+      padding: 30px;
     }
+    .feature-band--multi-view h2{ color: #FAFBFC; }
+    .feature-band--multi-view .feature-band__tagline{ color: rgba(250,251,252,0.85); }
     .grid{ grid-template-columns: 1fr; }
     .card{ padding: 30px; align-items: flex-start; text-align: left; }
     .card__body{ padding: 0; align-items: flex-start; justify-content: flex-end; text-align: left; }
@@ -658,7 +677,28 @@
   @media (max-width: 640px){
     .card{ min-height: 680px; }
     .feature-band{ min-height: 680px; }
-    .card--airplay-chromecast-handoff::before{ background-size: 200%; }
+    /* Mobile only: zoom each tile image 1.2 inside its container */
+    .card::before{ transform: scale(1.2); }
+    /* Multi-View: same tile look as the others on mobile (rounded 2:3 card, aligned margins) */
+    #feature-bands{ padding: 0 var(--sp-16); }
+    .feature-band--multi-view{ min-height: 0; aspect-ratio: 2 / 3; border-radius: 20px; border: 1px solid #76828c36; }
+    .feature-band--multi-view h2{ font-size: 32px; }
+    /* Tiles with a portrait mobile image: match the 2:3 image so it fills without cropping */
+    .card--faster-startup-mobile,
+    .card--win-probability-overlay,
+    .card--key-moments-live,
+    .card--airplay-chromecast-handoff{ min-height: 0; aspect-ratio: 2 / 3; }
+    .card--faster-startup-mobile::before,
+    .card--win-probability-overlay::before,
+    .card--key-moments-live::before,
+    .card--airplay-chromecast-handoff::before{
+      background-position: center, center;
+      background-size: cover, cover;
+    }
+    .card--faster-startup-mobile::before{ background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-stats-m.png'); }
+    .card--win-probability-overlay::before{ background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-myclips-m.png'); }
+    .card--key-moments-live::before{ background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-stories-m.png'); }
+    .card--airplay-chromecast-handoff::before{ background-image: linear-gradient(180deg, rgba(8,14,18,0) 40%, rgba(8,14,18,0.82) 74%, #0C1216 100%), url('assets/img/hp-fanzone-m.png'); }
     .card--4k-hdr-expansion::before{ background-size: 200%; background-position: calc(80% + 10px) top; }
     .card--offline-downloads::before{ background-size: 260%; background-position: calc(50% + 60px) top; }
     .card__title{ font-size: 32px; }
@@ -691,7 +731,7 @@
       <source src="assets/video/video-hero-720.mp4" type="video/mp4">
     </video>
     <video class="splash__video splash__video--mobile" autoplay muted loop playsinline>
-      <source src="assets/video/video-hero-vertical.mp4" type="video/mp4">
+      <source src="assets/video/video-hero-720.mp4" type="video/mp4">
     </video>
     <div class="splash__scrim"></div>
 
@@ -845,18 +885,18 @@
           </div>
         </div>
       </section>`;
-    document.getElementById('feature-bands').innerHTML = entries.slice(0, 3).map(band).join('');
+    document.getElementById('feature-bands').innerHTML = entries.slice(0, 1).map(band).join('');
 
     /* ---- HIGHLIGHTS: remaining updates as uniform 2-up tiles ---- */
-    const lightCards = ['airplay-chromecast-handoff', '4k-hdr-expansion', 'offline-downloads'];
+    const lightCards = ['4k-hdr-expansion', 'offline-downloads'];
     const card = (e) => `
       <a class="card card--${e.id}${lightCards.includes(e.id) ? ' card--light' : ''}" href="feature.html?id=${e.id}">
         <div class="card__body">
-          <h3 class="card__title">${e.name}</h3>
-          <p class="card__benefit">${e.tagline}</p>
+          <h3 class="card__title">${e.tileName || e.name}</h3>
+          <p class="card__benefit">${e.tileTagline || e.tagline}</p>
         </div>
       </a>`;
-    document.getElementById('grid').innerHTML = entries.slice(3, 9).map(card).join('');
+    document.getElementById('grid').innerHTML = [2, 1, 3, 4].map(i => entries[i]).map(card).join('');
 
     /* ---- Tiles slide into place, staggered, as they scroll into view ---- */
     (() => {

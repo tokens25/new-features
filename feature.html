@@ -165,11 +165,23 @@
   }
   .fhero--image{ background: var(--panel); }
   .fhero__ph{ position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; }
+  .fhero__ph picture{ display:block; width:100%; height:100%; }
   .fhero__ph img{
     width:100%; height:100%; object-fit:cover; object-position:center 78%;
     /* cover fills the frame edge-to-edge at any size; anchor low so the empty top
        is what gets cropped and the darker floor sits under the headline */
     transform-origin: center;
+  }
+  /* My Clips hero is centered/full — keep it centered so the devices aren't clipped */
+  .fhero--herom .fhero__ph img{ object-position: center; }
+  /* Fade the bottom of the image into the page background colour (solid at the base) so
+     the full-bleed hero blends seamlessly into the section below it. */
+  .fhero.fhero--herom::after{
+    background: linear-gradient(180deg,
+      rgba(var(--fade-rgb),0) 42%,
+      rgba(var(--fade-rgb),0.65) 68%,
+      rgba(var(--fade-rgb),0.92) 86%,
+      rgba(var(--fade-rgb),1) 100%);
   }
   .fhero__inner > div{ will-change: transform, opacity; }
   .fhero::after{
@@ -186,6 +198,7 @@
   .fhero h1{
     font-size: 68px; line-height:1.03; font-weight:700; letter-spacing:-0.02em; max-width: 600px;
   }
+  .fhero__desc{ margin-top: var(--sp-16); font-size: 19px; line-height: 1.5; font-weight: 500; color: var(--ink-2); max-width: 460px; }
   .fhero__sub{ margin-top: var(--sp-20); font-size:17px; font-weight:600; color: var(--ink-2); }
   .fhero__type{
     display:inline-block; font-size:17px; font-weight:700; color: var(--ink);
@@ -322,6 +335,9 @@
   .highlights__scroll--capbelow .hcard{ aspect-ratio: auto; background: transparent; border-radius: 0; overflow: visible; }
   .highlights__scroll--capbelow .hcard__media{ position: relative; inset: auto; width: 100%; aspect-ratio: 16 / 10; border-radius: var(--r-20); overflow: hidden; }
   .highlights__scroll--capbelow .hcard__cap{ position: static; top:auto; right:auto; left:auto; margin-top: var(--sp-20); font-size: 24px; line-height: 1.4; font-weight: 700; color: var(--ink); max-width: none; }
+  /* Per-entry (My Clips): caption below has a bold 24px title + description */
+  .highlights__scroll--capbelow .hcard__cap-title{ display:block; font-size: 24px; line-height: 1.25; font-weight: 700; color: var(--ink); }
+  .highlights__scroll--capbelow .hcard__cap-desc{ display:block; margin-top: var(--sp-8); font-size: 17px; line-height: 1.5; font-weight: 500; color: var(--ink-2); }
 
   /* ============ GAUGES (animated meters) ============ */
   .gauges{ text-align:center; background: var(--panel); }
@@ -421,6 +437,9 @@
     .fhero h1{ font-size: 40px; }
     .fhero__inner{ flex-direction:column; align-items:flex-start; }
     .fhero__ph img{ object-fit: contain; object-position: center 20px; transform: scale(calc((1 - var(--fp, 0) * 0.3) * 1.1)); }
+    /* Entries with a dedicated portrait mobile hero: fill, anchored to the top so the
+       phone rises above the headline overlay instead of clashing with it */
+    .fhero--herom .fhero__ph img{ object-fit: cover; object-position: center top; transform: none; }
     .statement__ph img{ object-position: 35% center; }
     .closer h2{ font-size: 34px; margin-bottom: var(--sp-40); }
     .closer__grid{ grid-template-columns: 1fr; gap: var(--sp-32); }
@@ -429,6 +448,8 @@
     .gallery__grid{ grid-template-columns: 1fr; }
     .gallery__cap{ font-size: 20px; }
     .highlights__scroll--capbelow .hcard__cap{ font-size: 20px; }
+    .highlights__scroll--capbelow .hcard__cap-title{ font-size: 20px; }
+    .highlights__scroll--capbelow .hcard__cap-desc{ font-size: 16px; }
     .highlights__head{ flex-direction:column; align-items:flex-start; gap: var(--sp-8); }
     .highlights__head h2{ font-size: 32px; }
     .highlights__scroll{ grid-auto-columns: 86vw; }
@@ -514,14 +535,19 @@
       ].filter(Boolean);
       const heroLabels = metaValues.map(v => `<span class="dlabel">${v}</span>`).join('');
 
-      // Accordion items built from the entry's real content
-      const accItems = [
-        { h: entry.sections[0].heading, t: entry.sections[0].text },
-        { h: entry.sections[1].heading, t: entry.sections[1].text },
-        { h: 'Where you can watch', t: `${entry.name} is available on ${entry.product}. Sign in with your DAZN account on any supported device to get started.` }
-      ];
-      // Per-entry opt-out (e.g. Scores hides this) — otherwise show the "Good to know" tip
-      if (!entry.hideGoodToKnow) accItems.push({ h: 'Good to know', t: entry.tip });
+      // Accordion items. `accordionSectionsOnly` renders just the entry's sections
+      // (e.g. My Clips: the 3 how-it-works steps); otherwise sections + service items.
+      let accItems;
+      if (entry.accordionSectionsOnly) {
+        accItems = entry.sections.map(s => ({ h: s.heading, t: s.text }));
+      } else {
+        accItems = [
+          { h: entry.sections[0].heading, t: entry.sections[0].text },
+          { h: entry.sections[1].heading, t: entry.sections[1].text },
+          { h: 'Where you can watch', t: `${entry.name} is available on ${entry.product}. Sign in with your DAZN account on any supported device to get started.` }
+        ];
+        if (!entry.hideGoodToKnow) accItems.push({ h: 'Good to know', t: entry.tip });
+      }
 
       const acc = accItems.map((it, i) => `
         <div class="acc__item${i === 0 ? ' open' : ''}">
@@ -534,21 +560,29 @@
       const galleryTiles = [0, 1, 2, 3].map(i =>
         `<div class="tile">${entry.galleryImages && entry.galleryImages[i] ? `<img src="${entry.galleryImages[i]}" alt="">` : PH}</div>`).join('');
 
-      // Horizontally-scrolling highlight cards
-      const highlightCaps = [
-        entry.tagline,
-        entry.sections[0].text,
-        entry.sections[1].text,
-        entry.tip
-      // Per-card caption override (entry.highlightCaps[i]); opt-out trims to 3 cards
-      ].map((t, i) => (entry.highlightCaps && entry.highlightCaps[i]) || t)
-       .slice(0, entry.highlightsThree ? 3 : 4);
-      const hcards = highlightCaps.map((t, i) => `
-        <article class="hcard">
-          <div class="hcard__media">${entry.highlightImages && entry.highlightImages[i] ? `<img src="${entry.highlightImages[i]}" alt="">` : PH}</div>
-          <p class="hcard__cap">${t}</p>
-        </article>`).join('');
-      const hdots = highlightCaps.map((_, i) => `<button${i === 0 ? ' class="is-active"' : ''} aria-label="Go to card ${i + 1}"></button>`).join('');
+      // Horizontally-scrolling highlight cards. `highlightItems` (title + text) takes
+      // priority; otherwise fall back to single-line captions.
+      const hImg = (i) => entry.highlightImages && entry.highlightImages[i] ? `<img src="${entry.highlightImages[i]}" alt="">` : PH;
+      let hcards, hCount;
+      if (entry.highlightItems) {
+        hCount = entry.highlightItems.length;
+        hcards = entry.highlightItems.map((it, i) => `
+          <article class="hcard">
+            <div class="hcard__media">${hImg(i)}</div>
+            <div class="hcard__cap"><span class="hcard__cap-title">${it.title}</span><span class="hcard__cap-desc">${it.text}</span></div>
+          </article>`).join('');
+      } else {
+        const highlightCaps = [entry.tagline, entry.sections[0].text, entry.sections[1].text, entry.tip]
+          .map((t, i) => (entry.highlightCaps && entry.highlightCaps[i]) || t)
+          .slice(0, entry.highlightsThree ? 3 : 4);
+        hCount = highlightCaps.length;
+        hcards = highlightCaps.map((t, i) => `
+          <article class="hcard">
+            <div class="hcard__media">${hImg(i)}</div>
+            <p class="hcard__cap">${t}</p>
+          </article>`).join('');
+      }
+      const hdots = Array.from({ length: hCount }, (_, i) => `<button${i === 0 ? ' class="is-active"' : ''} aria-label="Go to card ${i + 1}"></button>`).join('');
 
       // Animated gauges (arc draws in + number counts up on scroll)
       const gaugeData = [
@@ -588,12 +622,13 @@
 
       page.innerHTML = `
         <!-- HERO -->
-        <section class="fhero${entry.heroImage ? ' fhero--image' : ''}">
-          <div class="fhero__ph">${entry.heroImage ? `<img src="${entry.heroImage}" alt="">` : PH}</div>
+        <section class="fhero${entry.heroImage ? ' fhero--image' : ''}${entry.heroImageMobile ? ' fhero--herom' : ''}">
+          <div class="fhero__ph">${entry.heroImage ? `<picture><source media="(max-width: 640px)" srcset="${entry.heroImageMobile || entry.heroImage}"><img src="${entry.heroImage}" alt=""></picture>` : PH}</div>
           <div class="fhero__inner">
             <div>
-              <div class="fhero__eyebrow">${entry.name}</div>
+              <div class="fhero__eyebrow">${entry.heroEyebrow || entry.name}</div>
               <h1>${entry.tagline}</h1>
+              ${entry.heroSub ? `<p class="fhero__desc">${entry.heroSub}</p>` : ''}
               <p class="fhero__sub"><a class="fhero__type" href="index.html">${entry.labelText}</a></p>
               <div class="fhero__labels">${heroLabels}</div>
             </div>
@@ -607,7 +642,7 @@
         <!-- CLOSER LOOK -->
         <section class="section closer">
           <div class="wrap">
-            <h2>New Features</h2>
+            <h2>${entry.closerHeading || 'New Features'}</h2>
             <div class="closer__grid">
               <div class="closer__media">${entry.closerImages ? `<img src="${entry.closerImages[0]}" alt="">` : PH}</div>
               <div class="accordion">${acc}</div>
@@ -641,27 +676,28 @@
         </section>
 
         <!-- GAUGES -->
+        ${entry.hideGauges ? '' : `
         <section class="section gauges">
           <div class="wrap">
             <h2 class="gauges__title">By the numbers.</h2>
             <div class="gauges__row">${gauges}</div>
           </div>
-        </section>
+        </section>`}
 
         <!-- CENTERED STATEMENT -->
         <section class="section centered">
           <div class="wrap">
             <p class="eyebrow">${entry.labelText}</p>
-            <h2>How ${entry.name} works.</h2>
+            <h2>${entry.centeredHeading || `How ${entry.name} works.`}</h2>
             <p class="centered__lead">${entry.desc}</p>
             <div class="cards">
               <div>
                 <div class="card2__media">${entry.worksImages && entry.worksImages[0] ? `<img src="${entry.worksImages[0]}" alt="">` : PH}</div>
-                <p class="card2__cap"><strong>${entry.sections[0].heading}.</strong> <span class="muted">${entry.sections[0].text}</span></p>
+                ${entry.centeredNoCaps ? '' : `<p class="card2__cap"><strong>${entry.sections[0].heading}.</strong> <span class="muted">${entry.sections[0].text}</span></p>`}
               </div>
               <div>
                 <div class="card2__media">${entry.worksImages && entry.worksImages[1] ? `<img src="${entry.worksImages[1]}" alt="">` : PH}</div>
-                <p class="card2__cap"><strong>${entry.sections[1].heading}.</strong> <span class="muted">${entry.sections[1].text}</span></p>
+                ${entry.centeredNoCaps ? '' : `<p class="card2__cap"><strong>${entry.sections[1].heading}.</strong> <span class="muted">${entry.sections[1].text}</span></p>`}
               </div>
             </div>
           </div>
