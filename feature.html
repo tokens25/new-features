@@ -164,7 +164,9 @@
     border-radius: calc(var(--fp) * 28px);
   }
   .fhero--image{ background: var(--panel); }
+  .fhero.fhero--image.fhero--multi-view{ background: none; }
   .fhero__ph{ position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; }
+  .fhero--multi-view .fhero__ph{ background: #FFFFFF; }
   .fhero__ph picture{ display:block; width:100%; height:100%; }
   .fhero__ph img{
     width:100%; height:100%; object-fit:cover; object-position:center 78%;
@@ -368,10 +370,30 @@
     border-radius: var(--r-20);
     padding: var(--sp-40);
     min-height: 320px;
-    display:flex; flex-direction:column; justify-content:flex-end;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    text-align:center;
   }
-  .statcard__num{ font-size: 64px; font-weight:700; line-height:1; letter-spacing:-0.03em; color: var(--ink); }
+  .statcard__gauge{ width: 220px; height: 110px; margin-bottom: var(--sp-12); }
+  .statcard__gauge svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .statcard__gauge .sg-track{ fill:none; stroke:var(--track); stroke-width:16; stroke-linecap:round; }
+  .statcard__gauge .sg-value{
+    fill:none; stroke-width:16; stroke-linecap:round;
+    stroke-dasharray:1; stroke-dashoffset:1;
+    transition: stroke-dashoffset 1.9s cubic-bezier(.11,.79,.15,1);
+  }
+  @media (prefers-reduced-motion: reduce){ .statcard__gauge .sg-value{ transition:none; } }
+  .statcard__num{
+    display:flex; justify-content:center; align-items:flex-end;
+    font-size: 64px; font-weight:700; line-height:1; letter-spacing:-0.03em; color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
   .statcard__label{ margin-top: var(--sp-12); font-size: 20px; font-weight:500; color: var(--ink); }
+  /* Odometer digit reel */
+  .odo{ display:inline-block; overflow:hidden; height:1em; line-height:1; }
+  .odo__reel{ display:flex; flex-direction:column; transform: translateY(0em); transition: transform 1.9s cubic-bezier(.11,.79,.15,1); }
+  .odo__reel span{ display:block; height:1em; line-height:1; }
+  .odo--static{ display:inline-block; }
+  @media (prefers-reduced-motion: reduce){ .odo__reel{ transition:none; } }
   /* Scroll-in: left from left, middle from bottom, right from right (gated on .reveal) */
   .statcards__grid.reveal .statcard{
     opacity: 0;
@@ -610,19 +632,35 @@
         </div>`).join('');
 
       const statCards = [
-        { display: '5,5M', target: 5.5, decimals: 1, suffix: 'M', label: 'subscribers worldwide' },
-        { display: '200+', target: 200, decimals: 0, suffix: '+', label: 'markets served' },
-        { display: '9',    target: 9,   decimals: 0, suffix: '',  label: 'sports on one app' }
+        { display: '5,5M', target: 5.5, decimals: 1, suffix: 'M', label: 'subscribers worldwide', pct: 0.72 },
+        { display: '200+', target: 200, decimals: 0, suffix: '+', label: 'markets served', pct: 0.55 },
+        { display: '9',    target: 9,   decimals: 0, suffix: '',  label: 'sports on one app', pct: 0.86 }
       ];
-      const statcardsHtml = statCards.map(s => `
-        <div class="statcard">
-          <div class="statcard__num" data-target="${s.target}" data-decimals="${s.decimals}" data-suffix="${s.suffix}">${s.display}</div>
+      const buildOdometer = (str) => [...str].map(ch => /[0-9]/.test(ch)
+        ? `<span class="odo"><span class="odo__reel" data-digit="${ch}">${'0123456789'.repeat(4).split('').map(d => `<span>${d}</span>`).join('')}</span></span>`
+        : `<span class="odo--static">${ch}</span>`
+      ).join('');
+      const statcardsHtml = statCards.map((s, i) => `
+        <div class="statcard" data-pct="${s.pct}">
+          <div class="statcard__gauge">
+            <svg viewBox="0 0 208 108" aria-hidden="true">
+              <defs>
+                <linearGradient id="sgGrad${i}" x1="100%" y1="0%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#F2AF3D"/>
+                  <stop offset="100%" stop-color="#FBED7D"/>
+                </linearGradient>
+              </defs>
+              <path class="sg-track" d="M12,100 A92,92 0 0 1 196,100" pathLength="1"/>
+              <path class="sg-value" d="M12,100 A92,92 0 0 1 196,100" pathLength="1" stroke="url(#sgGrad${i})"/>
+            </svg>
+          </div>
+          <div class="statcard__num">${buildOdometer(s.display)}</div>
           <div class="statcard__label">${s.label}</div>
         </div>`).join('');
 
       page.innerHTML = `
         <!-- HERO -->
-        <section class="fhero${entry.heroImage ? ' fhero--image' : ''}${entry.heroImageMobile ? ' fhero--herom' : ''}">
+        <section class="fhero${entry.heroImage ? ' fhero--image' : ''}${entry.heroImageMobile ? ' fhero--herom' : ''} fhero--${entry.id}">
           <div class="fhero__ph">${entry.heroImage ? `<picture><source media="(max-width: 640px)" srcset="${entry.heroImageMobile || entry.heroImage}"><img src="${entry.heroImage}" alt=""></picture>` : PH}</div>
           <div class="fhero__inner">
             <div>
@@ -842,30 +880,40 @@
       const statEls = statGrid ? [...statGrid.querySelectorAll('.statcard')] : [];
       if (statGrid && statEls.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
         statGrid.classList.add('reveal');
-        const animateNum = (card, up) => {
-          const num = card.querySelector('.statcard__num');
-          const target = parseFloat(num.dataset.target);
-          const dec = parseInt(num.dataset.decimals || '0', 10);
-          const suf = num.dataset.suffix || '';
-          const fmt = (n) => (dec > 0 ? n.toFixed(dec).replace('.', ',') : Math.round(n).toString()) + suf;
-          const from = parseFloat(num.dataset.cur != null ? num.dataset.cur : (up ? 0 : target));
-          const to = up ? target : 0;
-          cancelAnimationFrame(card._raf || 0);
-          const dur = 1200, t0 = performance.now();
-          const tick = (t) => {
-            const p = Math.min(1, (t - t0) / dur);
-            const val = from + (to - from) * (1 - Math.pow(1 - p, 3));
-            num.dataset.cur = val; num.textContent = fmt(val);
-            if (p < 1) card._raf = requestAnimationFrame(tick);
-            else { num.dataset.cur = to; num.textContent = fmt(to); }
-          };
-          card._raf = requestAnimationFrame(tick);
+        const spinCard = (card, up) => {
+          const sgValue = card.querySelector('.sg-value');
+          if (sgValue) {
+            const pct = parseFloat(card.dataset.pct || '0');
+            sgValue.style.strokeDashoffset = up ? (1 - pct).toFixed(3) : '1';
+          }
+          card.querySelectorAll('.odo__reel').forEach(reel => {
+            clearTimeout(reel._to || 0);
+            if (!up) {
+              reel.style.transition = 'transform 1s cubic-bezier(.4,0,.2,1)';
+              reel.style.transform = 'translateY(0em)';
+              return;
+            }
+            const finalDigit = parseInt(reel.dataset.digit, 10);
+            const steps = 5 + Math.floor(Math.random() * 3); // 5-7 random shuffles
+            let i = 0;
+            const runStep = () => {
+              i++;
+              const isLast = i > steps;
+              const block = isLast ? 3 : Math.floor(Math.random() * 3);
+              const digit = isLast ? finalDigit : Math.floor(Math.random() * 10);
+              const dur = isLast ? 700 : Math.max(60, 190 - i * 22);
+              reel.style.transition = `transform ${dur}ms cubic-bezier(.3,.1,.2,1)`;
+              reel.style.transform = `translateY(-${block * 10 + digit}em)`;
+              if (!isLast) reel._to = setTimeout(runStep, dur);
+            };
+            runStep();
+          });
         };
         const sio = new IntersectionObserver((es) => es.forEach(e => {
           statGrid.dataset.everFired = '1';
           const show = e.isIntersecting;
           statEls.forEach(c => c.classList.toggle('in', show));
-          statEls.forEach(c => animateNum(c, show));
+          statEls.forEach(c => spinCard(c, show));
         }), { threshold: 0.3 });
         sio.observe(statGrid);
         // safety net: if the observer never fires (e.g. offscreen renderer), show finals
