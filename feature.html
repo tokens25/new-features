@@ -278,6 +278,12 @@
   .gallery__grid.reveal .tile:nth-child(4){ transform: translate(50px, 50px); }
   .gallery__grid.reveal .tile.in{ opacity: 1; transform: none; }
   .tile img{ width:100%; height:100%; object-fit:cover; }
+  /* Scores/My Clips: tiles 3 & 4 are flat UI shots — float them on the same
+     purple→warm gradient the device tiles (1 & 2) sit on */
+  .gallery__grid--win-probability-overlay .tile:nth-child(3) img,
+  .gallery__grid--win-probability-overlay .tile:nth-child(4) img{
+    width:100%; height:100%; object-fit:cover;
+  }
   .ph-ico{ width:64px; height:64px; color:var(--ph-ico); }
   .fhero__ph .ph-ico, .statement__ph .ph-ico{ width:112px; height:112px; color:var(--ph-ico-lg); }
   .gallery__cap{ margin-bottom: var(--sp-40); font-size: 24px; line-height:1.4; font-weight:600; max-width: 780px; }
@@ -435,6 +441,9 @@
   .statement--image .statement__ph::after{
     content:''; position:absolute; inset:0;
     background:linear-gradient(180deg, rgba(8,14,18,0.15) 0%, rgba(8,14,18,0.75) 100%);
+  }
+  .statement--win-probability-overlay .statement__ph::after{
+    background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.85) 78%, rgba(0,0,0,0.95) 100%);
   }
   .statement--image .eyebrow, .statement--image h2{ color:#FAFBFC; }
   .statement--image .statement__lead{ color:rgba(250,251,252,0.8); }
@@ -719,7 +728,7 @@
         <section class="section gallery" style="background:var(--gallery-bg)">
           <div class="wrap">
             <p class="gallery__cap"><strong>Made for every screen.</strong> <span class="muted">Watch ${entry.name} on ${platforms} — wherever the match takes you, with the same seamless experience.</span></p>
-            <div class="gallery__grid">${galleryTiles}</div>
+            <div class="gallery__grid gallery__grid--${entry.id}">${galleryTiles}</div>
           </div>
         </section>
 
@@ -761,7 +770,7 @@
         </section>
 
         <!-- BIG STATEMENT -->
-        <section class="statement${entry.statementImage ? ' statement--image' : ''}">
+        <section class="statement${entry.statementImage ? ' statement--image' : ''} statement--${entry.id}">
           <div class="statement__ph">${entry.statementImage ? `<img src="${entry.statementImage}" alt="">` : PH}</div>
           <div class="statement__inner">
             <p class="eyebrow">${entry.name}</p>
