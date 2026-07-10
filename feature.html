@@ -176,6 +176,7 @@
   }
   /* My Clips hero is centered/full — keep it centered so the devices aren't clipped */
   .fhero--herom .fhero__ph img{ object-position: center; }
+  .fhero--multi-view .fhero__ph img{ object-position: center bottom; }
   /* Fade the bottom of the image into the page background colour (solid at the base) so
      the full-bleed hero blends seamlessly into the section below it. */
   .fhero.fhero--herom::after{
@@ -462,6 +463,7 @@
     /* Entries with a dedicated portrait mobile hero: fill, anchored to the top so the
        phone rises above the headline overlay instead of clashing with it */
     .fhero--herom .fhero__ph img{ object-fit: cover; object-position: center top; transform: none; }
+    .fhero--multi-view .fhero__ph img{ object-fit: cover; object-position: center -150px; transform: none; }
     .statement__ph img{ object-position: 35% center; }
     .closer h2{ font-size: 34px; margin-bottom: var(--sp-40); }
     .closer__grid{ grid-template-columns: 1fr; gap: var(--sp-32); }

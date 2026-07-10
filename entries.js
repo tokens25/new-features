@@ -12,6 +12,7 @@ window.DAZN_ENTRIES = [
     tagline: "Watch two live games side by side.",
     ctaText: "Watch now",
     heroImage: "assets/img/multiview-feature-hero.png",
+    heroImageMobile: "assets/img/multiview-feature-hero-m.png",
     closerImages: [
       "assets/img/multiview-closer-1.png",
       "assets/img/multiview-closer-2.png",
