@@ -406,6 +406,8 @@
     justify-content:center;
     margin-top: var(--sp-16);
   }
+  /* Whole-card link — off on desktop (Learn more button is used instead) */
+  .feature-band__link{ display:none; }
 
   /* ============ HIGHLIGHTS — uniform 2-up tile grid ============ */
   #highlights{
@@ -683,6 +685,9 @@
     #feature-bands{ padding: 0 var(--sp-16); }
     .feature-band--multi-view{ min-height: 0; aspect-ratio: 2 / 3; border-radius: 20px; border: 1px solid #76828c36; }
     .feature-band--multi-view h2{ font-size: 32px; }
+    /* Mobile: whole card clickable, drop the Learn more button (like the tiles below) */
+    .feature-band--multi-view .feature-band__link{ display:block; position:absolute; inset:0; z-index:5; }
+    .feature-band--multi-view .feature-band__ctas{ display:none; }
     /* Tiles with a portrait mobile image: match the 2:3 image so it fills without cropping */
     .card--faster-startup-mobile,
     .card--win-probability-overlay,
@@ -877,6 +882,7 @@
     /* ---- FEATURE BANDS: the top updates as stacked full-width bands ---- */
     const band = (e) => `
       <section class="feature-band feature-band--${e.id}">
+        <a class="feature-band__link" href="feature.html?id=${e.id}" aria-label="${e.name}"></a>
         <div class="feature-band__content">
           <h2>${e.name}</h2>
           <p class="feature-band__tagline">${e.tagline}</p>
