@@ -94,7 +94,7 @@ window.DAZN_ENTRIES = [
     highlightsCaptionBelow: true,
     worksImages: ["assets/img/how1.png", "assets/img/12345.png"],
     statementImage: "assets/img/final.png",
-    galleryImages: ["assets/img/gallery-iphone.png", "assets/img/gallery-laptop.png", "assets/img/desktop1.png", "assets/img/tv1.png"],
+    galleryImages: ["assets/img/gallery-iphone.png", "assets/img/gallery-laptop.png", "assets/img/scores-gallery-myclips-phone.png", "assets/img/scores-gallery-myclips-grid.png"],
     hideGauges: true,
     centeredHeading: "Good to know",
     centeredNoCaps: true,
