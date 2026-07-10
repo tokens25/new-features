@@ -172,6 +172,7 @@
     transform-origin: center;
   }
   .fhero--win-probability-overlay .fhero__ph img{ object-position: center calc(80% - 80px); }
+  .fhero--faster-startup-mobile .fhero__ph img{ object-fit: cover; object-position: center -60px; }
   .fhero__inner > div{ will-change: transform, opacity; }
   .fhero::after{
     content:""; position:absolute; inset:0;
@@ -319,6 +320,10 @@
   .highlights__scroll--fill .hcard__media img{ object-fit: cover; object-position: center; transform: none; }
   .highlights__scroll--fill .hcard:nth-child(4) .hcard__media img{ object-fit: cover; object-position: center; transform: none; }
   .highlights__scroll--fill .hcard:nth-child(2) .hcard__media img{ object-position: center top; }
+  .highlights--faster-startup-mobile .hcard__media img{ object-fit: cover; object-position: center calc(30% + 60px); }
+  .highlights--faster-startup-mobile .hcard:nth-child(4) .hcard__media img{ object-fit: cover; transform: none; object-position: center calc(30% + 60px); }
+  .highlights--faster-startup-mobile .hcard:nth-child(2) .hcard__media img{ object-fit: cover; transform: none; object-position: -120px calc(30% + 200px); }
+  .highlights--faster-startup-mobile .hcard:nth-child(1) .hcard__media img{ object-position: center calc(30% + 100px); }
   .hcard__cap{
     position:absolute; z-index:1;
     top: var(--sp-40); right: var(--sp-40); left: 50%;
@@ -651,7 +656,7 @@
         </section>
 
         <!-- HIGHLIGHTS CAROUSEL -->
-        <section class="section highlights">
+        <section class="section highlights highlights--${entry.id}">
           <div class="wrap highlights__head">
             <h2>Get the highlights.</h2>
           </div>

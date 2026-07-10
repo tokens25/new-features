@@ -82,6 +82,36 @@ window.DAZN_ENTRIES = [
     name: "Faster start-up",
     tagline: "Kickoff is only a couple of seconds away.",
     ctaText: "Update the app",
+    heroImage: "assets/img/faster-startup-hero.png",
+    closerImages: [
+      "assets/img/faster-startup-closer-1.png",
+      "assets/img/faster-startup-closer-2.png",
+      "assets/img/faster-startup-closer-3.png",
+      "assets/img/faster-startup-closer-4.png"
+    ],
+    statementImage: "assets/img/faster-startup-statement.png",
+    highlightImages: [
+      "assets/img/faster-startup-highlight-1.png",
+      "assets/img/faster-startup-highlight-2.png",
+      "assets/img/faster-startup-highlight-3.png",
+      "assets/img/faster-startup-highlight-4.png"
+    ],
+    highlightCaps: [
+      "Kickoff is only a couple of seconds away.",
+      "Watch load progress in real time.",
+      "Optimized delivery to every device.",
+      "The countdown to kickoff just got shorter."
+    ],
+    worksImages: [
+      "assets/img/faster-startup-works-1.png",
+      "assets/img/faster-startup-works-2.png"
+    ],
+    galleryImages: [
+      "assets/img/faster-startup-gallery-1.png",
+      "assets/img/faster-startup-gallery-2.png",
+      "assets/img/faster-startup-gallery-3.png",
+      "assets/img/faster-startup-gallery-4.png"
+    ],
     labelClass: "label--improve",
     labelText: "Improvement",
     date: "August 2",
