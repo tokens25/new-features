@@ -322,8 +322,8 @@
   .highlights__scroll--fill .hcard:nth-child(2) .hcard__media img{ object-position: center top; }
   .highlights--faster-startup-mobile .hcard__media img{ object-fit: cover; object-position: center calc(30% + 60px); }
   .highlights--faster-startup-mobile .hcard:nth-child(4) .hcard__media img{ object-fit: cover; transform: none; object-position: center calc(30% + 60px); }
-  .highlights--faster-startup-mobile .hcard:nth-child(2) .hcard__media img{ object-fit: cover; transform: none; object-position: -120px calc(30% + 200px); }
   .highlights--faster-startup-mobile .hcard:nth-child(1) .hcard__media img{ object-position: center calc(30% + 100px); }
+  .highlights--faster-startup-mobile .hcard:nth-child(2) .hcard__media img{ object-position: center calc(1% + 60px); }
   .hcard__cap{
     position:absolute; z-index:1;
     top: var(--sp-40); right: var(--sp-40); left: 50%;
@@ -443,7 +443,11 @@
     .fhero h1{ font-size: 40px; }
     .fhero__inner{ flex-direction:column; align-items:flex-start; }
     .fhero__ph img{ object-fit: contain; object-position: center 20px; transform: scale(calc((1 - var(--fp, 0) * 0.3) * 1.1)); }
+    .fhero.fhero--image{ margin-left:0; margin-right:0; border-radius:0; }
+    .fhero.fhero--image .fhero__ph img{ transform: scale(1.1); }
     .fhero.fhero--win-probability-overlay .fhero__ph img{ object-fit: cover; object-position: -290px 20px; }
+    .fhero.fhero--multi-view .fhero__ph img{ object-fit: cover; object-position: -400px -165px; }
+    .highlights--faster-startup-mobile .hcard:nth-child(2) .hcard__media img{ object-fit: cover; transform: none; object-position: -40px calc(60% + 200px); }
     .statement__ph img{ object-position: 35% center; }
     .statement--win-probability-overlay .statement__ph img{ object-position: 11% -200px; }
     .closer h2{ font-size: 34px; margin-bottom: var(--sp-40); }
