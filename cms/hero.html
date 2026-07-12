@@ -54,9 +54,8 @@
   .crumb{display:flex; align-items:center; gap:7px; color:var(--ink-2); font-size:12.5px;}
   .crumb b{color:var(--ink); font-weight:650;} .crumb span{color:var(--ink-3);}
   .tb-btn{margin-left:auto; font:inherit; font-size:12.5px; font-weight:700; border:0; cursor:pointer;
-    background:var(--accent); color:var(--accent-ink); border-radius:8px; padding:7px 14px;}
-  @media (prefers-color-scheme:dark){ .tb-btn{color:#0C1216;} }
-  :root[data-theme="dark"] .tb-btn{color:#0C1216;}
+    background:linear-gradient(270deg,#FBED7D 0%,#F2AF3D 100%); color:#0C1216; border-radius:8px; padding:7px 14px;}
+  .tb-btn:hover{background:linear-gradient(270deg,#FCEF8B 0%,#F4B551 100%);}
 
   .block{border:1px solid var(--accent); border-radius:13px; background:var(--panel); box-shadow:0 0 0 1px var(--accent), var(--shadow); overflow:hidden;}
   .block__h{display:flex; align-items:center; gap:11px; padding:13px 15px; border-bottom:1px solid var(--line-2);}
