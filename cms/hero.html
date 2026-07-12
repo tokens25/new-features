@@ -77,13 +77,19 @@
   .input{width:100%; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); padding:9px 11px; font:inherit; font-size:13.5px; color:var(--ink);}
   textarea.input{resize:none; line-height:1.5;}
 
-  .media{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .slot{border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--panel-2);}
-  .slot__img{height:82px; position:relative; background:#0c151b;}
+  /* desktop = wide landscape frame · mobile = narrow portrait frame, so each source fills its own container */
+  .media{display:flex; gap:12px; align-items:stretch;}
+  .slot{border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--panel-2); display:flex; flex-direction:column; min-width:0;}
+  .slot--desktop{flex:1 1 auto;}
+  .slot--mobile{flex:0 0 118px;}
+  .slot__img{height:172px; position:relative; background:#0c151b;}
   .slot__img .scene{position:absolute; inset:0;}
-  .slot__meta{display:flex; align-items:center; gap:8px; padding:8px 10px; font-size:11.5px; color:var(--ink-2);}
-  .slot__meta .fn{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .slot__meta .rep{margin-left:auto; color:var(--ink); font-weight:600; cursor:pointer; font-size:11px;}
+  .slot__meta{display:flex; align-items:center; gap:8px; padding:8px 10px; font-size:11.5px; color:var(--ink-2); min-width:0;}
+  .slot__meta .fn{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .slot__meta .rep{margin-left:auto; color:var(--ink); font-weight:600; cursor:pointer; font-size:11px; flex:none;}
+  .slot--mobile .slot__meta{flex-direction:column; align-items:stretch; gap:3px;}
+  .slot--mobile .slot__meta .fn{align-self:stretch;}
+  .slot--mobile .slot__meta .rep{margin-left:0; align-self:flex-end;}
   .slot__tag{position:absolute; top:6px; left:6px; font-family:var(--f-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; background:rgba(8,14,18,.7); color:#e7edef; padding:2px 6px; border-radius:4px;}
 
   /* focal widget */
@@ -100,8 +106,8 @@
   /* real image, over-sized so repositioning reveals different parts (mirrors object-fit:cover) */
   #scene{position:absolute; inset:0; background-image:var(--hero-img); background-repeat:no-repeat; background-size:150%; background-position:center 32%;}
   .thumbimg{position:absolute; inset:0; background-image:var(--hero-img); background-size:cover; background-position:center; background-repeat:no-repeat;}
-  /* Mobile source is portrait — show it contained on a dark ground so it reads as a phone */
-  .thumbimg.m{background-image:var(--hero-img-m); background-size:auto 116%; background-position:center; background-color:#070c10;}
+  /* Mobile source is portrait — fills its own portrait frame */
+  .thumbimg.m{background-image:var(--hero-img-m); background-size:cover; background-position:center; background-color:#070c10;}
   /* legacy fake-scene styles (unused now) */
   .scene{position:absolute; inset:0;}
   .scene .phone{
@@ -176,9 +182,9 @@
       <div class="sub">
         <div class="sub__t">Media <span class="hint">desktop + portrait-mobile source</span></div>
         <div class="media">
-          <div class="slot"><div class="slot__img"><div class="thumbimg"></div><span class="slot__tag">Desktop</span></div>
+          <div class="slot slot--desktop"><div class="slot__img"><div class="thumbimg"></div><span class="slot__tag">Desktop</span></div>
             <div class="slot__meta"><span class="fn">hp-myclips-hero.png</span><span class="rep">Replace</span></div></div>
-          <div class="slot"><div class="slot__img"><div class="thumbimg m"></div><span class="slot__tag">Mobile</span></div>
+          <div class="slot slot--mobile"><div class="slot__img"><div class="thumbimg m"></div><span class="slot__tag">Mobile</span></div>
             <div class="slot__meta"><span class="fn">hp-myclips-hero-m.png</span><span class="rep">Replace</span></div></div>
         </div>
       </div>
