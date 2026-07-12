@@ -79,7 +79,6 @@
   .btn--ghost{background:transparent; color:var(--ink-2);}
   .btn--primary{background:#080E12; color:#FFFFFF; border-color:transparent; font-weight:700; transition:background .15s ease;}
   .btn--primary:hover{background:#444D53;}
-  .btn--primary:hover{background:linear-gradient(270deg,#FCEF8B 0%,#F4B551 100%);}
 
   /* body grid */
   .body{display:grid; grid-template-columns:186px 1fr 384px; min-height:660px;}
@@ -239,6 +238,38 @@
   }
   .editing-flag b{color:var(--ink);}
 
+  /* AI assist */
+  .ai-field{position:relative;}
+  .ai-field .cinput{padding-right:32px;}
+  .ai-trig{position:absolute; right:5px; top:50%; transform:translateY(-50%); width:24px; height:24px;
+    border:0; background:transparent; color:var(--ink-3); cursor:pointer; border-radius:6px; font-size:13px; line-height:1;
+    display:grid; place-items:center;}
+  .ai-trig:hover{color:var(--accent-ink); background:var(--accent);}
+  @media (prefers-color-scheme:dark){ .ai-trig:hover{color:#0C1216;} }
+  :root[data-theme="dark"] .ai-trig:hover{color:#0C1216;}
+  .ai{margin-top:10px; border:1px solid var(--line); border-radius:10px;
+    background:linear-gradient(var(--accent-soft),var(--accent-soft)), var(--panel); padding:12px;}
+  .ai__h{display:flex; align-items:center; gap:8px; font-weight:700; font-size:12.5px;}
+  .ai__spark{color:var(--accent-ink); background:var(--accent); width:18px; height:18px; border-radius:5px; display:grid; place-items:center; font-size:11px;}
+  @media (prefers-color-scheme:dark){ .ai__spark{color:#0C1216;} }
+  :root[data-theme="dark"] .ai__spark{color:#0C1216;}
+  .ai__ctx{margin-left:auto; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3);}
+  .ai__chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:11px;}
+  .aichip{font:inherit; font-size:12px; font-weight:600; border:1px solid var(--line); background:var(--panel); color:var(--ink-2); border-radius:20px; padding:5px 11px; cursor:pointer;}
+  .aichip.on{background:#444D53; color:#fff; border-color:transparent;}
+  .ai__prompt{margin-top:11px; border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:9px 11px; font-size:12.5px; color:var(--ink-2); display:flex; gap:8px; align-items:baseline;}
+  .ai__prompt .l{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); flex:none;}
+  .ai__opts{margin-top:9px; display:flex; flex-direction:column; gap:7px;}
+  .aiopt{display:flex; align-items:center; gap:10px; border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:9px 11px; cursor:pointer;}
+  .aiopt input{accent-color:#444D53; margin:0; flex:none;}
+  .aiopt__t{font-size:13px; color:var(--ink); flex:1; min-width:0;}
+  .aiopt__c{font-family:var(--f-mono); font-size:11px; color:var(--ok); font-variant-numeric:tabular-nums; flex:none;}
+  .aiopt.on{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent);}
+  .ai__foot{display:flex; align-items:center; gap:10px; margin-top:11px; flex-wrap:wrap;}
+  .ai__note{font-size:11px; color:var(--ink-3); flex:1; min-width:180px;}
+  .ai__acts{margin-left:auto; display:flex; gap:7px;}
+  .ai__acts .btn{font-size:12px; padding:6px 11px;}
+
   :where(a,button):focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
 </style>
@@ -253,6 +284,7 @@
       <div class="brand"><span class="mark"><svg viewBox="0 0 80 80" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M20.2218 65.4513C20.0126 65.1818 19.9137 64.8429 19.9453 64.5032V61.8963C19.9563 61.5616 20.0818 61.2409 20.3008 60.9878L29.5833 47.7948H21.2093C20.8796 47.862 20.5368 47.7906 20.2613 47.5973C20.019 47.2373 19.9074 46.8051 19.9453 46.3728V44.4768C19.9016 44.0795 19.9846 43.6786 20.1823 43.3313C20.4455 43.1101 20.7895 43.0098 21.1303 43.0548H34.6788C35.0624 43.0287 35.4456 43.1108 35.7848 43.2918C36.004 43.5714 36.1034 43.9265 36.0613 44.2793V46.8073C36.1033 46.9625 36.1033 47.126 36.0613 47.2813C35.9918 47.4637 35.8988 47.6363 35.7848 47.7948L26.3838 60.9878H35.3108C35.8243 60.9878 36.1403 60.9878 36.2588 61.2643C36.4589 61.5962 36.5423 61.9855 36.4958 62.3703V64.3058C36.5423 64.6905 36.4589 65.0798 36.2588 65.4118C36.2588 65.4118 35.8243 65.6883 35.3108 65.6883H21.3278C20.9433 65.7289 20.5559 65.6459 20.2218 65.4513ZM19.9453 35.1153V14.8913C19.9453 14.8913 19.9453 14.1803 20.2218 13.9433C20.566 13.7762 20.9454 13.6948 21.3278 13.7063H27.8453C30.1507 13.6634 32.3895 14.4801 34.1258 15.9973C35.7191 17.6767 36.5727 19.9246 36.4958 22.2383V27.2153C36.5774 29.6687 35.8255 32.0774 34.3628 34.0488C32.8365 35.5426 30.7703 36.3548 28.6353 36.3003H21.3278C21.3278 36.3003 20.4983 36.3003 20.2218 36.0633C20.0356 35.7827 19.9391 35.452 19.9453 35.1153ZM25.1593 31.7973H27.8453C28.7464 31.8716 29.6405 31.5877 30.3338 31.0073C31.3608 29.9803 31.2423 27.0573 31.2423 27.0573V22.7123C31.2935 21.4264 30.9784 20.1525 30.3338 19.0388C29.6523 18.4266 28.7609 18.1012 27.8453 18.1303H25.1593V31.7973ZM58.2208 42.9758H56.0878C55.7047 42.9557 55.3231 43.0375 54.9818 43.2128C54.7963 43.5069 54.713 43.854 54.7448 44.2003V56.0503L48.4248 44.2003C48.2928 43.8177 48.0441 43.4862 47.7138 43.2523C47.307 43.0623 46.858 42.9807 46.4103 43.0153H44.4353C44.0522 42.9952 43.6706 43.077 43.3293 43.2523C43.1438 43.5464 43.0605 43.8935 43.0923 44.2398V64.4638C43.0533 64.7981 43.1375 65.1351 43.3293 65.4118C43.6466 65.6119 44.0236 65.6957 44.3958 65.6488H46.5683C46.9528 65.6894 47.3402 65.6064 47.6743 65.4118C47.8835 65.1423 47.9824 64.8034 47.9508 64.4638V52.6138L54.2313 64.4638C54.376 64.8612 54.6376 65.2055 54.9818 65.4513C55.3986 65.5386 55.829 65.5386 56.2458 65.4513H58.2208C58.6053 65.4919 58.9928 65.4089 59.3268 65.2143C59.536 64.9448 59.6349 64.6059 59.6033 64.2663V44.2793C59.6266 43.9282 59.5291 43.5797 59.3268 43.2918C58.9855 43.1165 58.6039 43.0347 58.2208 43.0548V42.9758ZM41.5518 34.9573L48.2668 14.7728C48.3509 14.451 48.5299 14.162 48.7803 13.9433C49.0633 13.7661 49.3952 13.6831 49.7283 13.7063H53.4018C53.7354 13.6773 54.0691 13.7607 54.3498 13.9433C54.5634 14.1841 54.7248 14.4665 54.8238 14.7728L61.4993 34.9573C61.6353 35.2861 61.6353 35.6554 61.4993 35.9843C61.3007 36.2085 61.0077 36.3257 60.7093 36.3003H57.5493C57.205 36.3501 56.8599 36.215 56.6408 35.9448C56.4652 35.6349 56.3323 35.3027 56.2458 34.9573L55.1793 31.5603H47.5953L46.5683 34.9573C46.4563 35.3822 46.269 35.7835 46.0153 36.1423C45.7783 36.3398 44.9883 36.1423 44.9883 36.1423H42.2628C42.2628 36.1423 41.6703 36.1423 41.4728 35.7868C41.4181 35.5084 41.4455 35.2202 41.5518 34.9573ZM48.8198 27.4918H53.9548L51.5453 18.9598L48.8198 27.4918ZM79.1953 35.0758L74.6133 39.6973L79.1953 44.2793V79.1973H0.195312V44.2793L4.77731 39.6973L0.195312 35.1153V0.197266H79.1953V35.0758ZM74.2578 5.13476H5.13281V32.7848L10.6233 38.2753C11.4161 39.0883 11.4161 40.3852 10.6233 41.1983L5.13281 46.6493V74.2993H74.2578V46.6493L68.7673 41.1588C68.3663 40.7784 68.1392 40.25 68.1392 39.6973C68.1392 39.1446 68.3663 38.6161 68.7673 38.2358L74.2578 32.7453V5.13476Z"/></svg></span> Content <small>· Sveltia</small></div>
       <div class="crumb"><span>Features</span> &rsaquo; <b>My Clips</b></div>
       <div class="top-actions">
+        <button class="btn btn--ghost"><span class="ai__spark">&#10022;</span> Ask AI</button>
         <button class="btn btn--ghost">Preview</button>
         <button class="btn">Save draft</button>
         <button class="btn btn--primary">Publish &rarr;</button>
@@ -344,13 +376,26 @@
             <div class="clab">Cards <span class="n">4 items</span></div>
             <div class="cardlist">
               <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb"></div><div class="cfields">
-                <input class="cinput title" value="Chat"><input class="cinput desc" value="Describe the highlight you want and AI cuts the reel in seconds."></div><span class="ic">&#8943;</span></div>
+                <input class="cinput title" value="Chat">
+                <div class="ai-field"><input class="cinput desc" value="Describe the highlight you want and AI cuts the reel in seconds."><button class="ai-trig" title="Draft with AI">&#10022;</button></div>
+                <div class="ai">
+                  <div class="ai__h"><span class="ai__spark">&#10022;</span> Draft with AI <span class="ai__ctx">card 1 &middot; description</span></div>
+                  <div class="ai__chips"><button class="aichip on">Rewrite</button><button class="aichip">Shorten</button><button class="aichip">More energetic</button><button class="aichip">Translate&hellip;</button><button class="aichip">Alt text</button></div>
+                  <div class="ai__prompt"><span class="l">Prompt</span> Rewrite in DAZN voice &mdash; punchy, &le;&nbsp;90 characters</div>
+                  <div class="ai__opts">
+                    <label class="aiopt on"><input type="radio" name="aiv" checked><span class="aiopt__t">Tell DAZN what you want &mdash; AI cuts your reel in seconds.</span><span class="aiopt__c">58 / 90</span></label>
+                    <label class="aiopt"><input type="radio" name="aiv"><span class="aiopt__t">Describe any moment. Your highlight is ready in seconds.</span><span class="aiopt__c">55 / 90</span></label>
+                    <label class="aiopt"><input type="radio" name="aiv"><span class="aiopt__t">Say it out loud &mdash; AI builds the highlight on the spot.</span><span class="aiopt__c">56 / 90</span></label>
+                  </div>
+                  <div class="ai__foot"><span class="ai__note">Lands as a commit for review &mdash; nothing publishes on its own.</span><span class="ai__acts"><button class="btn btn--ghost">&#8635; Regenerate</button><button class="btn btn--primary">Insert</button></span></div>
+                </div>
+                </div><span class="ic">&#8943;</span></div>
               <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb g2"></div><div class="cfields">
-                <input class="cinput title" value="Clip preview"><input class="cinput desc" value="Play any result inline — check the prompt and description before you save."></div><span class="ic">&#8943;</span></div>
+                <input class="cinput title" value="Clip preview"><div class="ai-field"><input class="cinput desc" value="Play any result inline — check the prompt and description before you save."><button class="ai-trig" title="Draft with AI">&#10022;</button></div></div><span class="ic">&#8943;</span></div>
               <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb g3"></div><div class="cfields">
-                <input class="cinput title" value="Navigate library"><input class="cinput desc" value="Every reel lands in your library, filterable by Today, Yesterday or Last 7 days."></div><span class="ic">&#8943;</span></div>
+                <input class="cinput title" value="Navigate library"><div class="ai-field"><input class="cinput desc" value="Every reel lands in your library, filterable by Today, Yesterday or Last 7 days."><button class="ai-trig" title="Draft with AI">&#10022;</button></div></div><span class="ic">&#8943;</span></div>
               <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb g4"></div><div class="cfields">
-                <input class="cinput title" value="Prompt suggestions"><input class="cinput desc" value="No exact match? AI surfaces close prompts to get you to the right clip."></div><span class="ic">&#8943;</span></div>
+                <input class="cinput title" value="Prompt suggestions"><div class="ai-field"><input class="cinput desc" value="No exact match? AI surfaces close prompts to get you to the right clip."><button class="ai-trig" title="Draft with AI">&#10022;</button></div></div><span class="ic">&#8943;</span></div>
             </div>
             <button class="addcard">+ Add card</button>
           </div>
