@@ -1,0 +1,31 @@
+/* DAZN Oscine — brand typeface. Weights available: Light (300), Regular (400), Bold (700). */
+@font-face{
+  font-family:'DAZN Oscine';
+  src:url('DAZN_Oscine_Lt.woff2') format('woff2');
+  font-weight:300; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'DAZN Oscine';
+  src:url('DAZN_Oscine_LtIt.woff2') format('woff2');
+  font-weight:300; font-style:italic; font-display:swap;
+}
+@font-face{
+  font-family:'DAZN Oscine';
+  src:url('DAZN_Oscine_Rg.woff2') format('woff2');
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'DAZN Oscine';
+  src:url('DAZN_Oscine_It.woff2') format('woff2');
+  font-weight:400; font-style:italic; font-display:swap;
+}
+@font-face{
+  font-family:'DAZN Oscine';
+  src:url('DAZN_Oscine_Bd.woff2') format('woff2');
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'DAZN Oscine';
+  src:url('DAZN_Oscine_BdIt.woff2') format('woff2');
+  font-weight:700; font-style:italic; font-display:swap;
+}
