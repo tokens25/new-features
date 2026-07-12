@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Composable CMS — Concept</title>
+<style>
+  :root{
+    --paper:#EAEEF0; --surface:#FFFFFF; --surface-2:#F4F6F7;
+    --ink:#0E141A; --ink-2:#54636C; --ink-3:#85929B;
+    --line:#DCE2E5; --accent:#E4EC00; --accent-ink:#0C1216;
+    --f-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(16,26,34,.05),0 10px 26px rgba(16,26,34,.07);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0A0F14; --surface:#111a20; --surface-2:#0E161C;
+      --ink:#ECF1F3; --ink-2:#9AAAB3; --ink-3:#647680;
+      --line:#1E2830; --accent:#F7FF1A;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-sans); -webkit-font-smoothing:antialiased; line-height:1.6;}
+  .cap{max-width:840px; margin:0 auto; padding:clamp(30px,7vw,84px) clamp(18px,5vw,32px) 100px;}
+  .eyebrow{font-family:var(--f-mono); font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-2); display:inline-flex; align-items:center; gap:9px;}
+  .eyebrow::before{content:""; width:16px; height:9px; background:var(--accent); border-radius:1px;}
+  h1{font-size:clamp(30px,6vw,50px); line-height:1.02; letter-spacing:-.03em; font-weight:800; margin:.5em 0 0; text-wrap:balance; max-width:15ch;}
+  .deck{font-size:clamp(16px,2.3vw,20px); color:var(--ink-2); max-width:60ch; margin:20px 0 0; line-height:1.5;}
+  .grid{display:grid; grid-template-columns:1fr; gap:16px; margin-top:44px;}
+  @media(min-width:640px){ .grid{grid-template-columns:1fr 1fr;} .wide{grid-column:1 / -1;} }
+  a.card{
+    display:flex; flex-direction:column; gap:12px; text-decoration:none; color:inherit;
+    border:1px solid var(--line); border-radius:14px; background:var(--surface);
+    padding:22px; box-shadow:var(--shadow); transition:transform .15s ease, border-color .15s ease;
+  }
+  a.card:hover{transform:translateY(-3px); border-color:var(--accent);}
+  a.card:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+  .card__tag{font-family:var(--f-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent-ink); background:var(--accent); align-self:flex-start; padding:3px 8px; border-radius:5px; font-weight:700;}
+  @media (prefers-color-scheme:dark){ .card__tag{color:#0C1216;} }
+  .card h2{font-size:19px; letter-spacing:-.01em; margin:0; font-weight:730;}
+  .card p{margin:0; font-size:14px; color:var(--ink-2); line-height:1.5;}
+  .card .go{margin-top:auto; font-family:var(--f-mono); font-size:12px; color:var(--ink-3); display:flex; align-items:center; gap:6px;}
+  a.card:hover .go{color:var(--ink);}
+  footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); font-family:var(--f-mono); font-size:11.5px; letter-spacing:.04em; color:var(--ink-3); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+</style>
+</head>
+<body>
+<div class="cap">
+  <span class="eyebrow">DAZN · What&rsquo;s New — Concept</span>
+  <h1>A composable CMS for the feature site</h1>
+  <p class="deck">Every feature is assembled from reorderable blocks, edited through a git-based CMS (Sveltia). Three views: the content model &amp; build plan, the editor an author would use, and a custom widget close-up.</p>
+
+  <div class="grid">
+    <a class="card" href="plan.html">
+      <span class="card__tag">Plan</span>
+      <h2>Content model &amp; build plan</h2>
+      <p>The block library, shared schema, Sveltia config, migration from entries.js, and a four-phase rollout.</p>
+      <span class="go">Read the plan &rarr;</span>
+    </a>
+    <a class="card" href="editor.html">
+      <span class="card__tag">Mockup</span>
+      <h2>The editing dashboard</h2>
+      <p>Sveltia editor for the My Clips feature — block stack, expanded highlights, add-section menu, live preview.</p>
+      <span class="go">Open the editor &rarr;</span>
+    </a>
+    <a class="card wide" href="hero.html">
+      <span class="card__tag">Widget</span>
+      <h2>Hero block &amp; focal-point picker <span style="color:var(--ink-3);font-weight:500;font-size:14px;">· interactive</span></h2>
+      <p>Drag the crosshair to set where a hero image anchors — the widget writes the exact object-position, per breakpoint, with no CSS by hand. Scrim and media controls included.</p>
+      <span class="go">Try the widget &rarr;</span>
+    </a>
+  </div>
+
+  <footer>
+    <span>DAZN &middot; What&rsquo;s New &mdash; CMS concept</span>
+    <span>Sveltia · block-based · v0.1</span>
+  </footer>
+</div>
+</body>
+</html>

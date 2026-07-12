@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Sveltia editor — My Clips</title>
+<style>
+  :root{
+    --app:#E7EBED; --panel:#FFFFFF; --panel-2:#F4F6F7; --panel-3:#EDF1F2;
+    --ink:#0E141A; --ink-2:#54636C; --ink-3:#8592A0;
+    --line:#D9DFE2; --line-2:#E7EBED;
+    --accent:#DBE300; --accent-ink:#0C1216; --accent-soft:rgba(219,227,0,.16);
+    --live:#D12424; --ok:#2E9E5B;
+    --f-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(16,26,34,.05),0 8px 24px rgba(16,26,34,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --app:#080C10; --panel:#111A20; --panel-2:#0E161C; --panel-3:#16212A;
+      --ink:#ECF1F3; --ink-2:#9AAAB3; --ink-3:#647680;
+      --line:#1E2830; --line-2:#18222A;
+      --accent:#F7FF1A; --accent-soft:rgba(247,255,26,.10);
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"]{
+    --app:#E7EBED; --panel:#FFFFFF; --panel-2:#F4F6F7; --panel-3:#EDF1F2;
+    --ink:#0E141A; --ink-2:#54636C; --ink-3:#8592A0;
+    --line:#D9DFE2; --line-2:#E7EBED; --accent:#DBE300; --accent-soft:rgba(219,227,0,.16);
+    --shadow:0 1px 2px rgba(16,26,34,.05),0 8px 24px rgba(16,26,34,.06);
+  }
+  :root[data-theme="dark"]{
+    --app:#080C10; --panel:#111A20; --panel-2:#0E161C; --panel-3:#16212A;
+    --ink:#ECF1F3; --ink-2:#9AAAB3; --ink-3:#647680;
+    --line:#1E2830; --line-2:#18222A; --accent:#F7FF1A; --accent-soft:rgba(247,255,26,.10);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  .app{
+    background:var(--app); color:var(--ink); font-family:var(--f-sans);
+    -webkit-font-smoothing:antialiased; min-height:100vh; font-size:14px;
+  }
+  .cap{
+    max-width:1180px; margin:0 auto; padding:18px clamp(12px,3vw,26px) 60px;
+  }
+  .note{
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-3); display:flex; align-items:center; gap:9px; margin:4px 2px 14px;
+  }
+  .note::before{content:""; width:15px; height:8px; background:var(--accent); border-radius:1px;}
+
+  /* window chrome */
+  .win{
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    background:var(--panel); box-shadow:var(--shadow);
+  }
+  .topbar{
+    display:flex; align-items:center; gap:14px; padding:11px 16px;
+    border-bottom:1px solid var(--line); background:var(--panel);
+  }
+  .brand{display:flex; align-items:center; gap:9px; font-weight:750; letter-spacing:-.01em;}
+  .mark{
+    width:26px; height:26px; border-radius:6px; background:var(--ink); color:var(--panel);
+    display:grid; place-items:center; font-family:var(--f-mono); font-size:9px; font-weight:700; line-height:.9;
+  }
+  .brand small{color:var(--ink-3); font-weight:600; font-size:11px; font-family:var(--f-mono); letter-spacing:.04em;}
+  .crumb{display:flex; align-items:center; gap:8px; color:var(--ink-2); font-size:13px;}
+  .crumb b{color:var(--ink); font-weight:650;}
+  .crumb span{color:var(--ink-3);}
+  .top-actions{margin-left:auto; display:flex; align-items:center; gap:8px;}
+  .btn{
+    font:inherit; font-size:13px; font-weight:600; border-radius:8px; padding:7px 13px;
+    border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    display:inline-flex; align-items:center; gap:7px;
+  }
+  .btn--ghost{background:transparent; color:var(--ink-2);}
+  .btn--primary{background:var(--accent); color:var(--accent-ink); border-color:transparent; font-weight:700;}
+  @media (prefers-color-scheme:dark){ .btn--primary{color:#0C1216;} }
+  :root[data-theme="dark"] .btn--primary{color:#0C1216;}
+
+  /* body grid */
+  .body{display:grid; grid-template-columns:186px 1fr 384px; min-height:660px;}
+  @media(max-width:1000px){ .body{grid-template-columns:1fr;} .side,.preview{display:none;} }
+
+  .side{border-right:1px solid var(--line); padding:16px 12px; background:var(--panel-2);}
+  .side .lbl{font-family:var(--f-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:2px 8px 10px;}
+  .nav a{
+    display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px;
+    color:var(--ink-2); text-decoration:none; font-size:13.5px; font-weight:550; margin-bottom:2px;
+  }
+  .nav a .ct{margin-left:auto; font-family:var(--f-mono); font-size:11px; color:var(--ink-3);}
+  .nav a.on{background:var(--panel); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line);}
+  .nav a.on .dotmark{background:var(--accent);}
+  .dotmark{width:7px; height:7px; border-radius:2px; background:var(--ink-3);}
+
+  /* editor column */
+  .editor{padding:20px clamp(14px,2.4vw,26px); overflow:hidden; min-width:0;}
+  .ehead{display:flex; align-items:center; gap:12px; margin-bottom:4px;}
+  .ehead h1{font-size:22px; letter-spacing:-.02em; margin:0; font-weight:770;}
+  .chip{
+    font-family:var(--f-mono); font-size:10.5px; font-weight:600; letter-spacing:.03em;
+    padding:3px 9px; border-radius:20px; display:inline-flex; align-items:center; gap:6px;
+  }
+  .chip--draft{color:#8a6d00; background:var(--accent-soft);}
+  @media (prefers-color-scheme:dark){ .chip--draft{color:var(--accent);} }
+  :root[data-theme="dark"] .chip--draft{color:var(--accent);}
+  .chip--draft::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor;}
+  .slug{font-family:var(--f-mono); font-size:12px; color:var(--ink-3); margin:2px 0 20px;}
+
+  .group{
+    border:1px solid var(--line); border-radius:12px; background:var(--panel); margin-bottom:16px;
+  }
+  .group__h{
+    display:flex; align-items:center; gap:9px; padding:12px 15px; border-bottom:1px solid var(--line-2);
+  }
+  .group__h .t{font-weight:680; font-size:13.5px;}
+  .group__h .meta{margin-left:auto; font-family:var(--f-mono); font-size:11px; color:var(--ink-3);}
+  .group__b{padding:15px;}
+
+  .field{margin-bottom:14px;}
+  .field:last-child{margin-bottom:0;}
+  .field > label{display:block; font-size:12px; font-weight:600; color:var(--ink-2); margin-bottom:6px;}
+  .field > label .req{color:var(--ink-3); font-weight:500; font-family:var(--f-mono); font-size:10px; margin-left:5px;}
+  .input{
+    width:100%; border:1px solid var(--line); border-radius:8px; background:var(--panel-2);
+    padding:9px 11px; font:inherit; font-size:13.5px; color:var(--ink);
+  }
+  .row2{display:grid; grid-template-columns:1fr 150px; gap:10px;}
+  .seg{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--panel-2);}
+  .seg button{font:inherit; font-size:13px; padding:8px 16px; border:0; background:transparent; color:var(--ink-2); cursor:pointer; font-weight:600;}
+  .seg button.on{background:var(--ink); color:var(--panel);}
+  .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .tags .tg{
+    font-size:12.5px; background:var(--panel-2); border:1px solid var(--line); border-radius:6px;
+    padding:5px 9px 5px 10px; display:inline-flex; align-items:center; gap:7px; color:var(--ink);
+  }
+  .tags .tg i{font-style:normal; color:var(--ink-3); cursor:pointer;}
+  .tags .add{border-style:dashed; color:var(--ink-3); cursor:pointer;}
+  .select{position:relative;}
+  .select::after{content:"▾"; position:absolute; right:11px; top:50%; transform:translateY(-50%); color:var(--ink-3); font-size:11px; pointer-events:none;}
+
+  /* sections / blocks */
+  .sec-title{display:flex; align-items:center; gap:10px; margin:26px 2px 12px;}
+  .sec-title h2{font-size:15px; font-weight:720; letter-spacing:-.01em; margin:0;}
+  .sec-title .meta{margin-left:auto; font-family:var(--f-mono); font-size:11px; color:var(--ink-3);}
+
+  .block{border:1px solid var(--line); border-radius:11px; background:var(--panel); margin-bottom:9px; box-shadow:var(--shadow);}
+  .block__h{display:flex; align-items:center; gap:11px; padding:12px 13px;}
+  .grip{color:var(--ink-3); font-size:15px; line-height:1; cursor:grab; letter-spacing:-2px;}
+  .btag{
+    font-family:var(--f-mono); font-size:10.5px; font-weight:600; color:var(--ink-2);
+    background:var(--panel-2); border:1px solid var(--line); border-radius:5px; padding:3px 7px;
+  }
+  .block__h .nm{font-weight:660; font-size:13.5px;}
+  .block__h .sum{color:var(--ink-3); font-size:12.5px;}
+  .block__h .ctrls{margin-left:auto; display:flex; align-items:center; gap:4px; color:var(--ink-3);}
+  .ic{width:26px; height:26px; border-radius:6px; display:grid; place-items:center; cursor:pointer; font-size:13px; color:var(--ink-3);}
+  .ic:hover{background:var(--panel-2); color:var(--ink);}
+  .lock{color:var(--ink-3); font-size:11px; display:inline-flex; align-items:center; gap:4px; font-family:var(--f-mono);}
+
+  .block--open{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), var(--shadow);}
+  .block__b{border-top:1px solid var(--line-2); padding:15px;}
+  .subrow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;}
+
+  .cardlist{display:flex; flex-direction:column; gap:8px;}
+  .clab{font-family:var(--f-mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin-bottom:2px; display:flex; align-items:center; gap:8px;}
+  .clab .n{margin-left:auto;}
+  .citem{display:flex; gap:11px; align-items:flex-start; border:1px solid var(--line); border-radius:9px; padding:10px; background:var(--panel-2);}
+  .citem .grip{margin-top:6px;}
+  .thumb{width:74px; height:46px; border-radius:6px; flex:none; background:linear-gradient(135deg,#1a2530,#0f1a22); position:relative; overflow:hidden; border:1px solid var(--line);}
+  .thumb::after{content:""; position:absolute; inset:0; background:
+    radial-gradient(circle at 30% 40%, rgba(80,160,90,.5), transparent 42%),
+    radial-gradient(circle at 72% 60%, rgba(210,60,60,.4), transparent 45%);}
+  .thumb.g2::after{background:radial-gradient(circle at 50% 45%, rgba(60,120,220,.45), transparent 50%);}
+  .thumb.g3::after{background:radial-gradient(circle at 60% 50%, rgba(120,90,220,.4), transparent 55%);}
+  .thumb.g4::after{background:radial-gradient(circle at 40% 50%, rgba(240,170,50,.4), transparent 50%);}
+  .cfields{flex:1; min-width:0; display:flex; flex-direction:column; gap:7px;}
+  .cinput{width:100%; border:1px solid var(--line); border-radius:7px; background:var(--panel); padding:7px 9px; font:inherit; font-size:13px; color:var(--ink);}
+  .cinput.title{font-weight:650;}
+  .cinput.desc{font-size:12.5px; color:var(--ink-2);}
+  .addcard{
+    margin-top:9px; border:1px dashed var(--line); background:transparent; color:var(--ink-2);
+    border-radius:8px; padding:9px; width:100%; font:inherit; font-size:13px; font-weight:600; cursor:pointer;
+  }
+
+  /* add-section menu */
+  .addsec{position:relative; margin-top:6px;}
+  .addsec__btn{
+    width:100%; border:1px dashed var(--line); background:var(--panel-2); color:var(--ink);
+    border-radius:10px; padding:12px; font:inherit; font-size:13.5px; font-weight:650; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:9px;
+  }
+  .addsec__btn .plus{color:var(--accent-ink); background:var(--accent); width:20px; height:20px; border-radius:5px; display:grid; place-items:center; font-weight:800;}
+  @media (prefers-color-scheme:dark){ .addsec__btn .plus{color:#0C1216;} }
+  :root[data-theme="dark"] .addsec__btn .plus{color:#0C1216;}
+  .menu{
+    margin-top:8px; border:1px solid var(--line); border-radius:11px; background:var(--panel);
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  .menu__h{font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); padding:11px 14px 7px;}
+  .mrow{display:flex; align-items:center; gap:11px; padding:9px 14px; cursor:pointer; border-top:1px solid var(--line-2);}
+  .mrow:hover{background:var(--panel-2);}
+  .mrow .btag{flex:none;}
+  .mrow .mnm{font-weight:600; font-size:13px;}
+  .mrow .mds{color:var(--ink-3); font-size:12px; margin-left:auto;}
+
+  /* preview pane */
+  .preview{border-left:1px solid var(--line); background:var(--panel-2); display:flex; flex-direction:column;}
+  .preview__bar{display:flex; align-items:center; gap:9px; padding:11px 14px; border-bottom:1px solid var(--line);}
+  .preview__bar .t{font-size:12px; font-weight:650;}
+  .preview__bar .u{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); margin-left:auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px;}
+  .live{width:8px; height:8px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent);}
+  .screen{margin:14px; border-radius:14px; overflow:hidden; border:1px solid #1c2831; background:#080e12; flex:1; min-height:0; box-shadow:var(--shadow); color:#eaf0f2;}
+  .scr-pad{padding:16px 15px 20px;}
+  .scr-top{display:flex; align-items:center; gap:8px; font-size:10px; color:#7d8b93; font-family:var(--f-mono);}
+  .scr-top .d{width:15px; height:15px; border-radius:4px; background:#141d24; display:grid; place-items:center; color:#c9d3d8; font-size:7px; font-weight:700; line-height:.9;}
+  .scr-phone{
+    margin:16px auto 0; width:150px; height:186px; border-radius:20px; border:5px solid #0c161c;
+    background:linear-gradient(#0d1519,#0a1216); position:relative; overflow:hidden; box-shadow:0 12px 30px rgba(0,0,0,.5);
+  }
+  .scr-phone .clip{position:absolute; left:14px; right:14px; top:34px; height:64px; border-radius:8px;
+    background:linear-gradient(135deg,#1c4a24,#0f2a16); overflow:hidden;}
+  .scr-phone .clip::after{content:""; position:absolute; inset:0; background:
+    radial-gradient(circle at 35% 45%, rgba(90,180,100,.55), transparent 45%),
+    radial-gradient(circle at 70% 55%, rgba(220,70,70,.4), transparent 48%);}
+  .scr-phone .pill{position:absolute; top:16px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,#f7c93a,#f79c1a); color:#1a1200; font-size:8px; font-weight:800; padding:3px 9px; border-radius:20px; white-space:nowrap;}
+  .scr-head{padding:0 4px; margin-top:20px;}
+  .scr-eyebrow{font-size:9px; color:#9aa8b0; font-weight:600;}
+  .scr-h{font-size:19px; line-height:1.05; font-weight:800; letter-spacing:-.02em; margin:5px 0 0;}
+  .scr-sub{font-size:9.5px; color:#8f9da6; margin-top:7px; line-height:1.4;}
+  .scr-cta{margin-top:12px; display:inline-block; background:#fff; color:#0c1216; font-size:9.5px; font-weight:700; padding:7px 13px; border-radius:20px;}
+  .editing-flag{
+    margin:0 14px 14px; font-size:11px; color:var(--ink-2); background:var(--accent-soft);
+    border-radius:8px; padding:8px 11px; display:flex; align-items:center; gap:8px;
+  }
+  .editing-flag b{color:var(--ink);}
+
+  :where(a,button):focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+
+<div class="app">
+<div class="cap">
+  <div class="note">Mockup · Sveltia editor for the &ldquo;My Clips&rdquo; feature</div>
+
+  <div class="win">
+    <!-- top bar -->
+    <div class="topbar">
+      <div class="brand"><span class="mark">DA<br>ZN</span> Content <small>· Sveltia</small></div>
+      <div class="crumb"><span>Features</span> &rsaquo; <b>My Clips</b></div>
+      <div class="top-actions">
+        <button class="btn btn--ghost">Preview</button>
+        <button class="btn">Save draft</button>
+        <button class="btn btn--primary">Publish &rarr;</button>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- sidebar -->
+      <aside class="side">
+        <div class="lbl">Collections</div>
+        <nav class="nav">
+          <a class="on" href="#"><span class="dotmark"></span> Features <span class="ct">9</span></a>
+          <a href="#"><span class="dotmark"></span> Landing bands <span class="ct">3</span></a>
+          <a href="#"><span class="dotmark"></span> Highlight tiles <span class="ct">6</span></a>
+        </nav>
+        <div class="lbl" style="margin-top:18px;">Library</div>
+        <nav class="nav">
+          <a href="#"><span class="dotmark"></span> Media <span class="ct">142</span></a>
+        </nav>
+      </aside>
+
+      <!-- editor -->
+      <main class="editor">
+        <div class="ehead">
+          <h1>My Clips</h1>
+          <span class="chip chip--draft">Draft · unsaved</span>
+        </div>
+        <div class="slug">content/features/win-probability-overlay.md</div>
+
+        <!-- identity -->
+        <div class="group">
+          <div class="group__h"><span class="t">Identity</span><span class="meta">shared fields</span></div>
+          <div class="group__b">
+            <div class="field"><label>Name</label><input class="input" value="My Clips"></div>
+            <div class="field">
+              <label>Update type</label>
+              <div class="row2">
+                <input class="input" value="New release">
+                <div class="select"><input class="input" value="new" readonly></div>
+              </div>
+            </div>
+            <div class="field row2" style="display:grid;">
+              <div><label>Date</label><input class="input" value="July 27"></div>
+              <div><label>Theme</label>
+                <div class="seg"><button>Light</button><button class="on">Dark</button></div>
+              </div>
+            </div>
+            <div class="field"><label>Market</label>
+              <div class="tags"><span class="tg">United States <i>&times;</i></span><span class="tg">Canada <i>&times;</i></span><span class="tg add">+ add</span></div>
+            </div>
+            <div class="field"><label>Devices</label>
+              <div class="tags"><span class="tg">Mobile <i>&times;</i></span><span class="tg">Tablet <i>&times;</i></span><span class="tg">Desktop <i>&times;</i></span><span class="tg">TV <i>&times;</i></span><span class="tg add">+ add</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- sections -->
+        <div class="sec-title"><h2>Sections</h2><span class="meta">8 blocks · drag to reorder</span></div>
+
+        <div class="block"><div class="block__h">
+          <span class="grip">&#8942;&#8942;</span><span class="btag">hero</span><span class="nm">Hero</span>
+          <span class="sum">&mdash; Direct your own highlights</span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+        </div></div>
+
+        <div class="block"><div class="block__h">
+          <span class="grip">&#8942;&#8942;</span><span class="btag">accordion</span><span class="nm">New Features</span>
+          <span class="sum">&mdash; 4 items</span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+        </div></div>
+
+        <div class="block"><div class="block__h">
+          <span class="grip">&#8942;&#8942;</span><span class="btag">stat_cards</span><span class="nm">Closer Look</span>
+          <span class="sum">&mdash; 3 cards</span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+        </div></div>
+
+        <!-- expanded highlights -->
+        <div class="block block--open">
+          <div class="block__h">
+            <span class="grip">&#8942;&#8942;</span><span class="btag">highlights</span><span class="nm">Get the Highlights</span>
+            <span class="ctrls"><span class="ic">&#9652;</span><span class="ic">&#8943;</span></span>
+          </div>
+          <div class="block__b">
+            <div class="subrow">
+              <div class="field" style="margin:0;"><label>Layout</label><div class="select"><input class="input" value="Caption below" readonly></div></div>
+              <div class="field" style="margin:0;"><label>Cards per view</label><div class="select"><input class="input" value="4-up" readonly></div></div>
+            </div>
+            <div class="clab">Cards <span class="n">4 items</span></div>
+            <div class="cardlist">
+              <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb"></div><div class="cfields">
+                <input class="cinput title" value="Chat"><input class="cinput desc" value="Describe the highlight you want and AI cuts the reel in seconds."></div><span class="ic">&#8943;</span></div>
+              <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb g2"></div><div class="cfields">
+                <input class="cinput title" value="Clip preview"><input class="cinput desc" value="Play any result inline — check the prompt and description before you save."></div><span class="ic">&#8943;</span></div>
+              <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb g3"></div><div class="cfields">
+                <input class="cinput title" value="Navigate library"><input class="cinput desc" value="Every reel lands in your library, filterable by Today, Yesterday or Last 7 days."></div><span class="ic">&#8943;</span></div>
+              <div class="citem"><span class="grip">&#8942;&#8942;</span><div class="thumb g4"></div><div class="cfields">
+                <input class="cinput title" value="Prompt suggestions"><input class="cinput desc" value="No exact match? AI surfaces close prompts to get you to the right clip."></div><span class="ic">&#8943;</span></div>
+            </div>
+            <button class="addcard">+ Add card</button>
+          </div>
+        </div>
+
+        <div class="block"><div class="block__h">
+          <span class="grip">&#8942;&#8942;</span><span class="btag">gallery</span><span class="nm">Made for Every Screen</span>
+          <span class="sum">&mdash; 4 images</span>
+          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;4</span><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+        </div></div>
+
+        <div class="block"><div class="block__h">
+          <span class="grip">&#8942;&#8942;</span><span class="btag">how_it_works</span><span class="nm">How It Works</span>
+          <span class="sum">&mdash; 2 cards</span>
+          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;2</span><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+        </div></div>
+
+        <div class="block"><div class="block__h">
+          <span class="grip">&#8942;&#8942;</span><span class="btag">statement</span><span class="nm">Big Statement</span>
+          <span class="sum">&mdash; image + headline</span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+        </div></div>
+
+        <!-- add section -->
+        <div class="addsec">
+          <button class="addsec__btn"><span class="plus">+</span> Add section</button>
+          <div class="menu">
+            <div class="menu__h">Choose a block</div>
+            <div class="mrow"><span class="btag">hero</span><span class="mnm">Hero</span><span class="mds">headline + image band</span></div>
+            <div class="mrow"><span class="btag">accordion</span><span class="mnm">New Features</span><span class="mds">expandable list + image</span></div>
+            <div class="mrow"><span class="btag">stat_cards</span><span class="mnm">Closer Look</span><span class="mds">odometer numbers</span></div>
+            <div class="mrow"><span class="btag">highlights</span><span class="mnm">Get the Highlights</span><span class="mds">scrolling cards</span></div>
+            <div class="mrow"><span class="btag">gallery</span><span class="mnm">Made for Every Screen</span><span class="mds">2×2 device grid</span></div>
+            <div class="mrow"><span class="btag">gauges</span><span class="mnm">By the Numbers</span><span class="mds">arc meters</span></div>
+            <div class="mrow"><span class="btag">how_it_works</span><span class="mnm">How It Works</span><span class="mds">two explainer cards</span></div>
+            <div class="mrow"><span class="btag">statement</span><span class="mnm">Big Statement</span><span class="mds">closing image line</span></div>
+          </div>
+        </div>
+      </main>
+
+      <!-- live preview -->
+      <aside class="preview">
+        <div class="preview__bar"><span class="live"></span><span class="t">Live preview</span><span class="u">?id=win-probability-overlay</span></div>
+        <div class="screen">
+          <div class="scr-pad">
+            <div class="scr-top"><span class="d">DA<br>ZN</span> All features <span style="margin-left:auto;">Export &#9662;</span></div>
+            <div class="scr-phone">
+              <div class="pill">Best Lautaro goals ✦</div>
+              <div class="clip"></div>
+            </div>
+            <div class="scr-head">
+              <div class="scr-eyebrow">My Clips · Beta</div>
+              <h3 class="scr-h">Direct your own highlights</h3>
+              <div class="scr-sub">Tell DAZN what you want to see — AI finds the moments and cuts your reel in seconds.</div>
+              <span class="scr-cta">Create your highlight →</span>
+            </div>
+          </div>
+        </div>
+        <div class="editing-flag"><b>Editing:</b> Get the Highlights &mdash; changes render here live.</div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

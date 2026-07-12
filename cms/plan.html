@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Composable CMS — Content Model &amp; Build Plan</title>
+<style>
+  :root{
+    --paper:#EAEEF0; --surface:#FFFFFF; --surface-2:#F4F6F7;
+    --ink:#0E141A; --ink-2:#54636C; --ink-3:#85929B;
+    --line:#DCE2E5; --line-2:#E8ECEE;
+    --accent:#E4EC00; --accent-ink:#0C1216; --accent-soft:rgba(228,236,0,.16);
+    --code-bg:#0B1015; --code-line:#1C262C; --code-ink:#DCE3E6;
+    --code-key:#F7FF1A; --code-str:#8FE3A6; --code-com:#5E6E77; --code-punc:#8fa0a8;
+    --maxw:940px; --read:66ch;
+    --f-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0A0F14; --surface:#111a20; --surface-2:#0E161C;
+      --ink:#ECF1F3; --ink-2:#9AAAB3; --ink-3:#647680;
+      --line:#1E2830; --line-2:#182129;
+      --accent:#F7FF1A; --accent-ink:#0C1216; --accent-soft:rgba(247,255,26,.10);
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#EAEEF0; --surface:#FFFFFF; --surface-2:#F4F6F7;
+    --ink:#0E141A; --ink-2:#54636C; --ink-3:#85929B;
+    --line:#DCE2E5; --line-2:#E8ECEE;
+    --accent:#E4EC00; --accent-soft:rgba(228,236,0,.16);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0A0F14; --surface:#111a20; --surface-2:#0E161C;
+    --ink:#ECF1F3; --ink-2:#9AAAB3; --ink-3:#647680;
+    --line:#1E2830; --line-2:#182129;
+    --accent:#F7FF1A; --accent-soft:rgba(247,255,26,.10);
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  .wrap{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--f-sans); line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding:clamp(28px,6vw,80px) clamp(18px,5vw,40px) 120px;
+  }
+  .doc{max-width:var(--maxw); margin:0 auto;}
+
+  /* ---------- typographic system ---------- */
+  .eyebrow{
+    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--ink-2);
+    display:inline-flex; align-items:center; gap:9px;
+  }
+  .eyebrow::before{
+    content:""; width:16px; height:9px; background:var(--accent);
+    display:inline-block; border-radius:1px;
+  }
+  h1{
+    font-size:clamp(32px,6vw,54px); line-height:1.02; letter-spacing:-.03em;
+    font-weight:800; margin:.5em 0 0; text-wrap:balance; max-width:16ch;
+  }
+  .deck{
+    font-size:clamp(17px,2.4vw,21px); color:var(--ink-2); font-weight:400;
+    max-width:var(--read); margin:22px 0 0; line-height:1.5;
+  }
+  h2{
+    font-size:clamp(21px,3vw,27px); letter-spacing:-.02em; font-weight:750;
+    margin:0; line-height:1.1; text-wrap:balance;
+  }
+  h3{font-size:16px; letter-spacing:-.01em; font-weight:700; margin:0;}
+  p{margin:0; max-width:var(--read);}
+  a{color:inherit;}
+  strong{font-weight:680;}
+
+  /* ---------- masthead ---------- */
+  .masthead{border-bottom:1px solid var(--line); padding-bottom:34px;}
+  .meta{
+    display:flex; flex-wrap:wrap; gap:0; margin-top:34px;
+    border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    background:var(--surface);
+  }
+  .meta div{
+    flex:1 1 150px; padding:14px 18px;
+    border-right:1px solid var(--line);
+  }
+  .meta div:last-child{border-right:0;}
+  .meta dt{
+    font-family:var(--f-mono); font-size:10.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 5px;
+  }
+  .meta dd{margin:0; font-size:14px; font-weight:600;}
+  .meta dd .y{color:var(--accent-ink); background:var(--accent); padding:1px 7px; border-radius:4px; font-weight:700;}
+  @media (prefers-color-scheme:dark){ .meta dd .y{color:#0C1216;} }
+  :root[data-theme="dark"] .meta dd .y{color:#0C1216;}
+
+  /* ---------- section rhythm ---------- */
+  section{margin-top:clamp(52px,8vw,86px);}
+  .sec-head{
+    display:flex; align-items:baseline; gap:16px; margin-bottom:26px;
+    border-top:1px solid var(--line); padding-top:22px;
+  }
+  .sec-num{
+    font-family:var(--f-mono); font-size:13px; font-weight:600;
+    color:var(--accent-ink); background:var(--accent);
+    width:30px; height:24px; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:5px; flex:none; letter-spacing:.02em;
+  }
+  @media (prefers-color-scheme:dark){ .sec-num{color:#0C1216;} }
+  :root[data-theme="dark"] .sec-num{color:#0C1216;}
+  .sec-head p{margin-top:6px; color:var(--ink-2); font-size:15px;}
+  .stack{display:flex; flex-direction:column; gap:18px;}
+
+  /* ---------- composition diagram ---------- */
+  .compose{
+    display:grid; grid-template-columns:1fr; gap:14px;
+    border:1px solid var(--line); border-radius:14px;
+    background:var(--surface); padding:20px;
+  }
+  @media(min-width:680px){ .compose{grid-template-columns:190px 1fr; align-items:start; gap:26px;} }
+  .compose__id{
+    border:1px dashed var(--line); border-radius:10px; padding:16px;
+    background:var(--surface-2);
+  }
+  .compose__id .tag{margin-bottom:10px;}
+  .compose__id ul{margin:0; padding-left:16px; font-size:12.5px; color:var(--ink-2); line-height:1.9;}
+  .compose__id li{list-style:none; position:relative;}
+  .compose__id li::before{content:"·"; position:absolute; left:-14px; color:var(--accent-ink); font-weight:800;}
+  @media (prefers-color-scheme:dark){ .compose__id li::before{color:var(--accent);} }
+  :root[data-theme="dark"] .compose__id li::before{color:var(--accent);}
+  .blocks-col{display:flex; flex-direction:column; gap:8px;}
+  .brow{
+    display:flex; align-items:center; gap:12px;
+    border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:8px; padding:11px 14px; background:var(--surface-2);
+    font-size:13.5px;
+  }
+  .brow code{font-family:var(--f-mono); font-size:12px; color:var(--ink-2);}
+  .brow .grab{margin-left:auto; color:var(--ink-3); font-family:var(--f-mono); font-size:11px;}
+
+  /* ---------- field tables ---------- */
+  .fields{
+    border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    background:var(--surface);
+  }
+  .frow{display:grid; grid-template-columns:180px 1fr; border-top:1px solid var(--line-2);}
+  .frow:first-child{border-top:0;}
+  .frow dt{
+    padding:12px 16px; font-family:var(--f-mono); font-size:12.5px; font-weight:600;
+    color:var(--ink); background:var(--surface-2); border-right:1px solid var(--line-2);
+  }
+  .frow dd{padding:12px 16px; margin:0; font-size:13.5px; color:var(--ink-2);}
+  @media(max-width:560px){ .frow{grid-template-columns:1fr;} .frow dt{border-right:0;} }
+
+  /* ---------- block library ---------- */
+  .grp-label{
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-3); margin:30px 0 14px;
+  }
+  .cards{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:720px){ .cards{grid-template-columns:1fr 1fr;} }
+  .card{
+    border:1px solid var(--line); border-radius:13px; background:var(--surface);
+    padding:18px 18px 16px; display:flex; flex-direction:column; gap:11px;
+  }
+  .card__top{display:flex; align-items:center; gap:10px;}
+  .tag{
+    font-family:var(--f-mono); font-size:11px; font-weight:600; letter-spacing:.02em;
+    color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line);
+    padding:3px 8px; border-radius:5px;
+  }
+  .card__purpose{font-size:13.5px; color:var(--ink-2); line-height:1.5;}
+  .field-set{margin-top:2px;}
+  .field-set .lab{
+    font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-3); display:block; margin-bottom:7px;
+  }
+  .chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .chip{
+    font-family:var(--f-mono); font-size:11.5px; color:var(--ink);
+    background:var(--surface-2); border:1px solid var(--line); border-radius:5px;
+    padding:3px 7px;
+  }
+  .chip--opt{position:relative; padding-left:16px;}
+  .chip--opt::before{
+    content:""; position:absolute; left:6px; top:50%; transform:translateY(-50%);
+    width:6px; height:6px; border-radius:50%; background:var(--accent);
+  }
+
+  /* ---------- code / config ---------- */
+  .code{
+    background:var(--code-bg); border:1px solid var(--code-line); border-radius:12px;
+    overflow-x:auto; margin:0;
+  }
+  .code__bar{
+    display:flex; align-items:center; gap:8px; padding:10px 15px;
+    border-bottom:1px solid var(--code-line);
+  }
+  .code__bar .fn{font-family:var(--f-mono); font-size:11.5px; color:var(--code-com); margin-left:2px;}
+  .dot{width:10px; height:10px; border-radius:50%; background:#33424b;}
+  .code pre{margin:0; padding:16px 18px; font-family:var(--f-mono); font-size:12.5px; line-height:1.75; color:var(--code-ink);}
+  .code .k{color:var(--code-key);} .code .s{color:var(--code-str);}
+  .code .c{color:var(--code-com);} .code .p{color:var(--code-punc);}
+
+  /* ---------- phases ---------- */
+  .phase{
+    display:grid; grid-template-columns:auto 1fr; gap:18px; align-items:start;
+    border:1px solid var(--line); border-radius:13px; background:var(--surface);
+    padding:18px 20px;
+  }
+  .phase__n{
+    font-family:var(--f-mono); font-weight:700; font-size:15px;
+    color:var(--accent-ink); background:var(--accent);
+    width:34px; height:34px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  @media (prefers-color-scheme:dark){ .phase__n{color:#0C1216;} }
+  :root[data-theme="dark"] .phase__n{color:#0C1216;}
+  .phase__body h3{margin-bottom:5px;}
+  .phase__body p{font-size:13.5px; color:var(--ink-2);}
+  .phase__foot{
+    display:flex; gap:8px; flex-wrap:wrap; margin-top:11px;
+  }
+  .est{
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.03em;
+    border:1px solid var(--line); border-radius:20px; padding:3px 11px; color:var(--ink-2);
+  }
+  .est--load{background:var(--accent-soft); border-color:transparent; color:var(--ink);}
+
+  .callout{
+    border:1px solid var(--line); border-left:3px solid var(--accent);
+    background:var(--surface); border-radius:10px; padding:16px 18px;
+    font-size:14px; color:var(--ink-2); line-height:1.55;
+  }
+  .callout strong{color:var(--ink);}
+
+  footer{
+    margin-top:80px; padding-top:24px; border-top:1px solid var(--line);
+    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.04em;
+    color:var(--ink-3); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  :where(a,button):focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px;}
+  @media(prefers-reduced-motion:reduce){ *{scroll-behavior:auto!important;} }
+</style>
+
+<div class="wrap">
+<div class="doc">
+
+  <header class="masthead">
+    <span class="eyebrow">Content Architecture · Proposal</span>
+    <h1>A composable CMS for What&rsquo;s New</h1>
+    <p class="deck">Every feature is assembled from <strong>blocks</strong>. A simple update might be a hero and a gallery; a flagship gets an accordion, a stat wall, a highlight rail and a closing statement. Editors compose the page from a menu of sections &mdash; each block carrying both its content and its presentation options.</p>
+    <dl class="meta">
+      <div><dt>CMS</dt><dd>Sveltia <span class="y">Git-based</span></dd></div>
+      <div><dt>Backend</dt><dd>GitHub &middot; Vercel</dd></div>
+      <div><dt>Source of truth</dt><dd>content/features/*.md</dd></div>
+      <div><dt>Status</dt><dd>Schema &amp; plan</dd></div>
+    </dl>
+  </header>
+
+  <!-- 01 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <div><h2>The model in one idea</h2>
+      <p>A feature is not a fixed form. It is an identity plus an ordered list of blocks.</p></div>
+    </div>
+    <div class="stack">
+      <p>Today <code>entries.js</code> gives every feature the same flat set of fields, and the polish lives in hand-tuned CSS. The composable model flips that: a small set of <strong>shared identity fields</strong> stays constant, and the body becomes a <strong>reorderable stack of blocks</strong> the editor picks from. Add a highlights rail when the story needs it; leave it out when it doesn&rsquo;t. The template renders whatever blocks are present, in order.</p>
+      <div class="compose">
+        <div class="compose__id">
+          <span class="tag">entry: my-clips</span>
+          <ul>
+            <li>name, label</li>
+            <li>date</li>
+            <li>market / devices / users</li>
+            <li>theme: dark</li>
+          </ul>
+        </div>
+        <div class="blocks-col">
+          <div class="brow"><code>hero</code> Hero <span class="grab">drag &#8597;</span></div>
+          <div class="brow"><code>accordion</code> New Features <span class="grab">drag &#8597;</span></div>
+          <div class="brow"><code>stat_cards</code> Closer Look <span class="grab">drag &#8597;</span></div>
+          <div class="brow"><code>highlights</code> Get the Highlights <span class="grab">drag &#8597;</span></div>
+          <div class="brow"><code>gallery</code> Made for Every Screen <span class="grab">drag &#8597;</span></div>
+          <div class="brow"><code>how_it_works</code> How It Works <span class="grab">drag &#8597;</span></div>
+          <div class="brow"><code>statement</code> Big Statement <span class="grab">drag &#8597;</span></div>
+        </div>
+      </div>
+      <div class="callout"><strong>Why this fits Sveltia.</strong> Decap/Sveltia&rsquo;s <code>list</code> widget with <code>types</code> is a native variable-block editor &mdash; editors get an &ldquo;Add section&rdquo; menu, drag to reorder, and each block type shows only its own fields. The content model and the editing UI are the same object.</div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <div><h2>Shared identity</h2>
+      <p>The fields every feature carries, independent of which blocks it uses.</p></div>
+    </div>
+    <dl class="fields">
+      <div class="frow"><dt>id</dt><dd>URL slug &mdash; drives <code>feature.html?id=&hellip;</code> and the filename.</dd></div>
+      <div class="frow"><dt>name</dt><dd>Feature name, used in the hero eyebrow and the landing grid.</dd></div>
+      <div class="frow"><dt>label</dt><dd>Update type &mdash; text (&ldquo;New release&rdquo;) + kind (new / improvement / live / integration) for the pill colour.</dd></div>
+      <div class="frow"><dt>date</dt><dd>Release date shown in hero metadata.</dd></div>
+      <div class="frow"><dt>market · devices · users</dt><dd>Metadata chip lists &mdash; the audience vocabulary (United Kingdom, Mobile, Subscriber&hellip;).</dd></div>
+      <div class="frow"><dt>theme</dt><dd>light or dark &mdash; recolours the whole page through the token set.</dd></div>
+      <div class="frow"><dt>blocks</dt><dd>The ordered section stack. Everything visual below lives here.</dd></div>
+    </dl>
+  </section>
+
+  <!-- 03 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <div><h2>The block library</h2>
+      <p>Each block splits into <strong>content</strong> (what editors write) and <strong>options</strong> (how it presents) &mdash; the presets currently buried in CSS become toggles.</p></div>
+    </div>
+
+    <p class="grp-label">Feature-page blocks</p>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card__top"><span class="tag">hero</span><h3>Hero</h3></div>
+        <p class="card__purpose">Opening full-bleed band: product shot, headline, benefit line, metadata chips and CTA.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">headline</span><span class="chip">sub</span><span class="chip">cta</span>
+          <span class="chip">image</span><span class="chip">imageMobile</span><span class="chip">product</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">background: white / panel</span>
+          <span class="chip chip--opt">focal point x/y</span>
+          <span class="chip chip--opt">scrim: none / white / black</span>
+          <span class="chip chip--opt">portrait-mobile</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card__top"><span class="tag">accordion</span><h3>New Features</h3></div>
+        <p class="card__purpose">Expandable list of changes with a synced image that crossfades as each item opens.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">items[]: heading + body</span><span class="chip">images[]</span><span class="chip">tip</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">crossfade tint: black / white</span>
+          <span class="chip chip--opt">media aspect</span>
+          <span class="chip chip--opt">show &ldquo;Good to know&rdquo;</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card__top"><span class="tag">stat_cards</span><h3>Closer Look</h3></div>
+        <p class="card__purpose">Headline numbers that roll up like an odometer, each over a drawing arc gauge.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">cards[]: value + suffix + label</span><span class="chip">gauge %</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">odometer shuffle</span>
+          <span class="chip chip--opt">gauge gradient</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card__top"><span class="tag">highlights</span><h3>Get the Highlights</h3></div>
+        <p class="card__purpose">Horizontal, snap-scrolling cards &mdash; the most flexible block.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">cards[]: title + description</span><span class="chip">images[]</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">layout: overlay / below / inside</span>
+          <span class="chip chip--opt">3-up or 4-up</span>
+          <span class="chip chip--opt">fill / contain + focal</span>
+          <span class="chip chip--opt">square &lt; 480px</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card__top"><span class="tag">gallery</span><h3>Made for Every Screen</h3></div>
+        <p class="card__purpose">A 2&times;2 device grid that animates in from the four corners on scroll.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">caption</span><span class="chip">images[4]</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">per-tile fit: cover / contain</span>
+          <span class="chip chip--opt">per-tile background</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card__top"><span class="tag">gauges</span><h3>By the Numbers</h3></div>
+        <p class="card__purpose">270&deg; arc meters that draw in and count up when they hit the viewport centre.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">gauges[]: target + % + label</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">gradient</span>
+          <span class="chip chip--opt">number format</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card__top"><span class="tag">how_it_works</span><h3>How It Works</h3></div>
+        <p class="card__purpose">Two side-by-side explainer cards: image over a short caption.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">cards[2]: title + body + image</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">columns</span>
+          <span class="chip chip--opt">media aspect</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card__top"><span class="tag">statement</span><h3>Big Statement</h3></div>
+        <p class="card__purpose">Closing full-bleed image with one overlaid line &mdash; the emotional sign-off.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">eyebrow</span><span class="chip">headline</span><span class="chip">lead</span><span class="chip">image</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">text position</span>
+          <span class="chip chip--opt">scrim strength + tint</span></div></div>
+      </div>
+
+    </div>
+
+    <p class="grp-label">Landing-page blocks</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card__top"><span class="tag">feature_band</span><h3>Feature Band</h3></div>
+        <p class="card__purpose">Full-width stacked band on <code>index.html</code> &mdash; the top-billed updates.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">name</span><span class="chip">tagline</span><span class="chip">cta &rarr; feature</span>
+          <span class="chip">background</span><span class="chip">backgroundMobile</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">treatment: white photo / dark scrim</span>
+          <span class="chip chip--opt">parallax</span>
+          <span class="chip chip--opt">mobile = whole-card link</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card__top"><span class="tag">tile</span><h3>Highlight Tile</h3></div>
+        <p class="card__purpose">Card in the 2-up landing grid, linking through to its feature page.</p>
+        <div class="field-set"><span class="lab">Content</span><div class="chips">
+          <span class="chip">tileName</span><span class="chip">tileTagline</span><span class="chip">image</span><span class="chip">link</span></div></div>
+        <div class="field-set"><span class="lab">Options</span><div class="chips">
+          <span class="chip chip--opt">card: light / dark</span>
+          <span class="chip chip--opt">hover zoom</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <div><h2>How it reads in Sveltia</h2>
+      <p>The whole model is one collection with a variable-type <code>blocks</code> list. Here&rsquo;s the shape, with the hero block expanded.</p></div>
+    </div>
+    <div class="code">
+      <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="fn">public/admin/config.yml</span></div>
+<pre><span class="c"># Sveltia reads the Decap config format</span>
+<span class="k">backend:</span>
+  <span class="k">name:</span> github
+  <span class="k">repo:</span> <span class="s">tokens25/new-features</span>
+  <span class="k">branch:</span> <span class="s">second-main</span>
+<span class="k">media_folder:</span> <span class="s">assets/img</span>
+<span class="k">public_folder:</span> <span class="s">/assets/img</span>
+
+<span class="k">collections:</span>
+  <span class="p">-</span> <span class="k">name:</span> features
+    <span class="k">folder:</span> <span class="s">content/features</span>
+    <span class="k">create:</span> true
+    <span class="k">slug:</span> <span class="s">'{{id}}'</span>
+    <span class="k">fields:</span>
+      <span class="p">-</span> { <span class="k">name:</span> id,    <span class="k">widget:</span> string }
+      <span class="p">-</span> { <span class="k">name:</span> name,  <span class="k">widget:</span> string }
+      <span class="p">-</span> { <span class="k">name:</span> theme, <span class="k">widget:</span> select, <span class="k">options:</span> [light, dark] }
+      <span class="p">-</span> { <span class="k">name:</span> market, <span class="k">widget:</span> list }
+      <span class="c"># ---- the composable body ----</span>
+      <span class="p">-</span> <span class="k">name:</span> blocks
+        <span class="k">label:</span> Sections
+        <span class="k">widget:</span> list
+        <span class="k">types:</span>
+          <span class="p">-</span> <span class="k">name:</span> hero
+            <span class="k">widget:</span> object
+            <span class="k">fields:</span>
+              <span class="p">-</span> { <span class="k">name:</span> headline, <span class="k">widget:</span> string }
+              <span class="p">-</span> { <span class="k">name:</span> sub,      <span class="k">widget:</span> text }
+              <span class="p">-</span> { <span class="k">name:</span> image,    <span class="k">widget:</span> image }
+              <span class="p">-</span> { <span class="k">name:</span> imageMobile, <span class="k">widget:</span> image, <span class="k">required:</span> false }
+              <span class="p">-</span> { <span class="k">name:</span> background,  <span class="k">widget:</span> select, <span class="k">options:</span> [white, panel] }
+              <span class="p">-</span> { <span class="k">name:</span> scrim,       <span class="k">widget:</span> select, <span class="k">options:</span> [none, white, black] }
+              <span class="p">-</span> { <span class="k">name:</span> focalY,      <span class="k">widget:</span> number, <span class="k">required:</span> false }
+          <span class="p">-</span> { <span class="k">name:</span> accordion,    <span class="k">widget:</span> object, <span class="k">fields:</span> [<span class="c">&hellip;</span>] }
+          <span class="p">-</span> { <span class="k">name:</span> highlights,   <span class="k">widget:</span> object, <span class="k">fields:</span> [<span class="c">&hellip;</span>] }
+          <span class="p">-</span> { <span class="k">name:</span> gallery,      <span class="k">widget:</span> object, <span class="k">fields:</span> [<span class="c">&hellip;</span>] }
+          <span class="p">-</span> { <span class="k">name:</span> statement,    <span class="k">widget:</span> object, <span class="k">fields:</span> [<span class="c">&hellip;</span>] }</pre>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <div><h2>Migrating today&rsquo;s content</h2>
+      <p>Nothing is thrown away &mdash; the current entries convert straight into block stacks.</p></div>
+    </div>
+    <div class="stack">
+      <p>A one-off script reads <code>window.DAZN_ENTRIES</code> and emits one <code>content/features/&lt;id&gt;.md</code> per feature. Today&rsquo;s flat fields map cleanly: <code>heroImage</code>&rarr;<code>hero</code>, <code>sections[]</code>+<code>closerImages[]</code>&rarr;<code>accordion</code>, <code>highlightItems[]</code>&rarr;<code>highlights</code>, <code>galleryImages[]</code>&rarr;<code>gallery</code>, <code>worksImages[]</code>&rarr;<code>how_it_works</code>, <code>statementImage</code>&rarr;<code>statement</code>. The render layer barely changes: a tiny build step compiles the content files back into the array the templates already consume.</p>
+      <div class="callout"><strong>The real work isn&rsquo;t the CMS.</strong> It&rsquo;s promoting this session&rsquo;s hand-tuned CSS &mdash; <code>object-position</code> crops, per-page scrims, aspect overrides &mdash; into block <em>options</em> the templates read from data. That&rsquo;s where composability actually pays off, and it&rsquo;s the bulk of the effort.</div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <div><h2>Build plan</h2>
+      <p>Four phases, front-loaded on making the templates fully data-driven.</p></div>
+    </div>
+    <div class="stack">
+      <div class="phase">
+        <span class="phase__n">1</span>
+        <div class="phase__body"><h3>Content migration</h3>
+          <p>Split <code>entries.js</code> into per-feature files and a build step that recompiles them. The site renders identically &mdash; pure refactor, zero visual change.</p>
+          <div class="phase__foot"><span class="est">~2&ndash;3 days</span><span class="est">low risk</span></div></div>
+      </div>
+      <div class="phase">
+        <span class="phase__n">2</span>
+        <div class="phase__body"><h3>Data-drive the polish</h3>
+          <p>Move focal points, scrims, aspect ratios and layout variants out of bespoke CSS and into block option fields the templates consume. The heaviest phase &mdash; and what makes the blocks truly reusable.</p>
+          <div class="phase__foot"><span class="est est--load">~1&ndash;2 weeks</span><span class="est">core effort</span></div></div>
+      </div>
+      <div class="phase">
+        <span class="phase__n">3</span>
+        <div class="phase__body"><h3>Sveltia config</h3>
+          <p>Define the collection and every block type, mirroring the schema; point media at <code>assets/img</code>; add the <code>/admin</code> route.</p>
+          <div class="phase__foot"><span class="est">~2&ndash;3 days</span></div></div>
+      </div>
+      <div class="phase">
+        <span class="phase__n">4</span>
+        <div class="phase__body"><h3>Auth, preview &amp; deploy</h3>
+          <p>GitHub sign-in (Sveltia handles the OAuth directly), live preview pointed at the real templates, and the editor live on Vercel.</p>
+          <div class="phase__foot"><span class="est">~1&ndash;2 days</span></div></div>
+      </div>
+      <div class="callout"><strong>Total: roughly 3&ndash;4 weeks</strong>, and it lands incrementally &mdash; after Phase 1 the site is already file-per-feature; after Phase 3 editors can add and reorder blocks through the UI.</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>DAZN &middot; What&rsquo;s New &mdash; CMS content model</span>
+    <span>Sveltia · block-based · v0.1</span>
+  </footer>
+
+</div>
+</div>
+
+</body>
+</html>

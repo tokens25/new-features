@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Hero block editor — focal point</title>
+<style>
+  :root{
+    --app:#E7EBED; --panel:#FFFFFF; --panel-2:#F4F6F7;
+    --ink:#0E141A; --ink-2:#54636C; --ink-3:#8592A0;
+    --line:#D9DFE2; --line-2:#E7EBED;
+    --accent:#DBE300; --accent-ink:#0C1216; --accent-soft:rgba(219,227,0,.16);
+    --ok:#2E9E5B;
+    --f-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(16,26,34,.05),0 10px 26px rgba(16,26,34,.07);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --app:#080C10; --panel:#111A20; --panel-2:#0E161C;
+      --ink:#ECF1F3; --ink-2:#9AAAB3; --ink-3:#647680;
+      --line:#1E2830; --line-2:#18222A;
+      --accent:#F7FF1A; --accent-soft:rgba(247,255,26,.10);
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"]{
+    --app:#E7EBED; --panel:#FFFFFF; --panel-2:#F4F6F7; --ink:#0E141A; --ink-2:#54636C;
+    --ink-3:#8592A0; --line:#D9DFE2; --line-2:#E7EBED; --accent:#DBE300; --accent-soft:rgba(219,227,0,.16);
+    --shadow:0 1px 2px rgba(16,26,34,.05),0 10px 26px rgba(16,26,34,.07);
+  }
+  :root[data-theme="dark"]{
+    --app:#080C10; --panel:#111A20; --panel-2:#0E161C; --ink:#ECF1F3; --ink-2:#9AAAB3;
+    --ink-3:#647680; --line:#1E2830; --line-2:#18222A; --accent:#F7FF1A; --accent-soft:rgba(247,255,26,.10);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  .app{background:var(--app); color:var(--ink); font-family:var(--f-sans); -webkit-font-smoothing:antialiased; min-height:100vh; font-size:14px;}
+  .cap{max-width:720px; margin:0 auto; padding:20px clamp(12px,4vw,24px) 64px;}
+  .note{font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); display:flex; align-items:center; gap:9px; margin:4px 2px 14px;}
+  .note::before{content:""; width:15px; height:8px; background:var(--accent); border-radius:1px;}
+
+  .block{border:1px solid var(--accent); border-radius:13px; background:var(--panel); box-shadow:0 0 0 1px var(--accent), var(--shadow); overflow:hidden;}
+  .block__h{display:flex; align-items:center; gap:11px; padding:13px 15px; border-bottom:1px solid var(--line-2);}
+  .grip{color:var(--ink-3); font-size:15px; letter-spacing:-2px; cursor:grab;}
+  .btag{font-family:var(--f-mono); font-size:10.5px; font-weight:600; color:var(--ink-2); background:var(--panel-2); border:1px solid var(--line); border-radius:5px; padding:3px 7px;}
+  .block__h .nm{font-weight:680; font-size:14px;}
+  .block__h .ctrls{margin-left:auto; display:flex; gap:4px; color:var(--ink-3);}
+  .ic{width:26px; height:26px; border-radius:6px; display:grid; place-items:center; font-size:13px; cursor:pointer;}
+  .ic:hover{background:var(--panel-2); color:var(--ink);}
+  .block__b{padding:16px;}
+
+  .sub{border-top:1px solid var(--line-2); margin-top:18px; padding-top:16px;}
+  .sub:first-child{border-top:0; margin-top:0; padding-top:0;}
+  .sub__t{font-family:var(--f-mono); font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-3); margin-bottom:12px; display:flex; align-items:center; gap:8px;}
+  .sub__t .hint{margin-left:auto; text-transform:none; letter-spacing:0; font-family:var(--f-sans); font-size:11.5px; color:var(--ink-3);}
+
+  .field{margin-bottom:12px;} .field:last-child{margin-bottom:0;}
+  .field > label{display:block; font-size:12px; font-weight:600; color:var(--ink-2); margin-bottom:6px;}
+  .input{width:100%; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); padding:9px 11px; font:inherit; font-size:13.5px; color:var(--ink);}
+  textarea.input{resize:none; line-height:1.5;}
+
+  .media{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .slot{border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--panel-2);}
+  .slot__img{height:82px; position:relative; background:#0c151b;}
+  .slot__img .scene{position:absolute; inset:0;}
+  .slot__meta{display:flex; align-items:center; gap:8px; padding:8px 10px; font-size:11.5px; color:var(--ink-2);}
+  .slot__meta .fn{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .slot__meta .rep{margin-left:auto; color:var(--ink); font-weight:600; cursor:pointer; font-size:11px;}
+  .slot__tag{position:absolute; top:6px; left:6px; font-family:var(--f-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; background:rgba(8,14,18,.7); color:#e7edef; padding:2px 6px; border-radius:4px;}
+
+  /* focal widget */
+  .seg{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--panel-2);}
+  .seg button{font:inherit; font-size:12.5px; padding:6px 14px; border:0; background:transparent; color:var(--ink-2); cursor:pointer; font-weight:600;}
+  .seg button.on{background:var(--ink); color:var(--panel);}
+  .focal{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .focal{grid-template-columns:1.35fr 1fr; align-items:start;} }
+  .stage{
+    position:relative; border-radius:11px; overflow:hidden; border:1px solid var(--line);
+    aspect-ratio:16/10; background:#0a1218; cursor:crosshair; touch-action:none; user-select:none;
+  }
+  .stage__img{position:absolute; inset:0; width:100%; height:100%;}
+  /* a big oversized "scene" so repositioning reveals different parts */
+  .scene{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(120% 80% at 50% 8%, rgba(150,170,190,.35), transparent 55%),
+      radial-gradient(70% 50% at 20% 30%, rgba(60,90,140,.5), transparent 60%),
+      radial-gradient(70% 50% at 82% 26%, rgba(150,40,40,.42), transparent 60%),
+      linear-gradient(#0f1a22,#0a1319);
+  }
+  .scene .phone{
+    position:absolute; left:50%; top:50%; width:26%; aspect-ratio:9/17; transform:translate(-50%,-50%);
+    border-radius:12px; border:3px solid #05090c; background:linear-gradient(#0c161c,#0a1216);
+    box-shadow:0 18px 40px rgba(0,0,0,.55); overflow:hidden;
+  }
+  .scene .phone::before{content:""; position:absolute; left:8%; right:8%; top:14%; height:34%; border-radius:5px;
+    background:radial-gradient(circle at 40% 45%, rgba(90,180,100,.7), transparent 50%),linear-gradient(135deg,#1c4a24,#0f2a16);}
+  .scene .phone::after{content:""; position:absolute; left:8%; right:8%; top:52%; height:30%; border-radius:5px;
+    background:radial-gradient(circle at 60% 50%, rgba(220,70,70,.6), transparent 55%),linear-gradient(135deg,#3a1518,#241016);}
+  .scene .ground{position:absolute; left:0; right:0; bottom:0; height:22%; background:linear-gradient(transparent,rgba(6,10,13,.85));}
+  .dot{position:absolute; width:26px; height:26px; margin:-13px 0 0 -13px; border-radius:50%;
+    border:2px solid #fff; box-shadow:0 0 0 2px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.5); pointer-events:none;}
+  .dot::before,.dot::after{content:""; position:absolute; background:#fff; box-shadow:0 0 2px rgba(0,0,0,.6);}
+  .dot::before{left:50%; top:4px; bottom:4px; width:2px; margin-left:-1px;}
+  .dot::after{top:50%; left:4px; right:4px; height:2px; margin-top:-1px;}
+  .dot span{position:absolute; inset:9px; border-radius:50%; background:var(--accent);}
+  .frameguide{position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(255,255,255,.14); border-radius:11px; pointer-events:none;}
+
+  .readouts{display:flex; flex-direction:column; gap:10px;}
+  .rd{border:1px solid var(--line); border-radius:9px; background:var(--panel-2); padding:11px 12px;}
+  .rd .k{font-size:11px; color:var(--ink-3); margin-bottom:5px; display:flex; align-items:center; gap:7px;}
+  .rd .k .bp{margin-left:auto; font-family:var(--f-mono); font-size:10px; background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:1px 6px; color:var(--ink-2);}
+  .rd code{font-family:var(--f-mono); font-size:13px; color:var(--ink); font-weight:600;}
+  .rd code .v{color:var(--accent-ink); background:var(--accent); padding:0 5px; border-radius:4px;}
+  @media (prefers-color-scheme:dark){ .rd code .v{color:#0C1216;} }
+  :root[data-theme="dark"] .rd code .v{color:#0C1216;}
+  .helper{font-size:11.5px; color:var(--ink-3); line-height:1.5;}
+
+  .disp{display:flex; flex-direction:column; gap:14px;}
+  .drow{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .drow > label{font-size:12px; font-weight:600; color:var(--ink-2); width:96px; flex:none;}
+  .slider{flex:1; min-width:130px; height:5px; border-radius:4px; -webkit-appearance:none; appearance:none; background:linear-gradient(90deg,var(--accent) 0 60%, var(--line) 60% 100%); outline:none;}
+  .slider::-webkit-slider-thumb{-webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--panel); border:2px solid var(--ink); cursor:pointer;}
+  .slider::-moz-range-thumb{width:16px; height:16px; border-radius:50%; background:var(--panel); border:2px solid var(--ink); cursor:pointer;}
+  .sval{font-family:var(--f-mono); font-size:12px; color:var(--ink-2); width:38px; text-align:right;}
+  .toggle{width:40px; height:23px; border-radius:20px; background:var(--accent); position:relative; cursor:pointer; border:0;}
+  .toggle::after{content:""; position:absolute; top:2px; left:19px; width:19px; height:19px; border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.3);}
+
+  .foot{margin-top:16px; font-size:12px; color:var(--ink-3); line-height:1.55; padding:0 2px;}
+  .foot code{font-family:var(--f-mono); font-size:11.5px; color:var(--ink-2);}
+  :where(a,button,input):focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+</style>
+
+<div class="app"><div class="cap">
+  <div class="note">Custom widget · Hero block editor</div>
+
+  <div class="block">
+    <div class="block__h">
+      <span class="grip">&#8942;&#8942;</span><span class="btag">hero</span><span class="nm">Hero</span>
+      <span class="ctrls"><span class="ic">&#9652;</span><span class="ic">&#8943;</span></span>
+    </div>
+    <div class="block__b">
+
+      <!-- content -->
+      <div class="sub">
+        <div class="sub__t">Content</div>
+        <div class="field"><label>Eyebrow</label><input class="input" value="My Clips · Beta"></div>
+        <div class="field"><label>Headline</label><input class="input" value="Direct your own highlights"></div>
+        <div class="field"><label>Sub</label><textarea class="input" rows="2">Tell DAZN what you want to see — AI finds the moments and cuts your personal highlight reel in seconds.</textarea></div>
+        <div class="field"><label>CTA label</label><input class="input" value="Create your highlight"></div>
+      </div>
+
+      <!-- media -->
+      <div class="sub">
+        <div class="sub__t">Media <span class="hint">desktop + portrait-mobile source</span></div>
+        <div class="media">
+          <div class="slot"><div class="slot__img"><div class="scene" style="position:absolute;inset:0;"></div><span class="slot__tag">Desktop</span></div>
+            <div class="slot__meta"><span class="fn">hp-myclips-hero.png</span><span class="rep">Replace</span></div></div>
+          <div class="slot"><div class="slot__img"><div class="scene" style="position:absolute;inset:0;"></div><span class="slot__tag">Mobile</span></div>
+            <div class="slot__meta"><span class="fn">hp-myclips-hero-m.png</span><span class="rep">Replace</span></div></div>
+        </div>
+      </div>
+
+      <!-- focal -->
+      <div class="sub">
+        <div class="sub__t">Focal point <span class="hint" style="display:flex;align-items:center;gap:8px;">
+          <span class="seg" style="transform:scale(.92);transform-origin:right;"><button id="bpD" class="on">Desktop</button><button id="bpM">Mobile</button></span></span></div>
+        <div class="focal">
+          <div class="stage" id="stage">
+            <div class="stage__img"><div class="scene" id="scene"><div class="phone"></div><div class="ground"></div></div></div>
+            <div class="frameguide"></div>
+            <div class="dot" id="dot"><span></span></div>
+          </div>
+          <div class="readouts">
+            <div class="rd">
+              <div class="k">Generated CSS <span class="bp" id="bpTag">desktop</span></div>
+              <code>object-position: <span class="v" id="cssVal">center 32%</span></code>
+            </div>
+            <p class="helper">Drag the crosshair to set where the image anchors inside the hero frame. The widget writes the exact <code>object-position</code> value — no hand-editing CSS. Desktop and mobile store their own point.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- display options -->
+      <div class="sub">
+        <div class="sub__t">Display options</div>
+        <div class="disp">
+          <div class="drow"><label>Background</label>
+            <span class="seg"><button class="on">White</button><button>Panel</button></span></div>
+          <div class="drow"><label>Scrim</label>
+            <span class="seg"><button>None</button><button>White</button><button class="on">Black</button></span></div>
+          <div class="drow"><label>Scrim strength</label>
+            <input class="slider" type="range" min="0" max="100" value="72" id="scrim"><span class="sval" id="scrimV">72%</span></div>
+          <div class="drow"><label>Portrait-mobile</label>
+            <button class="toggle" aria-pressed="true" title="Use the mobile image under 640px"></button>
+            <span class="helper" style="margin:0;">serve the mobile source under 640px</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <p class="foot">Every control here maps straight to what the template already reads — the focal picker outputs the same <code>object-position: center -150px</code> values tuned by hand this session, the scrim slider drives the hero <code>::after</code> gradient, and the toggle picks the <code>&lt;picture&gt;</code> source. The editor never touches CSS.</p>
+
+</div></div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage'), scene=document.getElementById('scene'),
+      dot=document.getElementById('dot'), cssVal=document.getElementById('cssVal'),
+      bpTag=document.getElementById('bpTag'), bpD=document.getElementById('bpD'), bpM=document.getElementById('bpM');
+  var state={desktop:{x:50,y:32}, mobile:{x:38,y:12}}, bp='desktop';
+  var scale=1.5; // scene is zoomed so panning reveals different parts
+
+  function fmt(n){ return Math.round(n)+'%'; }
+  function apply(){
+    var p=state[bp], ox=p.x, oy=p.y;
+    dot.style.left=ox+'%'; dot.style.top=oy+'%';
+    // pan the over-scaled scene so the focal point sits centred in the frame
+    scene.style.transform='scale('+scale+')';
+    scene.style.transformOrigin=ox+'% '+oy+'%';
+    cssVal.textContent=(Math.round(ox)===50 ? 'center ' : fmt(ox)+' ')+fmt(oy);
+    bpTag.textContent=bp;
+  }
+  function setBp(b){ bp=b; bpD.classList.toggle('on',b==='desktop'); bpM.classList.toggle('on',b==='mobile'); apply(); }
+  bpD.addEventListener('click',function(){setBp('desktop');});
+  bpM.addEventListener('click',function(){setBp('mobile');});
+
+  var dragging=false;
+  function move(e){
+    var r=stage.getBoundingClientRect();
+    var cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+    var cy=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
+    var x=Math.max(0,Math.min(100, cx/r.width*100));
+    var y=Math.max(0,Math.min(100, cy/r.height*100));
+    state[bp]={x:x,y:y}; apply();
+  }
+  stage.addEventListener('pointerdown',function(e){dragging=true; stage.setPointerCapture(e.pointerId); move(e);});
+  stage.addEventListener('pointermove',function(e){ if(dragging) move(e);});
+  stage.addEventListener('pointerup',function(){dragging=false;});
+  stage.addEventListener('pointercancel',function(){dragging=false;});
+
+  var scrim=document.getElementById('scrim'), scrimV=document.getElementById('scrimV');
+  scrim.addEventListener('input',function(){
+    scrimV.textContent=scrim.value+'%';
+    scrim.style.background='linear-gradient(90deg,var(--accent) 0 '+scrim.value+'%, var(--line) '+scrim.value+'% 100%)';
+  });
+
+  apply();
+})();
+</script>
+
+</body>
+</html>
