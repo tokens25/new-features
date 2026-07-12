@@ -105,6 +105,9 @@
   .stage__img{position:absolute; inset:0; width:100%; height:100%;}
   /* real image, over-sized so repositioning reveals different parts (mirrors object-fit:cover) */
   #scene{position:absolute; inset:0; background-image:var(--hero-img); background-repeat:no-repeat; background-size:150%; background-position:center 32%;}
+  /* Mobile focal preview mirrors the portrait source in a portrait frame */
+  .stage.is-mobile{aspect-ratio:864/1821; width:232px; max-width:100%; margin-inline:auto; justify-self:center;}
+  .stage.is-mobile #scene{background-image:var(--hero-img-m);}
   .thumbimg{position:absolute; inset:0; background-image:var(--hero-img); background-size:cover; background-position:center; background-repeat:no-repeat;}
   /* Mobile source is portrait — fills its own portrait frame */
   .thumbimg.m{background-image:var(--hero-img-m); background-size:cover; background-position:center; background-color:#070c10;}
@@ -250,7 +253,7 @@
     cssVal.textContent=(Math.round(ox)===50 ? 'center ' : fmt(ox)+' ')+fmt(oy);
     bpTag.textContent=bp;
   }
-  function setBp(b){ bp=b; bpD.classList.toggle('on',b==='desktop'); bpM.classList.toggle('on',b==='mobile'); apply(); }
+  function setBp(b){ bp=b; bpD.classList.toggle('on',b==='desktop'); bpM.classList.toggle('on',b==='mobile'); stage.classList.toggle('is-mobile',b==='mobile'); apply(); }
   bpD.addEventListener('click',function(){setBp('desktop');});
   bpM.addEventListener('click',function(){setBp('mobile');});
 
