@@ -78,20 +78,13 @@
   .input{width:100%; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); padding:9px 11px; font:inherit; font-size:13.5px; color:var(--ink);}
   textarea.input{resize:none; line-height:1.5;}
 
-  /* desktop = wide landscape frame · mobile = narrow portrait frame, so each source fills its own container */
-  .media{display:flex; gap:12px; align-items:stretch;}
-  .slot{border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--panel-2); display:flex; flex-direction:column; min-width:0;}
-  .slot--desktop{flex:1 1 auto;}
-  .slot--mobile{flex:0 0 118px;}
-  .slot__img{height:172px; position:relative; background:#0c151b;}
-  .slot__img .scene{position:absolute; inset:0;}
-  .slot__meta{display:flex; align-items:center; gap:8px; padding:8px 10px; font-size:11.5px; color:var(--ink-2); min-width:0;}
-  .slot__meta .fn{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .slot__meta .rep{margin-left:auto; color:var(--ink); font-weight:600; cursor:pointer; font-size:11px; flex:none;}
-  .slot--mobile .slot__meta{flex-direction:column; align-items:stretch; gap:3px;}
-  .slot--mobile .slot__meta .fn{align-self:stretch;}
-  .slot--mobile .slot__meta .rep{margin-left:0; align-self:flex-end;}
-  .slot__tag{position:absolute; top:6px; left:6px; font-family:var(--f-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; background:rgba(8,14,18,.7); color:#e7edef; padding:2px 6px; border-radius:4px;}
+  /* source bar under the focal stage — set/replace the image for the active breakpoint */
+  .focal__main{min-width:0;}
+  .srcbar{display:flex; align-items:center; gap:9px; margin-top:10px; border:1px solid var(--line); border-radius:9px; background:var(--panel-2); padding:8px 10px;}
+  .srcbar__tag{font-family:var(--f-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; background:var(--ink); color:var(--panel); padding:3px 7px; border-radius:4px; flex:none;}
+  .srcbar__fn{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .srcbar__btn{margin-left:auto; font:inherit; font-size:11px; font-weight:600; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:5px 11px; cursor:pointer; flex:none; display:inline-flex; align-items:center; gap:5px;}
+  .srcbar__btn:hover{background:var(--panel-3);}
 
   /* focal widget */
   .seg{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--panel-2);}
@@ -109,9 +102,6 @@
   /* Mobile focal preview mirrors the portrait source in a portrait frame */
   .stage.is-mobile{aspect-ratio:864/1821; width:232px; max-width:100%; margin-inline:auto; justify-self:center;}
   .stage.is-mobile #scene{background-image:var(--hero-img-m);}
-  .thumbimg{position:absolute; inset:0; background-image:var(--hero-img); background-size:cover; background-position:center; background-repeat:no-repeat;}
-  /* Mobile source is portrait — fills its own portrait frame */
-  .thumbimg.m{background-image:var(--hero-img-m); background-size:cover; background-position:center; background-color:#070c10;}
   /* legacy fake-scene styles (unused now) */
   .scene{position:absolute; inset:0;}
   .scene .phone{
@@ -184,33 +174,29 @@
         <div class="field"><label>CTA label</label><input class="input" value="Create your highlight"></div>
       </div>
 
-      <!-- media -->
+      <!-- hero image: source + focal point combined -->
       <div class="sub">
-        <div class="sub__t">Media <span class="hint">desktop + portrait-mobile source</span></div>
-        <div class="media">
-          <div class="slot slot--desktop"><div class="slot__img"><div class="thumbimg"></div><span class="slot__tag">Desktop</span></div>
-            <div class="slot__meta"><span class="fn">hp-myclips-hero.png</span><span class="rep">Replace</span></div></div>
-          <div class="slot slot--mobile"><div class="slot__img"><div class="thumbimg m"></div><span class="slot__tag">Mobile</span></div>
-            <div class="slot__meta"><span class="fn">hp-myclips-hero-m.png</span><span class="rep">Replace</span></div></div>
-        </div>
-      </div>
-
-      <!-- focal -->
-      <div class="sub">
-        <div class="sub__t">Focal point <span class="hint" style="display:flex;align-items:center;gap:8px;">
+        <div class="sub__t">Hero image <span class="hint" style="display:flex;align-items:center;gap:8px;">
           <span class="seg" style="transform:scale(.92);transform-origin:right;"><button id="bpD" class="on">Desktop</button><button id="bpM">Mobile</button></span></span></div>
         <div class="focal">
-          <div class="stage" id="stage">
-            <div class="stage__img"><div class="scene" id="scene"></div></div>
-            <div class="frameguide"></div>
-            <div class="dot" id="dot"><span></span></div>
+          <div class="focal__main">
+            <div class="stage" id="stage">
+              <div class="stage__img"><div class="scene" id="scene"></div></div>
+              <div class="frameguide"></div>
+              <div class="dot" id="dot"><span></span></div>
+            </div>
+            <div class="srcbar">
+              <span class="srcbar__tag" id="srcTag">Desktop</span>
+              <span class="srcbar__fn" id="srcFn">hp-myclips-hero.png</span>
+              <button class="srcbar__btn" id="srcReplace">&#8635; Replace</button>
+            </div>
           </div>
           <div class="readouts">
             <div class="rd">
               <div class="k">Generated CSS <span class="bp" id="bpTag">desktop</span></div>
               <code>object-position: <span class="v" id="cssVal">center 32%</span></code>
             </div>
-            <p class="helper">Drag the crosshair to set where the image anchors inside the hero frame. The widget writes the exact <code>object-position</code> value — no hand-editing CSS. Desktop and mobile store their own point.</p>
+            <p class="helper">Set the source for each breakpoint, then drag the crosshair to anchor it inside the hero frame. The widget writes the exact <code>object-position</code> — no hand-editing CSS. Desktop and mobile keep their own source and focal point.</p>
           </div>
         </div>
       </div>
@@ -254,7 +240,11 @@
     cssVal.textContent=(Math.round(ox)===50 ? 'center ' : fmt(ox)+' ')+fmt(oy);
     bpTag.textContent=bp;
   }
-  function setBp(b){ bp=b; bpD.classList.toggle('on',b==='desktop'); bpM.classList.toggle('on',b==='mobile'); stage.classList.toggle('is-mobile',b==='mobile'); apply(); }
+  var srcTag=document.getElementById('srcTag'), srcFn=document.getElementById('srcFn');
+  function setBp(b){ bp=b; bpD.classList.toggle('on',b==='desktop'); bpM.classList.toggle('on',b==='mobile'); stage.classList.toggle('is-mobile',b==='mobile');
+    srcTag.textContent = b==='desktop' ? 'Desktop' : 'Mobile';
+    srcFn.textContent = b==='desktop' ? 'hp-myclips-hero.png' : 'hp-myclips-hero-m.png';
+    apply(); }
   bpD.addEventListener('click',function(){setBp('desktop');});
   bpM.addEventListener('click',function(){setBp('mobile');});
 
