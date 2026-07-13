@@ -143,6 +143,9 @@
 
   /* sections / blocks */
   .sec-title{display:flex; align-items:center; gap:10px; margin:26px 2px 12px;}
+  /* the current page: everything already placed on the feature page */
+  .stack{display:flex; flex-direction:column; gap:9px; border:1.5px dashed var(--line); border-radius:14px; background:var(--panel-2); padding:12px;}
+  .stack .block{margin-bottom:0;}
   .sec-title h2{font-size:15px; font-weight:720; letter-spacing:-.01em; margin:0;}
   .sec-title .meta{margin-left:auto; font-family:var(--f-mono); font-size:11px; color:var(--ink-3);}
 
@@ -199,7 +202,10 @@
     margin-top:8px; border:1px solid var(--line); border-radius:11px; background:var(--panel);
     box-shadow:var(--shadow); overflow:hidden;
   }
-  .menu__h{font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); padding:11px 14px 7px;}
+  .menu__h{display:flex; align-items:baseline; justify-content:space-between; font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-2); background:var(--accent-soft); border-bottom:1px solid var(--line-2); padding:10px 14px;}
+  .menu__h-hint{font-family:var(--f-sans); font-size:11.5px; letter-spacing:0; text-transform:none; color:var(--ink-3); font-weight:500;}
+  .mrow.mrow--disabled{opacity:.45; cursor:not-allowed;}
+  .mrow.mrow--disabled:hover{background:transparent;}
   .mrow{display:flex; align-items:center; gap:11px; padding:9px 14px; cursor:pointer; border-top:1px solid var(--line-2);}
   .mrow:hover{background:var(--panel-2);}
   .mrow .btag{flex:none;}
@@ -211,8 +217,11 @@
   .preview__bar{display:flex; align-items:center; gap:9px; padding:11px 14px; border-bottom:1px solid var(--line);}
   .preview__bar .t{font-size:12px; font-weight:650;}
   .preview__bar .u{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-3); margin-left:auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px;}
+  .preview__bar .seg{margin-left:auto;}
+  .seg--sm button{padding:4px 10px; font-size:11px;}
   .live{width:8px; height:8px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent);}
-  .screen{margin:14px; border-radius:14px; overflow:hidden; border:1px solid #1c2831; background:#080e12; flex:1; min-height:0; box-shadow:var(--shadow); color:#eaf0f2;}
+  .screen{position:relative; margin:14px; border-radius:14px; overflow:hidden; border:1px solid #1c2831; background:#080e12; flex:1; min-height:0; box-shadow:var(--shadow); color:#eaf0f2;}
+  .scr-frame{position:absolute; top:0; left:0; border:0; display:block; background:#080e12; transform-origin:top left;}
   .scr-pad{padding:16px 15px 20px;}
   .scr-top{display:flex; align-items:center; gap:8px; font-size:10px; color:#7d8b93; font-family:var(--f-mono);}
   .scr-top .d{height:15px; color:#c9d3d8; display:flex; align-items:center;}
@@ -280,6 +289,11 @@
   .dropdown .sep{height:1px; background:var(--line-2); margin:4px 6px;}
   .dropdown .danger{color:var(--live);}
   .dropdown .danger:hover{background:color-mix(in srgb, var(--live) 12%, transparent);}
+
+  /* drag to reorder sections (Hero is fixed) */
+  .block.dragging{opacity:.45;}
+  .grip:active{cursor:grabbing;}
+  .block--fixed .grip{cursor:default; opacity:.3;}
 
   :where(a,button):focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
@@ -355,29 +369,30 @@
         <!-- sections -->
         <div class="sec-title"><h2>Sections</h2><span class="meta">8 blocks · drag to reorder</span></div>
 
+        <div class="stack">
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">hero</span><span class="nm">Hero</span>
           <span class="sum">&mdash; Direct your own highlights</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
+          <span class="ctrls"><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">accordion</span><span class="nm">New Features</span>
           <span class="sum">&mdash; 4 items</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
+          <span class="ctrls"><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">stat_cards</span><span class="nm">Closer Look</span>
           <span class="sum">&mdash; 3 cards</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
+          <span class="ctrls"><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <!-- expanded highlights -->
         <div class="block block--open">
           <div class="block__h">
             <span class="grip">&#8942;&#8942;</span><span class="btag">highlights</span><span class="nm">Get the Highlights</span>
-            <span class="ctrls"><span class="ic">&#9652;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
+            <span class="ctrls"><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
           </div>
           <div class="block__b">
             <div class="subrow">
@@ -415,26 +430,26 @@
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">gallery</span><span class="nm">Made for Every Screen</span>
           <span class="sum">&mdash; 4 images</span>
-          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;4</span><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
+          <span class="ctrls"><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">how_it_works</span><span class="nm">How It Works</span>
           <span class="sum">&mdash; 2 cards</span>
-          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;2</span><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
+          <span class="ctrls"><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">statement</span><span class="nm">Big Statement</span>
           <span class="sum">&mdash; image + headline</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
+          <span class="ctrls"><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
+        </div>
 
         <!-- add section -->
         <div class="addsec">
-          <button class="addsec__btn"><span class="plus">+</span> Add section</button>
           <div class="menu">
-            <div class="menu__h">Choose a block</div>
+            <div class="menu__h">Choose a section block <span class="menu__h-hint">click to add</span></div>
             <div class="mrow"><span class="btag">hero</span><span class="mnm">Hero</span><span class="mds">headline + image band</span></div>
             <div class="mrow"><span class="btag">accordion</span><span class="mnm">New Features</span><span class="mds">expandable list + image</span></div>
             <div class="mrow"><span class="btag">stat_cards</span><span class="mnm">Closer Look</span><span class="mds">odometer numbers</span></div>
@@ -449,9 +464,10 @@
 
       <!-- live preview -->
       <aside class="preview">
-        <div class="preview__bar"><span class="live"></span><span class="t">Live preview</span><span class="u">?id=win-probability-overlay</span></div>
+        <div class="preview__bar"><span class="live"></span><span class="t">Live preview</span><span class="seg seg--sm" id="vwSeg"><button data-vw="desktop" class="on">Desktop</button><button data-vw="mobile">Mobile</button></span></div>
         <div class="screen">
-          <div class="scr-pad">
+          <iframe class="scr-frame" src="/feature?id=win-probability-overlay" title="Live preview — My Clips feature page" scrolling="no"></iframe>
+          <div class="scr-pad" style="display:none">
             <div class="scr-top"><span class="d"><svg viewBox="0 0 80 80" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M20.2218 65.4513C20.0126 65.1818 19.9137 64.8429 19.9453 64.5032V61.8963C19.9563 61.5616 20.0818 61.2409 20.3008 60.9878L29.5833 47.7948H21.2093C20.8796 47.862 20.5368 47.7906 20.2613 47.5973C20.019 47.2373 19.9074 46.8051 19.9453 46.3728V44.4768C19.9016 44.0795 19.9846 43.6786 20.1823 43.3313C20.4455 43.1101 20.7895 43.0098 21.1303 43.0548H34.6788C35.0624 43.0287 35.4456 43.1108 35.7848 43.2918C36.004 43.5714 36.1034 43.9265 36.0613 44.2793V46.8073C36.1033 46.9625 36.1033 47.126 36.0613 47.2813C35.9918 47.4637 35.8988 47.6363 35.7848 47.7948L26.3838 60.9878H35.3108C35.8243 60.9878 36.1403 60.9878 36.2588 61.2643C36.4589 61.5962 36.5423 61.9855 36.4958 62.3703V64.3058C36.5423 64.6905 36.4589 65.0798 36.2588 65.4118C36.2588 65.4118 35.8243 65.6883 35.3108 65.6883H21.3278C20.9433 65.7289 20.5559 65.6459 20.2218 65.4513ZM19.9453 35.1153V14.8913C19.9453 14.8913 19.9453 14.1803 20.2218 13.9433C20.566 13.7762 20.9454 13.6948 21.3278 13.7063H27.8453C30.1507 13.6634 32.3895 14.4801 34.1258 15.9973C35.7191 17.6767 36.5727 19.9246 36.4958 22.2383V27.2153C36.5774 29.6687 35.8255 32.0774 34.3628 34.0488C32.8365 35.5426 30.7703 36.3548 28.6353 36.3003H21.3278C21.3278 36.3003 20.4983 36.3003 20.2218 36.0633C20.0356 35.7827 19.9391 35.452 19.9453 35.1153ZM25.1593 31.7973H27.8453C28.7464 31.8716 29.6405 31.5877 30.3338 31.0073C31.3608 29.9803 31.2423 27.0573 31.2423 27.0573V22.7123C31.2935 21.4264 30.9784 20.1525 30.3338 19.0388C29.6523 18.4266 28.7609 18.1012 27.8453 18.1303H25.1593V31.7973ZM58.2208 42.9758H56.0878C55.7047 42.9557 55.3231 43.0375 54.9818 43.2128C54.7963 43.5069 54.713 43.854 54.7448 44.2003V56.0503L48.4248 44.2003C48.2928 43.8177 48.0441 43.4862 47.7138 43.2523C47.307 43.0623 46.858 42.9807 46.4103 43.0153H44.4353C44.0522 42.9952 43.6706 43.077 43.3293 43.2523C43.1438 43.5464 43.0605 43.8935 43.0923 44.2398V64.4638C43.0533 64.7981 43.1375 65.1351 43.3293 65.4118C43.6466 65.6119 44.0236 65.6957 44.3958 65.6488H46.5683C46.9528 65.6894 47.3402 65.6064 47.6743 65.4118C47.8835 65.1423 47.9824 64.8034 47.9508 64.4638V52.6138L54.2313 64.4638C54.376 64.8612 54.6376 65.2055 54.9818 65.4513C55.3986 65.5386 55.829 65.5386 56.2458 65.4513H58.2208C58.6053 65.4919 58.9928 65.4089 59.3268 65.2143C59.536 64.9448 59.6349 64.6059 59.6033 64.2663V44.2793C59.6266 43.9282 59.5291 43.5797 59.3268 43.2918C58.9855 43.1165 58.6039 43.0347 58.2208 43.0548V42.9758ZM41.5518 34.9573L48.2668 14.7728C48.3509 14.451 48.5299 14.162 48.7803 13.9433C49.0633 13.7661 49.3952 13.6831 49.7283 13.7063H53.4018C53.7354 13.6773 54.0691 13.7607 54.3498 13.9433C54.5634 14.1841 54.7248 14.4665 54.8238 14.7728L61.4993 34.9573C61.6353 35.2861 61.6353 35.6554 61.4993 35.9843C61.3007 36.2085 61.0077 36.3257 60.7093 36.3003H57.5493C57.205 36.3501 56.8599 36.215 56.6408 35.9448C56.4652 35.6349 56.3323 35.3027 56.2458 34.9573L55.1793 31.5603H47.5953L46.5683 34.9573C46.4563 35.3822 46.269 35.7835 46.0153 36.1423C45.7783 36.3398 44.9883 36.1423 44.9883 36.1423H42.2628C42.2628 36.1423 41.6703 36.1423 41.4728 35.7868C41.4181 35.5084 41.4455 35.2202 41.5518 34.9573ZM48.8198 27.4918H53.9548L51.5453 18.9598L48.8198 27.4918ZM79.1953 35.0758L74.6133 39.6973L79.1953 44.2793V79.1973H0.195312V44.2793L4.77731 39.6973L0.195312 35.1153V0.197266H79.1953V35.0758ZM74.2578 5.13476H5.13281V32.7848L10.6233 38.2753C11.4161 39.0883 11.4161 40.3852 10.6233 41.1983L5.13281 46.6493V74.2993H74.2578V46.6493L68.7673 41.1588C68.3663 40.7784 68.1392 40.25 68.1392 39.6973C68.1392 39.1446 68.3663 38.6161 68.7673 38.2358L74.2578 32.7453V5.13476Z"/></svg></span> All features <span style="margin-left:auto;">Export &#9662;</span></div>
             <div class="scr-phone">
               <div class="pill">Best Lautaro goals ✦</div>
@@ -475,22 +491,51 @@
 
 <script>
 (function(){
+  var editor = document.querySelector('.editor');
+  var addsec = editor.querySelector('.addsec');
+  var addMenu = addsec.querySelector('.menu');
+  var stack = editor.querySelector('.stack') || editor;
+  var HERO_EDIT = '/cms/hero';
+  var dragEl = null;
+
   function closeAll(){
     document.querySelectorAll('.dropdown.open').forEach(function(d){ d.classList.remove('open'); });
     document.querySelectorAll('.ic[data-menu].open').forEach(function(t){ t.classList.remove('open'); });
   }
-  document.querySelectorAll('.ic[data-menu]').forEach(function(trig){
-    trig.addEventListener('click', function(e){
-      e.stopPropagation();
-      var dd = trig.nextElementSibling, willOpen = !dd.classList.contains('open');
-      closeAll();
-      if(willOpen){ dd.classList.add('open'); trig.classList.add('open'); }
+  function heroBlock(){
+    return [].slice.call(stack.querySelectorAll('.block')).filter(function(b){
+      var t = b.querySelector('.btag'); return t && t.textContent.trim() === 'hero';
+    })[0];
+  }
+  function getAfter(y){
+    var els = [].slice.call(stack.querySelectorAll('.block:not(.dragging)'));
+    var best = { offset: -Infinity, el: null };
+    els.forEach(function(child){
+      var box = child.getBoundingClientRect();
+      var offset = y - box.top - box.height / 2;
+      if(offset < 0 && offset > best.offset){ best = { offset: offset, el: child }; }
     });
-  });
-  document.querySelectorAll('.mi-rename').forEach(function(btn){
-    btn.addEventListener('click', function(e){
+    return best.el;
+  }
+
+  /* wire a section block's menu (rename/edit/delete) + drag; idempotent */
+  function wireBlock(block){
+    if(block.__wired) return; block.__wired = true;
+    var tagEl = block.querySelector('.btag');
+    var isHero = tagEl && tagEl.textContent.trim() === 'hero';
+
+    var trig = block.querySelector('.ic[data-menu]');
+    if(trig){
+      trig.addEventListener('click', function(e){
+        e.stopPropagation();
+        var dd = trig.nextElementSibling, willOpen = !dd.classList.contains('open');
+        closeAll();
+        if(willOpen){ dd.classList.add('open'); trig.classList.add('open'); }
+      });
+    }
+    var rn = block.querySelector('.mi-rename');
+    if(rn) rn.addEventListener('click', function(e){
       e.stopPropagation(); closeAll();
-      var block = btn.closest('.block'); if(!block) return;
       var nm = block.querySelector('.nm'); if(!nm) return;
       nm.setAttribute('contenteditable','true'); nm.focus();
       var sel = window.getSelection(), range = document.createRange();
@@ -499,27 +544,140 @@
       nm.addEventListener('blur', done);
       nm.addEventListener('keydown', function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); nm.blur(); } });
     });
-  });
-  var HERO_EDIT = '/cms/hero';
-  document.querySelectorAll('.mi-edit').forEach(function(btn){
-    btn.addEventListener('click', function(e){
+    var ed = block.querySelector('.mi-edit');
+    if(ed) ed.addEventListener('click', function(e){
       e.stopPropagation(); closeAll();
-      var block = btn.closest('.block'); if(!block) return;
-      var tagEl = block.querySelector('.btag'); var tag = tagEl ? tagEl.textContent.trim() : '';
+      var t = block.querySelector('.btag'); var tag = t ? t.textContent.trim() : '';
       if(tag === 'hero'){ window.location.href = HERO_EDIT; return; }
-      // other blocks: mark as the one being edited
       block.classList.add('block--open'); block.scrollIntoView({block:'center', behavior:'smooth'});
     });
-  });
-  document.querySelectorAll('.mi-del').forEach(function(btn){
-    btn.addEventListener('click', function(e){
+    var del = block.querySelector('.mi-del');
+    if(del) del.addEventListener('click', function(e){
       e.stopPropagation(); closeAll();
-      var block = btn.closest('.block'); if(!block) return;
       block.style.transition = 'opacity .16s ease, transform .16s ease';
       block.style.opacity = '0'; block.style.transform = 'translateY(-4px)';
-      setTimeout(function(){ block.remove(); }, 160);
+      setTimeout(function(){ block.remove(); refreshAddMenu(); }, 160);
+    });
+
+    if(isHero){ block.classList.add('block--fixed'); return; }
+    var grip = block.querySelector('.grip');
+    if(grip){
+      grip.addEventListener('mousedown', function(){ block.setAttribute('draggable', 'true'); });
+      grip.addEventListener('mouseup', function(){ block.removeAttribute('draggable'); });
+    }
+    block.addEventListener('dragstart', function(e){
+      dragEl = block; block.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      try { e.dataTransfer.setData('text/plain', ''); } catch(_){}
+    });
+    block.addEventListener('dragend', function(){
+      block.classList.remove('dragging'); block.removeAttribute('draggable'); dragEl = null;
+    });
+  }
+
+  stack.addEventListener('dragover', function(e){
+    if(!dragEl) return;
+    e.preventDefault();
+    var hb = heroBlock(), after = getAfter(e.clientY);
+    if(after == null){ stack.appendChild(dragEl); }
+    else if(after === hb){ stack.insertBefore(dragEl, hb.nextSibling); } // never above Hero
+    else { stack.insertBefore(dragEl, after); }
+  });
+  stack.addEventListener('drop', function(e){ e.preventDefault(); });
+
+  /* --- add-section list: click a block to add it --- */
+  function makeBlock(tag, name, summary){
+    var block = document.createElement('div');
+    block.className = 'block';
+    block.innerHTML =
+      '<div class="block__h">' +
+        '<span class="grip">⋮⋮</span>' +
+        '<span class="btag">' + tag + '</span>' +
+        '<span class="nm">' + name + '</span>' +
+        '<span class="sum">— ' + summary + '</span>' +
+        '<span class="ctrls">' +
+          '<span class="mwrap"><span class="ic" data-menu>⋯</span>' +
+            '<div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div>' +
+          '</span></span>' +
+      '</div>';
+    return block;
+  }
+  function refreshAddMenu(){
+    var hasHero = !!heroBlock();
+    [].slice.call(addMenu.querySelectorAll('.mrow')).forEach(function(row){
+      var t = row.querySelector('.btag'); if(!t || t.textContent.trim() !== 'hero') return;
+      row.classList.toggle('mrow--disabled', hasHero);
+      row.querySelector('.mds').textContent = hasHero ? 'already added' : 'headline + image band';
+    });
+  }
+  [].slice.call(addMenu.querySelectorAll('.mrow')).forEach(function(row){
+    row.addEventListener('click', function(){
+      if(row.classList.contains('mrow--disabled')) return;
+      var tag = row.querySelector('.btag').textContent.trim();
+      var name = row.querySelector('.mnm').textContent;
+      var summary = row.querySelector('.mds').textContent;
+      var block = makeBlock(tag, name, summary);
+      if(tag === 'hero'){ stack.insertBefore(block, stack.querySelector('.block')); } // Hero goes first
+      else { stack.appendChild(block); }
+      wireBlock(block);
+      refreshAddMenu();
+      block.scrollIntoView({block:'center', behavior:'smooth'});
     });
   });
+
+  [].slice.call(stack.querySelectorAll('.block')).forEach(wireBlock);
+  refreshAddMenu();
+
+  /* --- live preview: render the whole feature page and scale it to fit ("preview all") --- */
+  var screenEl = document.querySelector('.preview .screen');
+  var frame = document.querySelector('.scr-frame');
+  var DESKTOP_W = 1280, MOBILE_W = 390;
+  var BASE_W = DESKTOP_W; // logical render width — default: desktop
+  function neutralizeVh(){
+    // the feature page uses vh section heights that balloon when the frame is tall;
+    // pin them to fixed px so the page height is stable and the whole thing can be measured
+    try {
+      var d = frame.contentDocument; if(!d || d.__vhFixed) return;
+      var st = d.createElement('style');
+      st.textContent = '.fhero{min-height:560px !important} .statement{min-height:480px !important}';
+      (d.head || d.documentElement).appendChild(st); d.__vhFixed = true;
+    } catch(e){}
+  }
+  function fitPreview(){
+    if(!screenEl || !frame) return;
+    var box = screenEl.getBoundingClientRect();
+    if(box.width < 2 || box.height < 2) return;
+    frame.style.width = BASE_W + 'px';
+    neutralizeVh();
+    frame.style.height = '';            // measure content height without feedback
+    var H = 2200;
+    try {
+      var d = frame.contentDocument;
+      if(d && d.documentElement){ H = Math.max(d.documentElement.scrollHeight, d.body ? d.body.scrollHeight : 0, 800); }
+    } catch(e){}
+    frame.style.height = H + 'px';
+    var scale = Math.min(box.width / BASE_W, box.height / H); // fit the whole page in the window
+    frame.style.transform = 'scale(' + scale + ')';
+    frame.style.left = Math.max(0, (box.width - BASE_W * scale) / 2) + 'px';
+    frame.style.top = '0px';
+  }
+  if(frame){
+    frame.addEventListener('load', function(){ neutralizeVh(); fitPreview(); setTimeout(fitPreview, 400); setTimeout(fitPreview, 1400); });
+    window.addEventListener('resize', fitPreview);
+    setTimeout(fitPreview, 600);
+  }
+  var vwSeg = document.getElementById('vwSeg');
+  if(vwSeg){
+    [].slice.call(vwSeg.querySelectorAll('button')).forEach(function(b){
+      b.addEventListener('click', function(){
+        [].slice.call(vwSeg.querySelectorAll('button')).forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        BASE_W = b.getAttribute('data-vw') === 'mobile' ? MOBILE_W : DESKTOP_W;
+        fitPreview();
+      });
+    });
+  }
+
   document.addEventListener('click', closeAll);
 })();
 </script>
