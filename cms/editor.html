@@ -270,6 +270,17 @@
   .ai__acts{margin-left:auto; display:flex; gap:7px;}
   .ai__acts .btn{font-size:12px; padding:6px 11px;}
 
+  /* section three-dots menu */
+  .mwrap{position:relative; display:inline-flex;}
+  .ic[data-menu].open{background:var(--panel-2); color:var(--ink);}
+  .dropdown{position:absolute; right:0; top:calc(100% + 5px); min-width:150px; background:var(--panel); border:1px solid var(--line); border-radius:9px; box-shadow:var(--shadow); padding:4px; z-index:30; display:none;}
+  .dropdown.open{display:block;}
+  .dropdown button{display:block; width:100%; text-align:left; font:inherit; font-size:13px; font-weight:550; color:var(--ink); background:none; border:0; border-radius:6px; padding:8px 10px; cursor:pointer;}
+  .dropdown button:hover{background:var(--panel-2);}
+  .dropdown .sep{height:1px; background:var(--line-2); margin:4px 6px;}
+  .dropdown .danger{color:var(--live);}
+  .dropdown .danger:hover{background:color-mix(in srgb, var(--live) 12%, transparent);}
+
   :where(a,button):focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
 </style>
@@ -347,26 +358,26 @@
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">hero</span><span class="nm">Hero</span>
           <span class="sum">&mdash; Direct your own highlights</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">accordion</span><span class="nm">New Features</span>
           <span class="sum">&mdash; 4 items</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">stat_cards</span><span class="nm">Closer Look</span>
           <span class="sum">&mdash; 3 cards</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <!-- expanded highlights -->
         <div class="block block--open">
           <div class="block__h">
             <span class="grip">&#8942;&#8942;</span><span class="btag">highlights</span><span class="nm">Get the Highlights</span>
-            <span class="ctrls"><span class="ic">&#9652;</span><span class="ic">&#8943;</span></span>
+            <span class="ctrls"><span class="ic">&#9652;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
           </div>
           <div class="block__b">
             <div class="subrow">
@@ -404,19 +415,19 @@
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">gallery</span><span class="nm">Made for Every Screen</span>
           <span class="sum">&mdash; 4 images</span>
-          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;4</span><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;4</span><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">how_it_works</span><span class="nm">How It Works</span>
           <span class="sum">&mdash; 2 cards</span>
-          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;2</span><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+          <span class="ctrls"><span class="lock">&#128274; locked&nbsp;2</span><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <div class="block"><div class="block__h">
           <span class="grip">&#8942;&#8942;</span><span class="btag">statement</span><span class="nm">Big Statement</span>
           <span class="sum">&mdash; image + headline</span>
-          <span class="ctrls"><span class="ic">&#9662;</span><span class="ic">&#8943;</span></span>
+          <span class="ctrls"><span class="ic">&#9662;</span><span class="mwrap"><span class="ic" data-menu>&#8943;</span><div class="dropdown"><button class="mi-rename">Rename</button><button class="mi-edit">Edit</button><div class="sep"></div><button class="mi-del danger">Delete</button></div></span></span>
         </div></div>
 
         <!-- add section -->
@@ -462,5 +473,55 @@
 </div>
 </div>
 
+<script>
+(function(){
+  function closeAll(){
+    document.querySelectorAll('.dropdown.open').forEach(function(d){ d.classList.remove('open'); });
+    document.querySelectorAll('.ic[data-menu].open').forEach(function(t){ t.classList.remove('open'); });
+  }
+  document.querySelectorAll('.ic[data-menu]').forEach(function(trig){
+    trig.addEventListener('click', function(e){
+      e.stopPropagation();
+      var dd = trig.nextElementSibling, willOpen = !dd.classList.contains('open');
+      closeAll();
+      if(willOpen){ dd.classList.add('open'); trig.classList.add('open'); }
+    });
+  });
+  document.querySelectorAll('.mi-rename').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation(); closeAll();
+      var block = btn.closest('.block'); if(!block) return;
+      var nm = block.querySelector('.nm'); if(!nm) return;
+      nm.setAttribute('contenteditable','true'); nm.focus();
+      var sel = window.getSelection(), range = document.createRange();
+      range.selectNodeContents(nm); sel.removeAllRanges(); sel.addRange(range);
+      function done(){ nm.removeAttribute('contenteditable'); nm.removeEventListener('blur', done); }
+      nm.addEventListener('blur', done);
+      nm.addEventListener('keydown', function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); nm.blur(); } });
+    });
+  });
+  var HERO_EDIT = '/cms/hero';
+  document.querySelectorAll('.mi-edit').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation(); closeAll();
+      var block = btn.closest('.block'); if(!block) return;
+      var tagEl = block.querySelector('.btag'); var tag = tagEl ? tagEl.textContent.trim() : '';
+      if(tag === 'hero'){ window.location.href = HERO_EDIT; return; }
+      // other blocks: mark as the one being edited
+      block.classList.add('block--open'); block.scrollIntoView({block:'center', behavior:'smooth'});
+    });
+  });
+  document.querySelectorAll('.mi-del').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation(); closeAll();
+      var block = btn.closest('.block'); if(!block) return;
+      block.style.transition = 'opacity .16s ease, transform .16s ease';
+      block.style.opacity = '0'; block.style.transform = 'translateY(-4px)';
+      setTimeout(function(){ block.remove(); }, 160);
+    });
+  });
+  document.addEventListener('click', closeAll);
+})();
+</script>
 </body>
 </html>
