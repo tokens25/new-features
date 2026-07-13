@@ -1,4 +1,9 @@
 {
-  "cleanUrls": false,
-  "rewrites": [{ "source": "/", "destination": "/index.html" }]
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "directoryListing": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/cms", "destination": "/cms/index.html" }
+  ]
 }
