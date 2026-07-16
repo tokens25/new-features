@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/whats-new/">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #ffffff; }
+  a { color: #0A0F14; text-decoration: none; }
+  a:hover { color: #000000; }
+</style>
+</helmet>
+<div style="display:flex; justify-content:center; background:#ffffff; min-height:100vh">
+  <dc-import name="FeatureFeed" layout="editorial" theme="light" updates="{{updates}}" video-src="{{videoSrc}}" hint-size="1440px,2000px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      videoSrc: 'https://new-features-second-dazn.vercel.app/assets/video/video-hero-720.mp4',
+      updates: [
+        { tag: 'New', area: 'Playback', date: 'Jul 2026', title: 'Key Moments',
+          blurb: 'Auto-generated highlights of every goal, card and big chance — jump straight to what matters without scrubbing the timeline.',
+          media: '16:9 · KEY-MOMENTS.MP4' },
+        { tag: 'New', area: 'Social', date: 'Jun 2026', title: 'My Clips',
+          blurb: 'Grab up to 60 seconds of any live match and share it in a couple of taps, watermark and match card included.',
+          media: '16:9 · MY-CLIPS.MP4' },
+        { tag: 'Improved', area: 'Playback', date: 'Jun 2026', title: 'Multi-View',
+          blurb: 'Watch up to four live streams at once and swap the main audio feed on the fly, now on TV and web.',
+          media: '16:9 · MULTI-VIEW.PNG' },
+        { tag: 'New', area: 'Stats', date: 'May 2026', title: 'Live Match Stats',
+          blurb: 'Real-time xG, possession and momentum, overlaid on the stream or pinned to a side panel while you watch.',
+          media: '16:9 · STATS-OVERLAY.PNG' },
+        { tag: 'Improved', area: 'Playback', date: 'May 2026', title: 'Catch-Up from Kickoff',
+          blurb: 'Joined late? Restart from the first whistle and fast-forward back to the live edge whenever you like.',
+          media: '16:9 · CATCH-UP.MP4' },
+        { tag: 'New', area: 'Home', date: 'Apr 2026', title: 'For You',
+          blurb: 'A personalised rail that learns the teams, sports and competitions you actually follow.',
+          media: '16:9 · FOR-YOU.PNG' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

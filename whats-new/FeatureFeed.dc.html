@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  a { text-decoration: none; }
+</style>
+</helmet>
+<div style="width:1440px; background:{{p.bg}}; color:{{p.tp}}; font-family:'DAZN Trim', 'DAZN Oscine', 'Hanken Grotesk', Helvetica, Arial, sans-serif; overflow:hidden">
+
+  <!-- TOP BAR -->
+  <div style="display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:68px; border-bottom:1px solid {{p.border}}; position:relative; z-index:3; background:{{p.bg}}">
+    <div style="display:flex; align-items:center; gap:16px">
+      <span style="font-weight:900; font-size:22px; letter-spacing:-0.02em">DAZN</span>
+      <span style="width:6px; height:6px; border-radius:999px; background:{{p.brand}}"></span>
+      <span style="font-weight:600; font-size:15px; color:{{p.ts}}">What's New</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:28px">
+      <a href="#" style="font-size:14px; font-weight:600; color:{{p.ts}}">Product</a>
+      <a href="#" style="font-size:14px; font-weight:600; color:{{p.ts}}">Stats</a>
+      <a href="#" style="font-size:14px; font-weight:600; color:{{p.ts}}">Apps</a>
+      <span style="display:inline-flex; align-items:center; height:38px; padding:0 18px; border-radius:999px; background:{{p.brand}}; color:#06090C; font-weight:800; font-size:14px">Subscribe</span>
+    </div>
+  </div>
+
+  <!-- HERO: BROADCAST -->
+  <sc-if value="{{isBroadcast}}" hint-placeholder-val="{{true}}">
+    <div style="position:relative; height:600px; overflow:hidden">
+      <video src="{{videoSrc}}" autoplay muted loop playsinline style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover"></video>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,14,18,0.10) 0%, rgba(8,14,18,0.30) 45%, {{p.heroScrim}} 100%)"></div>
+      <div style="position:absolute; left:48px; right:48px; bottom:52px">
+        <div style="display:inline-flex; align-items:center; gap:10px; margin-bottom:22px">
+          <span style="width:8px; height:8px; border-radius:999px; background:{{p.live}}"></span>
+          <span style="font-size:13px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:#fff">Product updates · 2026</span>
+        </div>
+        <h1 style="margin:0; font-size:104px; line-height:0.92; font-weight:900; letter-spacing:-0.03em; color:#fff; max-width:900px">What's New</h1>
+        <p style="margin:20px 0 0; font-size:19px; line-height:1.5; color:rgba(255,255,255,0.82); max-width:560px">Every release, upgrade and improvement we ship — across live streaming, stats, and the DAZN app on every screen.</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- HERO: CONTROL ROOM (split) -->
+  <sc-if value="{{heroSplit}}" hint-placeholder-val="{{true}}">
+    <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:24px; padding:40px 48px; align-items:stretch; background:{{p.bg}}">
+      <div style="position:relative; border-radius:20px; overflow:hidden; min-height:480px">
+        <video src="{{videoSrc}}" autoplay muted loop playsinline style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover"></video>
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,14,18,0) 55%, rgba(8,14,18,0.55) 100%)"></div>
+        <div style="position:absolute; left:24px; bottom:22px; display:inline-flex; align-items:center; gap:9px; padding:8px 14px; border-radius:999px; background:rgba(8,14,18,0.55); backdrop-filter:blur(6px)">
+          <span style="width:8px; height:8px; border-radius:999px; background:{{p.live}}"></span>
+          <span style="font-size:12px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#fff">Now streaming</span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; justify-content:center; background:{{p.c1}}; border:1px solid {{p.border}}; border-radius:20px; padding:56px 52px">
+        <div style="width:44px; height:5px; border-radius:999px; background:{{p.brand}}; margin-bottom:26px"></div>
+        <span style="font-size:13px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:{{p.tt}}">Product updates · 2026</span>
+        <h1 style="margin:14px 0 0; font-size:74px; line-height:0.94; font-weight:900; letter-spacing:-0.03em; color:{{p.tp}}">What's New</h1>
+        <p style="margin:22px 0 0; font-size:18px; line-height:1.55; color:{{p.ts}}; max-width:440px">Every release, upgrade and improvement we ship — across live streaming, stats, and the DAZN app on every screen.</p>
+        <div style="display:flex; gap:32px; margin-top:34px; padding-top:28px; border-top:1px solid {{p.border}}">
+          <div><div style="font-size:30px; font-weight:900; color:{{p.tp}}">6</div><div style="font-size:13px; color:{{p.ts}}; margin-top:2px">updates this quarter</div></div>
+          <div><div style="font-size:30px; font-weight:900; color:{{p.tp}}">4</div><div style="font-size:13px; color:{{p.ts}}; margin-top:2px">product areas</div></div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- FILTER ROW -->
+  <div style="display:flex; align-items:center; gap:12px; padding:24px 48px; border-bottom:1px solid {{p.border}}; background:{{p.bg}}">
+    <span style="font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:{{p.tt}}; margin-right:8px">Filter</span>
+    <span style="display:inline-flex; align-items:center; height:36px; padding:0 16px; border-radius:999px; background:{{p.brand}}; color:#06090C; font-weight:800; font-size:14px">All</span>
+    <span style="display:inline-flex; align-items:center; height:36px; padding:0 16px; border-radius:999px; box-shadow:inset 0 0 0 1px {{p.border}}; color:{{p.ts}}; font-weight:600; font-size:14px">Playback</span>
+    <span style="display:inline-flex; align-items:center; height:36px; padding:0 16px; border-radius:999px; box-shadow:inset 0 0 0 1px {{p.border}}; color:{{p.ts}}; font-weight:600; font-size:14px">Stats</span>
+    <span style="display:inline-flex; align-items:center; height:36px; padding:0 16px; border-radius:999px; box-shadow:inset 0 0 0 1px {{p.border}}; color:{{p.ts}}; font-weight:600; font-size:14px">Social</span>
+    <span style="display:inline-flex; align-items:center; height:36px; padding:0 16px; border-radius:999px; box-shadow:inset 0 0 0 1px {{p.border}}; color:{{p.ts}}; font-weight:600; font-size:14px">Home</span>
+  </div>
+
+  <!-- FEED: grid / list (broadcast + control) -->
+  <sc-if value="{{showGridFeed}}" hint-placeholder-val="{{true}}">
+  <div style="{{feedStyle}}">
+    <sc-for list="{{updates}}" as="item" hint-placeholder-count="6">
+      <article style="{{cardStyle}}">
+        <div style="{{mediaStyle}}">
+          <span style="font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px; letter-spacing:0.14em; color:{{p.tt}}">{{item.media}}</span>
+        </div>
+        <div style="{{textPad}}">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:15px">
+            <span style="{{item.tagStyle}}">{{item.tag}}</span>
+            <span style="padding:5px 10px; border-radius:999px; font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:{{p.ts}}; box-shadow:inset 0 0 0 1px {{p.border}}">{{item.area}}</span>
+            <span style="margin-left:auto; font-size:13px; font-weight:500; color:{{p.tt}}">{{item.date}}</span>
+          </div>
+          <h3 style="margin:0; font-size:{{titleSize}}; line-height:1.12; font-weight:800; letter-spacing:-0.01em; color:{{p.tp}}">{{item.title}}</h3>
+          <p style="margin:10px 0 0; font-size:16px; line-height:1.55; color:{{p.ts}}">{{item.blurb}}</p>
+          <a href="#" style="display:inline-block; margin-top:16px; font-size:14px; font-weight:800; color:{{p.link}}">Learn more →</a>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+  </sc-if>
+
+  <!-- FEED: EDITORIAL DASHBOARD -->
+  <sc-if value="{{isEditorial}}" hint-placeholder-val="{{true}}">
+  <div style="display:grid; grid-template-columns:250px 1fr; gap:44px; max-width:1320px; margin:0 auto; padding:48px">
+    <aside style="align-self:start; position:sticky; top:24px">
+      <div style="font-size:13px; font-weight:800; letter-spacing:0.16em; text-transform:uppercase; color:{{p.tt}}; margin-bottom:14px">Browse</div>
+      <div style="display:flex; flex-direction:column; gap:4px">
+        <sc-for list="{{navItems}}" as="nav" hint-placeholder-count="5">
+          <div style="{{nav.style}}"><span>{{nav.label}}</span><span style="opacity:0.55; font-weight:600">{{nav.count}}</span></div>
+        </sc-for>
+      </div>
+      <div style="margin-top:26px; padding:22px; border-radius:16px; background:{{p.c1}}; border:1px solid {{p.border}}">
+        <div style="font-size:16px; font-weight:800; color:{{p.tp}}">Never miss a drop</div>
+        <p style="margin:8px 0 14px; font-size:13px; line-height:1.5; color:{{p.ts}}">Get the monthly What's New digest in your inbox.</p>
+        <span style="display:block; text-align:center; padding:11px; border-radius:999px; background:{{p.brand}}; color:#06090C; font-weight:800; font-size:14px">Subscribe</span>
+      </div>
+    </aside>
+    <div>
+      <article style="display:grid; grid-template-columns:1.1fr 1fr; gap:32px; align-items:center; background:{{p.c1}}; border:1px solid {{p.border}}; border-radius:20px; padding:24px; margin-bottom:28px">
+        <div style="aspect-ratio:16/9; border-radius:14px; background:{{mediaBg}}; display:flex; align-items:center; justify-content:center">
+          <span style="font-family:ui-monospace, monospace; font-size:12px; letter-spacing:0.14em; color:{{p.tt}}">{{featured.media}}</span>
+        </div>
+        <div style="padding-right:12px">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:15px">
+            <span style="{{featured.tagStyle}}">{{featured.tag}}</span>
+            <span style="padding:5px 10px; border-radius:999px; font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:{{p.ts}}; box-shadow:inset 0 0 0 1px {{p.border}}">{{featured.area}}</span>
+            <span style="margin-left:auto; font-size:13px; font-weight:500; color:{{p.tt}}">{{featured.date}}</span>
+          </div>
+          <h3 style="margin:0; font-size:34px; line-height:1.08; font-weight:900; letter-spacing:-0.02em; color:{{p.tp}}">{{featured.title}}</h3>
+          <p style="margin:12px 0 0; font-size:17px; line-height:1.55; color:{{p.ts}}">{{featured.blurb}}</p>
+          <a href="#" style="display:inline-block; margin-top:16px; font-size:14px; font-weight:800; color:{{p.link}}">Learn more →</a>
+        </div>
+      </article>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px">
+        <sc-for list="{{rest}}" as="item" hint-placeholder-count="5">
+          <article style="display:flex; flex-direction:column; background:{{p.c1}}; border:1px solid {{p.border}}; border-radius:18px; overflow:hidden">
+            <div style="aspect-ratio:16/9; background:{{mediaBg}}; border-bottom:1px solid {{p.border}}; display:flex; align-items:center; justify-content:center">
+              <span style="font-family:ui-monospace, monospace; font-size:12px; letter-spacing:0.14em; color:{{p.tt}}">{{item.media}}</span>
+            </div>
+            <div style="padding:20px 22px 24px">
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:13px">
+                <span style="{{item.tagStyle}}">{{item.tag}}</span>
+                <span style="padding:5px 10px; border-radius:999px; font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:{{p.ts}}; box-shadow:inset 0 0 0 1px {{p.border}}">{{item.area}}</span>
+                <span style="margin-left:auto; font-size:13px; font-weight:500; color:{{p.tt}}">{{item.date}}</span>
+              </div>
+              <h3 style="margin:0; font-size:21px; line-height:1.15; font-weight:800; letter-spacing:-0.01em; color:{{p.tp}}">{{item.title}}</h3>
+              <p style="margin:9px 0 0; font-size:15px; line-height:1.5; color:{{p.ts}}">{{item.blurb}}</p>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- FEED: RELEASE TIMELINE -->
+  <sc-if value="{{isTimeline}}" hint-placeholder-val="{{true}}">
+  <div style="max-width:1000px; margin:0 auto; padding:56px 48px 24px">
+    <sc-for list="{{updates}}" as="item" hint-placeholder-count="6">
+      <div style="display:grid; grid-template-columns:120px 44px 1fr; gap:22px; padding-bottom:40px">
+        <div style="text-align:right; padding-top:2px">
+          <div style="font-size:16px; font-weight:800; color:{{p.tp}}">{{item.date}}</div>
+          <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:{{p.tt}}; margin-top:5px">{{item.area}}</div>
+        </div>
+        <div style="position:relative">
+          <div style="position:absolute; left:50%; top:2px; bottom:-40px; width:2px; background:{{p.border}}; transform:translateX(-50%)"></div>
+          <div style="position:absolute; left:50%; top:4px; width:15px; height:15px; border-radius:999px; background:{{p.brand}}; box-shadow:0 0 0 3px {{p.bg}}; transform:translateX(-50%)"></div>
+        </div>
+        <article style="display:grid; grid-template-columns:220px 1fr; gap:22px; align-items:center; background:{{p.c1}}; border:1px solid {{p.border}}; border-radius:16px; padding:16px">
+          <div style="aspect-ratio:16/9; border-radius:11px; background:{{mediaBg}}; display:flex; align-items:center; justify-content:center">
+            <span style="font-family:ui-monospace, monospace; font-size:11px; letter-spacing:0.12em; color:{{p.tt}}">{{item.media}}</span>
+          </div>
+          <div style="padding-right:8px">
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:11px">
+              <span style="{{item.tagStyle}}">{{item.tag}}</span>
+            </div>
+            <h3 style="margin:0; font-size:23px; line-height:1.12; font-weight:800; letter-spacing:-0.01em; color:{{p.tp}}">{{item.title}}</h3>
+            <p style="margin:8px 0 0; font-size:15px; line-height:1.5; color:{{p.ts}}">{{item.blurb}}</p>
+          </div>
+        </article>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+  <!-- FOOTER -->
+  <div style="display:flex; align-items:center; justify-content:space-between; padding:34px 48px; margin-top:24px; border-top:1px solid {{p.border}}; background:{{p.bg}}">
+    <span style="font-size:13px; color:{{p.tt}}">© 2026 DAZN Group. All rights reserved.</span>
+    <div style="display:flex; gap:24px">
+      <a href="#" style="font-size:13px; color:{{p.ts}}">Terms of Use</a>
+      <a href="#" style="font-size:13px; color:{{p.ts}}">Privacy Policy</a>
+      <a href="#" style="font-size:13px; color:{{p.ts}}">Cookie Preferences</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:2100},&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;broadcast&quot;,&quot;control&quot;,&quot;editorial&quot;,&quot;timeline&quot;],&quot;default&quot;:&quot;broadcast&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;updates&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;any[]&quot;},&quot;videoSrc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.props.theme || 'dark';
+    const layout = this.props.layout || 'broadcast';
+    const dark = theme === 'dark';
+
+    const p = dark ? {
+      bg: '#0A0F14', c1: '#121820', c2: '#1B222B',
+      border: 'rgba(255,255,255,0.11)',
+      tp: '#FFFFFF', ts: 'rgba(255,255,255,0.66)', tt: 'rgba(255,255,255,0.44)',
+      brand: '#F7FF1A', live: '#D12424', link: '#F7FF1A',
+      stripeA: '#171F29', stripeB: '#0E141B',
+      heroScrim: '#0A0F14'
+    } : {
+      bg: '#FFFFFF', c1: '#F5F6F8', c2: '#EAECEF',
+      border: 'rgba(10,15,20,0.13)',
+      tp: '#0A0F14', ts: 'rgba(10,15,20,0.64)', tt: 'rgba(10,15,20,0.42)',
+      brand: '#F7FF1A', live: '#D12424', link: '#0A0F14',
+      stripeA: '#EDEFF2', stripeB: '#E1E4E8',
+      heroScrim: 'rgba(8,14,18,0.72)'
+    };
+
+    const isBroadcast = layout === 'broadcast';
+    const isControl = layout === 'control';
+    const isEditorial = layout === 'editorial';
+    const isTimeline = layout === 'timeline';
+    const heroSplit = !isBroadcast;
+    const showGridFeed = isBroadcast || isControl;
+
+    const feedStyle = isBroadcast
+      ? { display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '1180px', margin: '0 auto', padding: '44px 48px 8px' }
+      : { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', maxWidth: '1280px', margin: '0 auto', padding: '44px 48px 8px' };
+
+    const cardStyle = isBroadcast
+      ? { display: 'grid', gridTemplateColumns: 'minmax(340px,42%) 1fr', gap: '30px', alignItems: 'center', background: p.c1, borderRadius: '18px', padding: '20px', border: `1px solid ${p.border}` }
+      : { display: 'flex', flexDirection: 'column', background: p.c1, borderRadius: '18px', overflow: 'hidden', border: `1px solid ${p.border}` };
+
+    const mediaStyle = {
+      aspectRatio: '16/9', width: '100%',
+      borderRadius: isBroadcast ? '12px' : '0',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: `repeating-linear-gradient(135deg, ${p.stripeA}, ${p.stripeA} 11px, ${p.stripeB} 11px, ${p.stripeB} 22px)`,
+      borderBottom: isBroadcast ? 'none' : `1px solid ${p.border}`
+    };
+
+    const textPad = isBroadcast ? { paddingRight: '14px' } : { padding: '22px 24px 26px' };
+    const titleSize = isBroadcast ? '26px' : '22px';
+
+    const mediaBg = `repeating-linear-gradient(135deg, ${p.stripeA}, ${p.stripeA} 11px, ${p.stripeB} 11px, ${p.stripeB} 22px)`;
+
+    const chipBase = { padding: '5px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 800, letterSpacing: '0.05em', textTransform: 'uppercase', lineHeight: 1 };
+    const updates = (this.props.updates || []).map(u => ({
+      ...u,
+      tagStyle: u.tag === 'New'
+        ? { ...chipBase, background: '#F7FF1A', color: '#06090C' }
+        : { ...chipBase, background: 'transparent', color: '#9AA0A6', boxShadow: 'inset 0 0 0 1px #565C63', fontWeight: 700 }
+    }));
+
+    const featured = updates[0];
+    const rest = updates.slice(1);
+
+    const navBase = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', borderRadius: '10px', fontSize: '15px' };
+    const areaOrder = ['Playback', 'Stats', 'Social', 'Home'];
+    const counts = {};
+    updates.forEach(u => { counts[u.area] = (counts[u.area] || 0) + 1; });
+    const navItems = [{ label: 'All', count: updates.length, active: true }]
+      .concat(areaOrder.map(a => ({ label: a, count: counts[a] || 0, active: false })))
+      .map(n => ({ ...n, style: n.active
+        ? { ...navBase, background: p.c2, color: p.tp, fontWeight: 800 }
+        : { ...navBase, background: 'transparent', color: p.ts, fontWeight: 600 } }));
+
+    return {
+      p, isBroadcast, isControl, isEditorial, isTimeline, heroSplit, showGridFeed,
+      feedStyle, cardStyle, mediaStyle, textPad, titleSize, mediaBg,
+      featured, rest, navItems,
+      updates, videoSrc: this.props.videoSrc || ''
+    };
+  }
+}
+</script>
+</body>
+</html>
